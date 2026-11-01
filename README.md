@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/34238576/README.md)
 # Economia Aziendale classe Terza
 
 Sito per la classe: lezioni animate, materiali e una palestra di partita doppia con correzione automatica. Funziona in qualsiasi browser, senza account e senza installare nulla.

@@ -1,0 +1,1163 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<meta charset="utf-8">
+<title>Partita doppia a colori</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: lettore video scuro attorno a un palco 1920×1080 color carta; codice colore VF+ verde / VF− rosso; economici: d’esercizio blu, pluriennali viola, patrimonio netto petrolio, sospesi arancio */
+:root{
+  --paper:#F6F3EC; --ink:#1B1F2A; --line:#D9D4C7; --mute:#5A6070; --card:#FFFFFF;
+  --blu:#0B3BFF;  --blu-t:#0A2FD0; --blu-bg:#E4EAFF;
+  --vio:#7A3FD1;  --vio-t:#5E2BAE; --vio-bg:#EFE6FC;
+  --tea:#00838F;  --tea-t:#006A74; --tea-bg:#DDF2F3;
+  --ora:#E06A00;  --ora-t:#A84F00; --ora-bg:#FDEBD8;
+  --ver:#00A13E;  --ver-t:#007A2F; --ver-bg:#DDF5E5;
+  --ros:#F01E16;  --ros-t:#C8150E; --ros-bg:#FDE3E1;
+  --gold:#FFF1B8;
+  --chrome:#10131B; --chrome-2:#1B2030; --chrome-fg:#EEEBE3; --chrome-mute:#9AA2B4;
+  --f-disp:'Bricolage Grotesque','IBM Plex Sans',system-ui,sans-serif;
+  --f-body:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--chrome);color:var(--chrome-fg);font-family:var(--f-body);margin:0}
+.page{min-height:100%;box-sizing:border-box;padding-block:16px 24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;align-items:center;gap:12px}
+.player{width:100%;max-width:calc((100vh - 170px) * 16 / 9);min-width:0;display:flex;flex-direction:column;gap:10px}
+.viewport{position:relative;width:100%;aspect-ratio:16/9;max-width:100%;background:#000;border-radius:10px;overflow:hidden}
+.player:fullscreen{max-width:none;background:#000;justify-content:center;padding:0}
+.player:fullscreen .viewport{border-radius:0;aspect-ratio:auto;flex:1}
+.player:fullscreen .controls{position:absolute;left:0;right:0;bottom:0;padding:10px 16px;background:rgba(16,19,27,.92);opacity:0;transition:opacity .25s}
+.player:fullscreen:hover .controls{opacity:1}
+.player.rec .controls{display:none}
+
+/* ---------- PALCO ---------- */
+.stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;background:var(--paper);color:var(--ink);font-family:var(--f-body);overflow:hidden;font-variant-numeric:tabular-nums}
+.scene{position:absolute;inset:0;will-change:transform,opacity}
+.scene.lesson{background:var(--paper)}
+.shead{position:absolute;left:64px;right:64px;top:92px;display:flex;align-items:center;gap:20px}
+.kchip{font-family:var(--f-mono);font-size:19px;font-weight:600;letter-spacing:.08em;color:#fff;background:var(--ink);border-radius:8px;padding:8px 14px;white-space:nowrap}
+.shead h2{margin:0;font-family:var(--f-disp);font-weight:800;font-size:44px;letter-spacing:-.015em;line-height:1.02;text-wrap:balance;flex:1}
+.snum{font-family:var(--f-mono);font-size:18px;font-weight:600;color:var(--mute)}
+.scontent{position:absolute;left:64px;right:64px;top:182px;bottom:128px;display:flex;flex-direction:column;justify-content:center;gap:20px}
+.zone{display:flex;flex-direction:column;gap:20px}
+.grid{display:grid;grid-template-columns:700px 1fr;gap:48px;align-items:start}
+.col{display:flex;flex-direction:column;gap:20px;min-width:0}
+
+/* barra in alto */
+.topbar{position:absolute;left:64px;right:64px;top:28px;height:44px;display:flex;align-items:center;gap:40px;z-index:5;transition:opacity .3s}
+.segs{display:flex;gap:10px;flex:1}
+.seg{flex:1;display:flex;flex-direction:column;gap:6px}
+.seg span{font-family:var(--f-mono);font-size:15px;font-weight:600;letter-spacing:.06em;color:var(--mute);white-space:nowrap}
+.seg.on span{color:var(--ink)}
+.seg i{display:block;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.seg i b{display:block;height:100%;width:0;background:var(--ink)}
+.legend{display:flex;gap:16px;font-size:16px;font-weight:600;white-space:nowrap}
+.legend span{display:flex;align-items:center;gap:8px}
+.dot{display:inline-block;width:16px;height:16px;border-radius:50%;flex-shrink:0}
+.dot.b{background:var(--blu)}.dot.v{background:var(--vio)}.dot.t{background:var(--tea)}.dot.o{background:var(--ora)}.dot.g{background:var(--ver)}.dot.r{background:var(--ros)}.dot.k{background:var(--ink)}
+
+/* sottotitoli */
+.caption{position:absolute;left:64px;right:64px;bottom:22px;min-height:84px;box-sizing:border-box;background:var(--ink);color:#F6F3EC;border-radius:16px;padding:14px 28px;display:flex;align-items:center;gap:20px;font-size:24px;line-height:1.38;z-index:6}
+.caption svg{flex-shrink:0;opacity:.7}
+.stage.nocap .caption{display:none}
+
+/* colori testo */
+b.b,.t-b{color:var(--blu-t)} b.v,.t-v{color:var(--vio-t)} b.t,.t-t{color:var(--tea-t)} b.o,.t-o{color:var(--ora-t)} b.g,.t-g{color:var(--ver-t)} b.r,.t-r{color:var(--ros-t)}
+
+/* ---------- TABELLA PARTITA DOPPIA ---------- */
+.tbl{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px 20px 12px;display:flex;flex-direction:column}
+.tbl-title{display:flex;align-items:center;gap:12px;font-family:var(--f-disp);font-weight:600;font-size:25px;padding:2px 0 10px;line-height:1.2}
+.tr{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr) minmax(0,1fr) minmax(0,.95fr) minmax(0,1.45fr);gap:14px;align-items:center}
+.th{font-family:var(--f-mono);font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);padding:8px 0;border-bottom:3px solid var(--ink)}
+.th .num{text-align:right}
+.row{padding:10px 0;border-bottom:1px solid #ECE8DE;font-size:22px}
+.acc{font-weight:600;display:flex;align-items:center;gap:12px;line-height:1.15}
+.row.b .acc{color:var(--blu-t)}.row.v .acc{color:var(--vio-t)}.row.t .acc{color:var(--tea-t)}.row.o .acc{color:var(--ora-t)}.row.g .acc{color:var(--ver-t)}.row.r .acc{color:var(--ros-t)}
+.num{text-align:right}
+.amt{display:inline-block;font-family:var(--f-mono);font-weight:600;font-size:22px;padding:4px 10px;border-radius:8px;border:2px solid}
+.amt.b{color:var(--blu-t);background:var(--blu-bg);border-color:var(--blu)}
+.amt.v{color:var(--vio-t);background:var(--vio-bg);border-color:var(--vio)}
+.amt.t{color:var(--tea-t);background:var(--tea-bg);border-color:var(--tea)}
+.amt.o{color:var(--ora-t);background:var(--ora-bg);border-color:var(--ora)}
+.amt.g{color:var(--ver-t);background:var(--ver-bg);border-color:var(--ver)}
+.amt.r{color:var(--ros-t);background:var(--ros-bg);border-color:var(--ros)}
+.dest{font-size:17px;color:var(--mute);font-weight:500}
+.vchip{display:inline-block;font-family:var(--f-mono);font-size:15px;font-weight:600;padding:4px 8px;border-radius:6px;line-height:1.25}
+.vchip.b{background:var(--blu-bg);color:var(--blu-t)}.vchip.v{background:var(--vio-bg);color:var(--vio-t)}.vchip.t{background:var(--tea-bg);color:var(--tea-t)}.vchip.o{background:var(--ora-bg);color:var(--ora-t)}.vchip.g{background:var(--ver-bg);color:var(--ver-t)}.vchip.r{background:var(--ros-bg);color:var(--ros-t)}
+.tbl-bal{align-self:flex-end;display:flex;align-items:center;gap:12px;margin-top:10px;font-family:var(--f-mono);font-size:16px;font-weight:600;color:var(--mute)}
+.tbl-bal b{color:var(--ink)}
+.tbl-bal .ok{display:flex;align-items:center;gap:6px;color:#fff;background:var(--ver);padding:3px 10px 3px 6px;border-radius:20px}
+.tbl.wide .row{font-size:24px}.tbl.wide .amt{font-size:24px}.tbl.wide .dest{font-size:18px}.tbl.wide .vchip{font-size:16px}
+
+/* ---------- DOCUMENTO (fattura) ---------- */
+.doc{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:16px 22px;display:flex;flex-direction:column;gap:4px}
+.doc-h{display:flex;align-items:center;gap:12px;font-family:var(--f-disp);font-weight:600;font-size:25px;padding-bottom:8px;line-height:1.2}
+.drow{display:flex;justify-content:space-between;gap:16px;font-size:21px;padding:6px 10px;margin:0 -10px;border-bottom:1px dashed #CFC9BA;border-radius:6px}
+.drow .v{font-family:var(--f-mono);font-weight:500}
+.drow.sum{font-weight:600}
+.drow.tot{border-bottom:0;border-top:3px solid var(--ink);margin-top:4px;font-size:22px}
+.drow.tot .v{font-weight:600}
+.doc-foot{font-size:17px;color:var(--mute);padding-top:6px}
+
+/* ---------- PILLOLE ---------- */
+.pill{display:flex;align-items:center;gap:18px;border-radius:16px;padding:16px 24px;font-size:23px;line-height:1.38;border:2px solid var(--ink);background:var(--gold);transform-origin:left center}
+.pill.info{background:#EAF0FF;border-color:var(--blu)}
+.pill.note{background:var(--card);border-color:var(--line)}
+.pill .pi{flex-shrink:0;width:52px;height:52px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center}
+.pill.note .pi{background:var(--mute)}
+.pill.info .pi{background:var(--blu)}
+
+/* ---------- FORMULE ---------- */
+.formula{display:flex;align-items:center;justify-content:center;gap:26px}
+.fbox{display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--card);border:3px solid var(--ink);border-radius:18px;padding:16px 30px;min-width:260px}
+.fbox .l{font-size:20px;font-weight:500;text-align:center}
+.fbox .v{font-family:var(--f-disp);font-weight:800;font-size:58px;line-height:1}
+.fbox .s{font-family:var(--f-mono);font-size:17px;color:var(--mute);font-weight:600}
+.fbox.res{background:var(--blu-bg);border-color:var(--blu);color:var(--blu-t)}
+.fbox.res.v{background:var(--vio-bg);border-color:var(--vio);color:var(--vio-t)}
+.fop{font-family:var(--f-disp);font-weight:800;font-size:68px}
+.fcomp{display:flex;align-items:center;flex-wrap:wrap;gap:10px;background:var(--card);border:2px dashed var(--ink);border-radius:16px;padding:14px 20px;font-size:22px}
+.fcomp .lead{font-weight:600;margin-right:6px}
+.tok{font-family:var(--f-mono);font-weight:600;font-size:24px;display:inline-block}
+.tok.n{background:#F1EEE6;padding:3px 10px;border-radius:8px}
+.tok.res{padding:4px 12px;border-radius:8px;border:2px solid var(--ink);background:var(--gold)}
+.tok.res.b{background:var(--blu-bg);border-color:var(--blu);color:var(--blu-t)}
+.tok.res.v{background:var(--vio-bg);border-color:var(--vio);color:var(--vio-t)}
+
+/* ---------- PASSI ---------- */
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{display:flex;align-items:center;gap:16px;font-size:22px;line-height:1.3}
+.step .n{flex-shrink:0;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;font-family:var(--f-mono);font-weight:600;font-size:20px;display:flex;align-items:center;justify-content:center}
+
+/* ---------- MASTRINO ---------- */
+.mast{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:16px 24px 18px;position:relative}
+.mast-h{display:flex;align-items:center;gap:10px;justify-content:center;font-family:var(--f-disp);font-weight:600;font-size:24px;padding-bottom:8px;border-bottom:4px solid var(--ink)}
+.mcols{display:grid;grid-template-columns:1fr 1fr}
+.mcol{display:flex;flex-direction:column;gap:8px;padding:8px 14px 10px 0;min-height:150px}
+.mcol+.mcol{border-left:4px solid var(--ink);padding:8px 0 10px 14px}
+.mlab{font-family:var(--f-mono);font-size:14px;font-weight:600;letter-spacing:.08em;color:var(--mute)}
+.mcol+.mcol .mlab{text-align:right}
+.ment{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:18px}
+.ment .amt{font-size:20px}
+.mtot{display:grid;grid-template-columns:1fr 1fr;border-top:2px solid var(--ink);padding-top:6px;font-family:var(--f-mono);font-weight:600;font-size:20px}
+.mtot span{padding-right:14px;text-align:right}
+.mtot span+span{padding:0 0 0 14px}
+.stampbox{position:absolute;left:50%;bottom:-16px;transform:translateX(-50%)}
+.mast .mtot{margin-bottom:34px}
+.stamp{display:inline-flex;flex-direction:column;align-items:center;gap:2px;border:5px double var(--ver-t);color:var(--ver-t);background:rgba(255,255,255,.9);border-radius:10px;padding:8px 18px;font-family:var(--f-disp);font-weight:800;font-size:24px;letter-spacing:.03em;white-space:nowrap}
+.stamp small{font-family:var(--f-mono);font-size:15px;font-weight:600;letter-spacing:.08em}
+.stamp.ink{border-color:var(--ink);color:var(--ink);font-size:38px;padding:12px 28px}
+.stamp.ink small{font-size:19px}
+.stamprow{display:flex;justify-content:center}
+
+/* ---------- CALENDARIO ---------- */
+.cal{align-self:flex-start;display:flex;align-items:center;gap:26px}
+.cal-card{width:210px;border:3px solid var(--ink);border-radius:18px;overflow:hidden;background:var(--card);text-align:center}
+.cal-card .top{background:var(--ros);color:#fff;font-family:var(--f-mono);font-weight:600;font-size:20px;letter-spacing:.12em;padding:8px}
+.cal-card .big{font-family:var(--f-disp);font-weight:800;font-size:132px;line-height:1.1}
+.cal .txt{font-size:24px;line-height:1.35;max-width:380px;font-weight:500}
+
+/* ---------- FLUSSI ---------- */
+.flow{position:relative}
+.flow svg.trails{position:absolute;left:0;top:0;overflow:visible}
+.node{position:absolute;width:220px;margin-left:-110px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.node .circ{width:100px;height:100px;border-radius:50%;background:var(--card);border:4px solid var(--ink);display:flex;align-items:center;justify-content:center;box-sizing:border-box}
+.node .lab{font-family:var(--f-mono);font-weight:600;font-size:19px;letter-spacing:.06em}
+.node .sub{font-size:17px;color:var(--mute);line-height:1.25;font-weight:500}
+.mover{position:absolute;left:0;top:0;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:4px solid var(--ink);background:var(--card);box-shadow:0 8px 20px rgba(27,31,42,.25);z-index:3;opacity:0}
+.mover.b{border-color:var(--blu);background:var(--blu-bg)}.mover.v{border-color:var(--vio);background:var(--vio-bg)}.mover.t{border-color:var(--tea);background:var(--tea-bg)}.mover.g{border-color:var(--ver);background:var(--ver-bg)}.mover.r{border-color:var(--ros);background:var(--ros-bg)}
+.mlabel{position:absolute;left:0;top:0;transform:translate(-50%,-50%);white-space:nowrap;font-family:var(--f-mono);font-weight:600;font-size:17px;padding:5px 12px;border-radius:20px;background:var(--ink);color:#fff;z-index:2}
+.mlabel.b{background:var(--blu)}.mlabel.v{background:var(--vio)}.mlabel.t{background:var(--tea-t)}.mlabel.g{background:var(--ver-t)}.mlabel.r{background:var(--ros-t)}
+.mlabel-wrap{position:absolute;left:0;top:0;z-index:2}
+
+/* ---------- INTRO / CAPITOLI / OUTRO ---------- */
+.intro{background:var(--paper);padding:84px 96px;box-sizing:border-box;display:grid;grid-template-columns:1fr 640px;gap:80px}
+.kick{font-family:var(--f-mono);font-size:22px;font-weight:600;letter-spacing:.14em;color:var(--mute)}
+.intro h1{margin:22px 0 22px;font-family:var(--f-disp);font-weight:800;font-size:104px;line-height:.98;letter-spacing:-.025em}
+.intro p.sub{margin:0;font-size:30px;line-height:1.4;color:#3E4454;max-width:760px}
+.codes{display:flex;flex-direction:column;gap:18px;justify-content:center}
+.code{display:flex;gap:20px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:18px 22px}
+.code .sw{width:78px;height:78px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--f-mono);font-weight:600;font-size:20px;border:4px solid}
+.code h4{margin:0;font-family:var(--f-disp);font-weight:600;font-size:28px}
+.code p{margin:2px 0 0;font-size:19px;color:#3E4454}
+.code .econ4{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.code .econ4 .amt{font-size:15px;padding:2px 8px}
+.code em{font-style:normal;font-family:var(--f-mono);font-size:15px;font-weight:600;letter-spacing:.08em;color:var(--mute)}
+.tacc{margin-top:46px;width:640px}
+.tacc .tn{text-align:center;font-weight:600;font-size:24px;padding-bottom:8px;border-bottom:4px solid var(--ink)}
+.tacc .tc{display:grid;grid-template-columns:1fr 1fr}
+.tacc .tc>div{display:flex;flex-direction:column;gap:10px;padding:10px 14px 0 0;min-height:130px}
+.tacc .tc>div+div{border-left:4px solid var(--ink);padding:10px 0 0 14px;align-items:flex-end}
+.chap{background:var(--ink);color:#F6F3EC;padding:120px 120px;box-sizing:border-box}
+.chap .no{font-family:var(--f-disp);font-weight:800;font-size:300px;line-height:.85;letter-spacing:-.04em}
+.chap .no span:nth-child(1){color:var(--ver)}.chap .no span:nth-child(2){color:#6E8BFF}
+.chap h3{margin:30px 0 40px;font-family:var(--f-disp);font-weight:800;font-size:96px;letter-spacing:-.02em;line-height:1}
+.chap ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.chap li{font-size:30px;color:#C9CEDA;display:flex;gap:18px;align-items:baseline}
+.chap li b{font-family:var(--f-mono);font-size:20px;color:#8D95A8;font-weight:600}
+.stripe{position:absolute;top:-200px;bottom:-200px;width:520px;z-index:10}
+.outro{background:var(--paper);padding:90px 120px;box-sizing:border-box;display:flex;flex-direction:column;gap:24px}
+.outro h3{margin:0;font-family:var(--f-disp);font-weight:800;font-size:92px;letter-spacing:-.02em}
+.rule{display:flex;align-items:center;gap:26px;font-size:36px;font-weight:500}
+.rule .amt{font-size:30px;min-width:150px;text-align:center}
+.final{margin-top:20px;align-self:flex-start;font-family:var(--f-disp);font-weight:800;font-size:56px;background:var(--ink);color:#fff;padding:18px 36px;border-radius:18px}
+
+
+/* ---------- MODALITÀ PRESENTAZIONE ---------- */
+.player{position:relative}
+.modebar{gap:12px}
+.seg2{display:inline-flex;border:1px solid #2C3346;border-radius:12px;overflow:hidden}
+.seg2 button{min-height:44px;padding:0 16px;border:0;background:transparent;color:var(--chrome-mute);font:600 15px var(--f-body);cursor:pointer}
+.seg2 button[aria-pressed="true"]{background:var(--chrome-fg);color:var(--ink)}
+.seg2 button:focus-visible{outline:3px solid #8FA6FF;outline-offset:-3px}
+.pos{font-family:var(--f-mono);font-size:14px;color:var(--chrome-mute);white-space:nowrap}
+.cbtn.big{height:52px;padding:0 22px;font-size:17px}
+.dots{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.dots i{width:10px;height:10px;border-radius:50%;background:#2C3346}
+.dots i.on{background:var(--chrome-fg)}
+.hint{font-size:14px;color:var(--chrome-mute);margin-left:auto}
+.viewport.clickable{cursor:pointer}
+.index{position:absolute;inset:0;z-index:40;background:rgba(10,12,18,.88);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto;border-radius:10px}
+.index-box{width:100%;max-width:1100px;background:var(--chrome-2);border:1px solid #2C3346;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:16px}
+.index-h{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.index-h h3{margin:0;font-family:var(--f-disp);font-size:28px}
+.index-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.ichap{display:flex;flex-direction:column;gap:4px;min-width:0}
+.ichap button{display:flex;gap:10px;align-items:baseline;text-align:left;width:100%;min-height:40px;padding:8px 10px;border-radius:8px;border:0;background:transparent;color:var(--chrome-fg);font:500 15px/1.3 var(--f-body);cursor:pointer}
+.ichap button:hover{background:#262D40}
+.ichap button:focus-visible{outline:3px solid #8FA6FF}
+.ichap button.cap{font:700 17px var(--f-disp);background:#232A3B}
+.ichap button b{font-family:var(--f-mono);font-size:13px;color:var(--chrome-mute);flex-shrink:0}
+.ichap button.here{box-shadow:inset 0 0 0 2px #8FA6FF}
+.player:fullscreen .index{border-radius:0}
+@media (max-width:760px){.hint{display:none}}
+/* ---------- CONTROLLI ---------- */
+.controls{display:flex;flex-direction:column;gap:8px}
+.scrub{position:relative;height:28px;display:flex;align-items:center}
+.scrub input{width:100%;margin:0;accent-color:#F6F3EC;cursor:pointer;height:28px}
+.marks{position:absolute;left:0;right:0;top:0;height:6px;pointer-events:none}
+.marks i{position:absolute;top:0;width:2px;height:6px;background:var(--chrome-mute)}
+.crow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cbtn{min-width:44px;height:44px;border-radius:10px;border:1px solid #2C3346;background:var(--chrome-2);color:var(--chrome-fg);display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 12px;font:600 15px var(--f-body);cursor:pointer}
+.cbtn:hover{background:#262D40}
+.cbtn:focus-visible,.chips button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #8FA6FF;outline-offset:2px}
+.cbtn.primary{background:#F6F3EC;color:var(--ink);border-color:#F6F3EC}
+.time{font-family:var(--f-mono);font-size:15px;color:var(--chrome-mute);min-width:118px}
+.spacer{flex:1}
+.tog{display:inline-flex;align-items:center;gap:8px;font-size:15px;color:var(--chrome-fg);cursor:pointer;padding:0 6px;min-height:44px}
+.tog input{width:18px;height:18px;accent-color:#8FA6FF}
+select.cbtn{appearance:auto}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{height:36px;border-radius:18px;border:1px solid #2C3346;background:transparent;color:var(--chrome-mute);font:600 14px var(--f-mono);padding:0 14px;cursor:pointer}
+.chips button.on{background:var(--chrome-fg);color:var(--ink);border-color:var(--chrome-fg)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal-box{background:var(--chrome-2);border:1px solid #2C3346;border-radius:16px;max-width:560px;padding:24px 26px;display:flex;flex-direction:column;gap:12px;font-size:16px;line-height:1.5}
+.modal-box h3{margin:0;font-family:var(--f-disp);font-size:26px}
+.modal-box ol{margin:0;padding-left:22px}
+.modal-box .msg{color:#FFB4AE}
+.modal-box .row2{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.recbadge{position:fixed;top:12px;right:12px;background:#C8150E;color:#fff;font:600 14px var(--f-mono);padding:6px 12px;border-radius:20px;z-index:60}
+@media (max-width:640px){.time{min-width:0}.tog span{font-size:14px}}
+@media (prefers-reduced-motion:reduce){.topbar{transition:none}}
+</style>
+
+<div class="page">
+  <a href="index.html" style="align-self:flex-start;color:#C9CEDA;font:600 15px 'IBM Plex Sans',system-ui,sans-serif;text-decoration:none;min-height:32px;display:inline-flex;align-items:center">← Torna al sito della classe</a>
+  <div class="player" id="player">
+    <div class="viewport" id="viewport">
+      <div class="stage nocap" id="stage">
+        <div class="topbar" id="topbar">
+          <div class="segs" id="segs"></div>
+          <div class="legend">
+            <span><i class="dot g"></i>Finanz. +</span>
+            <span><i class="dot r"></i>Finanz. −</span>
+            <span><i class="dot b"></i>Econ. d’esercizio</span>
+            <span><i class="dot v"></i>Pluriennali</span>
+            <span><i class="dot t"></i>Patr. netto</span>
+            <span><i class="dot o"></i>Sospesi</span>
+          </div>
+        </div>
+        <div class="caption" id="caption"><svg width="34" height="34" viewBox="0 0 48 48" fill="none" stroke="#F6F3EC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 18 H16 L26 9 V39 L16 30 H8 Z"/><path d="M33 17 C36 20 36 28 33 31 M38 12 C44 18 44 30 38 36"/></svg><span id="captxt"></span></div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="crow modebar">
+        <div class="seg2" role="group" aria-label="Modalità">
+          <button type="button" id="mPres" aria-pressed="true">Presentazione</button>
+          <button type="button" id="mVid" aria-pressed="false">Video continuo</button>
+        </div>
+        <span class="pos" id="pos" aria-live="polite"></span>
+        <span class="spacer"></span>
+        <label class="tog"><input type="checkbox" id="cCap"><span>Sottotitoli</span></label>
+        <button class="cbtn" id="bIndex" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Indice</button>
+        <button class="cbtn" id="bFull" type="button" aria-label="Schermo intero"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+      </div>
+      <div class="crow" id="presCtl">
+        <button class="cbtn big" id="pPrev" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15 5v14L4 12z"/></svg>Indietro</button>
+        <button class="cbtn primary big" id="pNext" type="button">Avanti<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 5v14l11-7z"/></svg></button>
+        <div class="dots" id="dots" aria-hidden="true"></div>
+        <span class="hint">Clic sulla slide o tasto → per avanzare · ← per tornare indietro</span>
+      </div>
+      <div id="vidCtl" hidden>
+        <div class="scrub"><div class="marks" id="marks"></div><input type="range" id="seek" min="0" max="100" step="0.01" value="0" aria-label="Posizione nel video"></div>
+        <div class="crow">
+          <button class="cbtn" id="bPrev" type="button" aria-label="Scena precedente"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>
+          <button class="cbtn primary" id="bPlay" type="button" aria-label="Riproduci"><svg id="icoPlay" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg><span id="lPlay">Riproduci</span></button>
+          <button class="cbtn" id="bNext" type="button" aria-label="Scena successiva"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
+          <span class="time" id="time">0:00 / 0:00</span>
+          <span class="spacer"></span>
+          <label class="tog"><input type="checkbox" id="cLesson"><span>Pausa a fine scena</span></label>
+          <select class="cbtn" id="speed" aria-label="Velocità">
+            <option value="0.75">0,75×</option><option value="1" selected>1×</option><option value="1.25">1,25×</option><option value="1.5">1,5×</option>
+          </select>
+        </div>
+      </div>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="index" id="index" hidden>
+      <div class="index-box" role="dialog" aria-modal="true" aria-labelledby="iTitle">
+        <div class="index-h"><h3 id="iTitle">Indice della lezione</h3><button class="cbtn" id="iClose" type="button">Chiudi</button></div>
+        <div class="index-grid" id="indexGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* ================= UTILITÀ ================= */
+const RGB={b:'11,59,255',v:'122,63,209',t:'0,131,143',o:'224,106,0',g:'0,161,62',r:'240,30,22',k:'27,31,42'};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const eo=p=>1-Math.pow(1-p,3);
+const eio=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+const eback=p=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2)};
+function fmt(n,dec){dec=dec==null?2:dec;const neg=n<0;n=Math.abs(n);let [i,d]=n.toFixed(dec).split('.');i=i.replace(/\B(?=(\d{3})+(?!\d))/g,'.');return (neg?'−':'')+i+(dec?','+d:'')}
+function num(s){return parseFloat(String(s).replace(/\./g,'').replace(',','.').replace(/[^\d.]/g,''))||0}
+function h(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+const SVGNS='http://www.w3.org/2000/svg';
+
+/* icone a tratto, viewBox 48 */
+const ICP={
+ stato:'<path d="M4 12 L24 4 L44 12"/><path d="M6 12 H42"/><path d="M10 16 V35 M18 16 V35 M30 16 V35 M38 16 V35"/><path d="M5 39 H43 M3 44 H45"/>',
+ vault:'<rect x="5" y="9" width="38" height="30" rx="4"/><circle cx="24" cy="24" r="8"/><path d="M24 16 V19 M24 29 V32 M16 24 H19 M29 24 H32"/><path d="M10 39 V43 M38 39 V43"/>',
+ office:'<path d="M8 44 V8 H30 V44"/><path d="M30 18 H40 V44"/><path d="M14 15 H18 M22 15 H24 M14 23 H18 M22 23 H24 M14 31 H18 M22 31 H24"/><path d="M4 44 H44"/>',
+ person:'<circle cx="24" cy="15" r="8"/><path d="M9 43 C9 32 16 27 24 27 C32 27 39 32 39 43"/>',
+ factory:'<path d="M4 42 V20 L16 12 V20 L28 12 V20 L40 12 V42 Z"/><path d="M40 42 V6 H44 V42"/><path d="M10 30 H16 M22 30 H28 M34 30 H38"/><path d="M2 42 H46"/>',
+ van:'<path d="M3 34 V14 H30 V34"/><path d="M30 20 H38 L45 28 V34 H30"/><circle cx="12" cy="36" r="4"/><circle cx="37" cy="36" r="4"/><path d="M16 34 H33"/>',
+ truck:'<path d="M2 32 V12 H30 V32"/><path d="M30 18 H39 L46 26 V32 H30"/><circle cx="11" cy="35" r="4"/><circle cx="38" cy="35" r="4"/><path d="M15 32 H34"/><path d="M8 18 H22 M8 24 H18"/>',
+ box:'<path d="M6 16 L24 7 L42 16 V34 L24 43 L6 34 Z"/><path d="M6 16 L24 25 L42 16"/><path d="M24 25 V43"/><path d="M15 11.5 L33 20.5"/>',
+ doc:'<path d="M12 4 H30 L38 12 V44 H12 Z"/><path d="M30 4 V12 H38"/><path d="M17 20 H33 M17 27 H33 M17 34 H27"/>',
+ coins:'<ellipse cx="24" cy="12" rx="14" ry="5"/><path d="M10 12 V20 C10 23 16 25 24 25 C32 25 38 23 38 20 V12"/><path d="M10 20 V28 C10 31 16 33 24 33 C32 33 38 31 38 28 V20"/><path d="M10 28 V36 C10 39 16 41 24 41 C32 41 38 39 38 36 V28"/>',
+ cash:'<rect x="4" y="13" width="40" height="23" rx="3"/><circle cx="24" cy="24.5" r="5"/><path d="M10 19 V30 M38 19 V30"/>',
+ bulb:'<path d="M18 36 H30 M19 42 H29"/><path d="M24 6 C15 6 10 13 10 19 C10 25 15 28 17 32 H31 C33 28 38 25 38 19 C38 13 33 6 24 6 Z"/>',
+ info:'<circle cx="24" cy="24" r="18"/><path d="M24 21 V33"/><path d="M24 14.5 V15.5"/>',
+ arrow:'<path d="M4 24 H42 M32 14 L42 24 L32 34"/>',
+ pin:'<path d="M24 44 V31"/><path d="M13 31 H35 L30 21 V8 H18 V21 Z"/>',
+ check:'<path d="M10 25 L20 35 L38 13"/>',
+ shop:'<path d="M8 21 V42 H40 V21"/><path d="M4 21 H44 L39 8 H9 Z"/><path d="M20 42 V30 H28 V42"/>',
+ cambiale:'<rect x="4" y="11" width="40" height="26" rx="2"/><path d="M10 18 H26 M10 24 H20"/><path d="M24 31 C27 27 29 33 32 29 C34 26 36 31 39 29"/>',
+ pen:'<path d="M8 40 L12 30 L34 8 L40 14 L18 36 Z"/><path d="M30 12 L36 18"/>'
+};
+function icon(n,size,color,sw){if(!n||!ICP[n])return '';return `<svg width="${size||34}" height="${size||34}" viewBox="0 0 48 48" fill="none" stroke="${color||'currentColor'}" stroke-width="${sw||2.8}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICP[n]}</svg>`}
+const CHECK=`<svg width="18" height="18" viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICP.check}</svg>`;
+
+/* ================= TIPI DI ANIMAZIONE ================= */
+const K={
+ fade:(el,p)=>{el.style.opacity=p},
+ up:(el,p)=>{const e=eo(p);el.style.opacity=Math.min(1,p*1.6);el.style.transform=`translateY(${(1-e)*26}px)`},
+ left:(el,p)=>{const e=eo(p);el.style.opacity=Math.min(1,p*2.5);el.style.transform=`translateX(${-(1-e)*80}px)`;el.style.clipPath=p>=1?'none':`inset(-20px ${(1-e)*100}% -20px -20px)`},
+ right:(el,p)=>{const e=eo(p);el.style.opacity=Math.min(1,p*2.5);el.style.transform=`translateX(${(1-e)*80}px)`;el.style.clipPath=p>=1?'none':`inset(-20px -20px -20px ${(1-e)*100}%)`},
+ pop:(el,p)=>{const e=eback(p);el.style.opacity=Math.min(1,p*3);el.style.transform=`scale(${.5+.5*e})`},
+ flash:(el,p,o)=>{const s=Math.sin(Math.PI*p);el.style.transform=`scale(${1+.16*s})`;el.style.boxShadow=s>.002?`0 0 0 ${10*s}px rgba(${o.rgb},${.28*s})`:'none'},
+ count:(el,p,o)=>{el.textContent=(o.pre||'')+fmt(o.to*eo(p),o.dec)+(o.suf||'')},
+ hl:(el,p,o)=>{const e=eo(p);el.style.background=e>0?`rgba(${o.rgb},${.17*e})`:'';el.style.boxShadow=e>0?`inset 0 0 0 2px rgba(${o.rgb},${.95*e})`:''},
+ pulse:(el,p)=>{const s=Math.sin(Math.PI*p);el.style.transform=`scale(${1+.18*s})`},
+ draw:(el,p,o)=>{el.style.strokeDashoffset=o.len*(1-eio(p))},
+ move:(el,p,o)=>{const e=eio(p);const q=qb(o.P,e);el.style.transform=`translate(${q[0]}px,${q[1]}px)`;el.style.opacity=(p<=0||p>=1)?0:Math.min(1,p*8,(1-p)*9)},
+ stamp:(el,p,o)=>{const e=eo(p);el.style.opacity=Math.min(1,p*4);el.style.transform=`rotate(${o&&o.rot!=null?o.rot:-6}deg) scale(${2.2-1.2*e})`},
+ wipe:(el,p,o)=>{el.style.transform=`translateX(${-700+2900*eio(p)}px) skewX(-14deg)`},
+ grow:(el,p)=>{el.style.transform=`scaleX(${eo(p)})`;el.style.transformOrigin='left center'}
+};
+function qb(P,t){const[a,c,b]=P;const u=1-t;return[u*u*a[0]+2*u*t*c[0]+t*t*b[0],u*u*a[1]+2*u*t*c[1]+t*t*b[1]]}
+
+/* ================= DATI ================= */
+const SECS=[null,
+ {k:'01 · COSTITUZIONE',s:'Costituzione',t:'La costituzione'},
+ {k:'02 · COSTI D’IMPIANTO',s:'Costi d’impianto',t:'Costi d’impianto'},
+ {k:'03 · CICLO DEGLI ACQUISTI',s:'Acquisti',t:'Il ciclo degli acquisti'},
+ {k:'04 · CICLO DELLE VENDITE',s:'Vendite',t:'Il ciclo delle vendite'},
+ {k:'05 · ACCONTI E REGOLAMENTO',s:'Acconti',t:'Acconti e regolamento'}];
+/* conti economici: d'esercizio blu (b), costi pluriennali viola (v), patrimonio netto petrolio (t), costi e ricavi sospesi arancio (o) */
+const ECON={'Fabbricati':'v','Automezzi':'v','Impianti e macchinari':'v','Avviamento':'v','Costi di impianto':'v','Patrimonio netto':'t','Merci':'o'};
+const R=(c,n,s,a,d,v)=>[c==='b'?(ECON[n]||'b'):c,n,s,a,d,v];
+const SPA='SP · Attivo',SPP='SP · Passivo',SPN='SP · Patrimonio netto',CEC='CE · Costi',CER='CE · Ricavi',CERC='CE · Rettifiche costi',CERR='CE · Rettifiche ricavi';
+
+const LESSONS=[
+/* 2 */{sec:1,slide:2,title:'Apporti: denaro e beni in natura',
+ cap:'Il titolare porta 50.000 € in banca: è un’entrata, verde in Dare. Capannone e furgone, stimati dal perito, sono costi pluriennali, viola in Dare. Il Patrimonio netto, color petrolio, va sempre in Avere.',
+ blocks:[
+  {t:'flow',id:'f',col:'L',h:560,nodes:[
+    {id:'tit',x:130,y:250,icon:'person',label:'TITOLARE',sub:'conferisce denaro e beni'},
+    {id:'ban',x:560,y:70,icon:'vault',label:'BANCA X C/C'},
+    {id:'fab',x:560,y:260,icon:'factory',label:'FABBRICATI'},
+    {id:'aut',x:560,y:450,icon:'van',label:'AUTOMEZZI'}],
+   moves:[{from:'tit',to:'ban',icon:'coins',label:'50.000 €',c:'g',arc:-40}]},
+  {t:'table',col:'R',title:'Apporto in denaro · 50.000 € versati sul conto corrente',icon:'coins',rows:[
+    R('g','Banca X c/c','D','50.000,00',SPA,'VF+ Entrata (+Crediti)'),
+    R('b','Patrimonio netto','A','50.000,00',SPN,'VE+ Apporto del titolare')]},
+  {t:'moves',flow:'f',moves:[{from:'tit',to:'fab',icon:'factory',label:'150.000 €',c:'v',arc:-20},{from:'tit',to:'aut',icon:'van',label:'20.000 €',c:'v',arc:40,par:.5}]},
+  {t:'table',col:'R',title:'Apporto in natura · capannone e furgone stimati da un perito',icon:'factory',rows:[
+    R('b','Fabbricati','D','150.000,00',SPA,'VE− Costo pluriennale'),
+    R('b','Automezzi','D','20.000,00',SPA,'VE− Costo pluriennale'),
+    R('b','Patrimonio netto','A','170.000,00',SPN,'VE+ Apporto del titolare')]},
+  {t:'pill',col:'B',html:'Denaro → <b class="g">Banca in Dare</b> · Beni → <b class="v">costi pluriennali (viola) in Dare</b> · <b class="t">Patrimonio netto sempre in Avere</b>'}
+ ]},
+/* 3 */{sec:1,slide:3,title:'Acquisto di un’azienda funzionante',
+ cap:'Compriamo un’azienda già avviata: paghiamo 110.000 €, ma il suo patrimonio netto vale 90.000 €. La differenza, 20.000 €, è l’Avviamento: un costo pluriennale, viola in Dare.',
+ blocks:[
+  {t:'formula',items:[{l:'Prezzo pagato al cedente',v:110000},'−',{l:'Patrimonio netto corrente',v:90000,s:'80.000 + 30.000 − 20.000'},'=',{l:'AVVIAMENTO',v:20000,res:1,c:'v'}]},
+  {t:'table',rows:[
+    R('b','Impianti e macchinari','D','80.000,00',SPA,'VE− Costo pluriennale'),
+    R('g','Crediti v/clienti','D','30.000,00',SPA,'VF+ +Crediti'),
+    R('b','Avviamento','D','20.000,00',SPA,'VE− Costo pluriennale'),
+    R('r','Debiti v/fornitori','A','20.000,00',SPP,'VF− +Debiti'),
+    R('r','Debiti v/cedente','A','110.000,00',SPP,'VF− +Debiti')]},
+  {t:'pill',k:'info',html:'La cessione d’azienda è <b>fuori campo IVA</b>: si paga l’<b>imposta di registro</b>.'}
+ ]},
+/* 4 */{sec:2,slide:4,title:'Costi di impianto: la parcella del commercialista',
+ cap:'Nella parcella, onorario, cassa previdenza, spese documentate e bollo formano i Costi di impianto, un costo pluriennale viola in Dare. L’IVA è un credito verde; il debito verso il professionista è rosso in Avere.',
+ blocks:[
+  {t:'doc',col:'L',title:'Parcella del commercialista',rows:[['Onorario','2.000,00'],['+ Cassa previdenza 4%','80,00'],['= Imponibile IVA','2.080,00'],['+ IVA 22%','457,60'],['+ Spese documentate (art. 15)','300,00'],['+ Imposta di bollo','2,00'],['= Totale fattura','2.839,60'],['− Ritenuta 20% su onorario','400,00'],['= Netto da pagare','2.439,60']]},
+  {t:'table',col:'R',rows:[
+    R('b','Costi di impianto','D','2.382,00',SPA,'VE− Costo pluriennale'),
+    R('g','IVA ns/credito','D','457,60',SPA,'VF+ +IVA a credito'),
+    R('r','Debiti v/fornitori','A','2.839,60',SPP,'VF− +Debiti')]},
+  {t:'fcomp',col:'R',lead:'Costi di impianto =',c:'v',items:['2.000','+','80','+','300','+','2','=','2.382 €'],hl:[{rows:[0,1,4,5],c:'v'}]},
+  {t:'pill',col:'R',k:'note',ic:'arrow',html:'La ritenuta (400 €) <b>non si registra ora</b>: entra in gioco quando paghiamo il notaio.',hl:[{rows:[7],c:'r'}]}
+ ]},
+/* 5 */{sec:2,slide:5,title:'Il sostituto d’imposta: il passamano',
+ cap:'Paghiamo il professionista: il debito di 2.839,60 € si chiude, verde in Dare. Gli diamo 2.439,60 € e tratteniamo 400 €: sono tasse sue, che verseremo noi allo Stato.',
+ blocks:[
+  {t:'flow',id:'f',h:290,nodes:[
+    {id:'not',x:260,y:110,icon:'person',label:'NOTAIO',sub:'riceve 2.439,60 € · bonifico subito'},
+    {id:'az',x:896,y:110,icon:'office',label:'AZIENDA',sub:'trattiene 400 € per lo Stato'},
+    {id:'st',x:1530,y:110,icon:'stato',label:'STATO',sub:'riceverà i 400 € · F24 entro il 16'}],
+   moves:[
+    {from:'not',to:'az',icon:'doc',label:'Parcella 2.839,60 €',c:'k',arc:-75},
+    {from:'az',to:'not',icon:'coins',label:'Bonifico 2.439,60 €',c:'r',arc:75,reveal:['not']},
+    {from:'az',to:'st',icon:'coins',label:'Ritenuta 400 € · F24',c:'r',arc:-75,dashed:1,reveal:['az','st']}]},
+  {t:'table',rows:[
+    R('g','Debiti v/fornitori','D','2.839,60',SPP,'VF+ −Debiti'),
+    R('r','Erario c/ritenute da versare','A','400,00',SPP,'VF− +Debiti v/Erario'),
+    R('r','Banca X c/c','A','2.439,60',SPA,'VF− Uscita (−Crediti)')]},
+  {t:'pill',html:'<b>Sostituto d’imposta</b> = l’azienda paga una parte delle tasse del notaio <b>al posto suo</b>, trattenendola dalla parcella.'}
+ ]},
+/* 6 */{sec:2,slide:6,title:'Versamento della ritenuta: il modello F24',
+ cap:'Entro il 16 del mese successivo versiamo la ritenuta con il modello F24: il debito verso l’Erario si chiude, verde in Dare, e i soldi escono dalla banca, rosso in Avere.',
+ blocks:[
+  {t:'cal',col:'L',top:'SCADENZA',n:16,txt:'del mese successivo al pagamento del notaio'},
+  {t:'steps',col:'L',items:['Paghiamo il notaio, es. il 10 marzo, e tratteniamo 400 €','Entro il 16 aprile compiliamo l’F24 (codice tributo 1040)','La banca versa 400 € allo Stato: il debito si chiude']},
+  {t:'flow',id:'f',col:'R',h:210,nodes:[{id:'ban',x:190,y:70,icon:'vault',label:'BANCA X C/C'},{id:'st',x:850,y:70,icon:'stato',label:'STATO'}],
+   moves:[{from:'ban',to:'st',icon:'coins',label:'400 € · F24 cod. 1040',c:'r',arc:-50}]},
+  {t:'table',col:'R',rows:[
+    R('g','Erario c/ritenute da versare','D','400,00',SPP,'VF+ −Debiti v/Erario'),
+    R('r','Banca X c/c','A','400,00',SPA,'VF− Uscita (−Crediti)')]}
+ ]},
+/* 7 */{sec:3,slide:7,title:'Acquisti: trasporto forfettario e imballaggi fatturati',
+ cap:'Fattura di acquisto: trasporto forfettario e imballaggi si sommano alla merce. Merci c/acquisti è un costo blu in Dare, l’IVA un credito verde, il debito verso Alfa è rosso in Avere.',
+ blocks:[
+  {t:'doc',col:'L',title:'Fattura n. 45 · Alfa srl',rows:[['Merci','4.000,00'],['+ Trasporto (forfait, non documentato)','200,00'],['+ Imballaggi fatturati','100,00'],['= Imponibile IVA','4.300,00'],['+ IVA 22%','946,00'],['= Totale fattura','5.246,00']]},
+  {t:'table',col:'R',rows:[
+    R('b','Merci c/acquisti','D','4.300,00',CEC,'VE− Costo'),
+    R('g','IVA ns/credito','D','946,00',SPA,'VF+ +IVA a credito'),
+    R('r','Debiti v/fornitori','A','5.246,00',SPP,'VF− +Debiti')]},
+  {t:'fcomp',col:'R',lead:'Merci c/acquisti =',c:'b',items:['4.000','+','200','+','100','=','4.300 €'],hl:[{rows:[0,1,2],c:'b'}]},
+  {t:'pill',col:'L',k:'info',html:'Trasporto non documentato e imballaggio fatturato sono <b class="b">parte del prezzo</b>: entrano nel costo della merce e nella base IVA.'}
+ ]},
+/* 8 */{sec:3,slide:8,title:'Trasporto documentato ① · la fattura del vettore',
+ cap:'Trasporto documentato: il vettore intesta la fattura a noi, ma lo paga il fornitore. Registriamo prima la fattura del vettore: costo di trasporto blu, IVA verde, debito rosso.',
+ blocks:[
+  {t:'flow',id:'f',h:300,nodes:[
+    {id:'fo',x:240,y:80,icon:'office',label:'FORNITORE',sub:'② paga il vettore al posto nostro'},
+    {id:'ve',x:896,y:80,icon:'truck',label:'VETTORE',sub:'① intesta la fattura a NOI'},
+    {id:'noi',x:1550,y:80,icon:'office',label:'NOI',sub:'③ registriamo PRIMA la fattura del vettore'}],
+   moves:[
+    {from:'fo',to:'noi',icon:'truck',label:'trasporto della merce',c:'b',arc:-70},
+    {from:'ve',to:'noi',icon:'doc',label:'Fattura n. 12 · 183,00',c:'k',arc:100,reveal:['ve']},
+    {from:'fo',to:'ve',icon:'coins',label:'paga 183,00 per noi',c:'k',arc:100,reveal:['fo','noi']}]},
+  {t:'doc',col:'L',title:'Fattura n. 12 · Trasporti Beta (vettore)',rows:[['Servizio di trasporto','150,00'],['+ IVA 22%','33,00'],['= Totale fattura','183,00']]},
+  {t:'table',col:'R',rows:[
+    R('b','Costi di trasporto','D','150,00',CEC,'VE− Costo'),
+    R('g','IVA ns/credito','D','33,00',SPA,'VF+ +IVA a credito'),
+    R('r','Debiti v/fornitori (vettore)','A','183,00',SPP,'VF− +Debiti')]},
+  {t:'pill',col:'B',k:'note',ic:'arrow',html:'④ Il fornitore ce la riaddebita (art. 15): il debito verso il vettore lo chiuderà <b>la fattura del fornitore</b>, che lo ha già pagato per nostro conto.'}
+ ]},
+/* 9 */{sec:3,slide:9,title:'Trasporto documentato ② · la fattura del fornitore',
+ cap:'Arriva la fattura di Alfa con le spese art. 15: il debito verso il vettore si chiude, verde in Dare, e nasce il debito verso Alfa per 5.063 €, rosso in Avere. Nel mastrino il saldo va a zero.',
+ blocks:[
+  {t:'doc',col:'L',title:'Fattura n. 46 · Alfa srl',rows:[['Merci','4.000,00'],['+ IVA 22%','880,00'],['+ Spese documentate art. 15 (vettore)','183,00'],['= Totale fattura','5.063,00']]},
+  {t:'mast',id:'m',col:'L',title:'Mastrino · Debiti v/fornitori (vettore)',ents:[{s:'A',l:'Fattura vettore',v:'183,00'},{s:'D',l:'Chiusura (fatt. Alfa)',v:'183,00',later:1}],tot:'183,00',saldo:'SALDO = 0',ssub:'debito chiuso'},
+  {t:'table',col:'R',rows:[
+    R('b','Merci c/acquisti','D','4.000,00',CEC,'VE− Costo'),
+    R('g','IVA ns/credito','D','880,00',SPA,'VF+ +IVA a credito'),
+    R('g','Debiti v/fornitori (vettore)','D','183,00',SPP,'VF+ −Debiti'),
+    R('r','Debiti v/fornitori (Alfa)','A','5.063,00',SPP,'VF− +Debiti')]},
+  {t:'mpost',id:'m'},
+  {t:'pill',col:'R',k:'note',ic:'pin',html:'Le spese documentate sono <b>fuori dall’IVA</b> del fornitore (art. 15): l’IVA sul trasporto l’abbiamo già registrata con la fattura del vettore.',hl:[{rows:[2],c:'k'}]}
+ ]},
+/* 10 */{sec:3,slide:10,title:'Le cauzioni: l’esempio dei fitti passivi',
+ cap:'Affittiamo un negozio: il fitto del mese è un costo blu, la cauzione invece è un credito verde, perché a fine contratto ci verrà restituita. Dalla banca escono 4.800 €.',
+ blocks:[
+  {t:'steps',col:'L',items:['Prendiamo in affitto un negozio','Paghiamo il fitto del primo mese','Versiamo un deposito cauzionale (3 mensilità)','A fine contratto la cauzione ci torna indietro']},
+  {t:'flow',id:'f',col:'L',h:250,nodes:[{id:'noi',x:110,y:110,icon:'office',label:'NOI'},{id:'loc',x:590,y:110,icon:'shop',label:'LOCATORE'}],
+   moves:[{from:'noi',to:'loc',icon:'coins',label:'fitto 1.200 €',c:'b',arc:-80},{from:'noi',to:'loc',icon:'coins',label:'cauzione 3.600 €',c:'g',arc:-10,par:.4},{from:'loc',to:'noi',icon:'coins',label:'torna a fine contratto',c:'g',arc:85,dashed:1}]},
+  {t:'doc',col:'R',title:'Contratto di locazione',rows:[['Fitto primo mese','1.200,00'],['+ Deposito cauzionale (3 mensilità)','3.600,00'],['= Pagati con bonifico','4.800,00']],foot:'Locatore privato: niente IVA.'},
+  {t:'table',col:'R',rows:[
+    R('b','Fitti passivi','D','1.200,00',CEC,'VE− Costo'),
+    R('g','Crediti per cauzioni','D','3.600,00',SPA,'VF+ +Crediti'),
+    R('r','Banca X c/c','A','4.800,00',SPA,'VF− Uscita (−Crediti)')]},
+  {t:'pill',col:'B',html:'Fitto = <b class="b">costo</b> (lo spendiamo) · Cauzione = <b class="g">credito</b> (ci verrà restituita)'}
+ ]},
+/* 11 */{sec:3,slide:11,title:'Resi su acquisti: la merce torna al fornitore',
+ cap:'Restituiamo merce difettosa a Gamma: il debito si riduce di 610 €, verde in Dare. Il reso rettifica il costo, blu in Avere, e l’IVA a credito si storna, rossa in Avere.',
+ blocks:[
+  {t:'flow',id:'f',col:'L',h:270,nodes:[{id:'noi',x:120,y:100,icon:'office',label:'NOI',sub:'fatt. n. 47 di 6.100 €'},{id:'ga',x:580,y:100,icon:'office',label:'GAMMA SRL',sub:'emette la nota di variazione'}],
+   moves:[{from:'noi',to:'ga',icon:'box',label:'① merce difettosa 500 €',c:'b',arc:-75,reveal:['noi']},{from:'ga',to:'noi',icon:'doc',label:'② nota: −500 € e IVA −110 €',c:'k',arc:80,reveal:['ga']}]},
+  {t:'doc',col:'L',title:'Nota di variazione n. 3 · Gamma srl',rows:[['Reso merce difettosa','500,00'],['+ IVA 22%','110,00'],['= Totale a nostro favore','610,00']]},
+  {t:'pill',col:'R',html:'<b>Perché l’IVA torna indietro?</b> Il costo scende di 500 € → l’IVA pagata scende di 110 €: non possiamo più recuperarla dallo Stato.'},
+  {t:'table',col:'R',rows:[
+    R('g','Debiti v/fornitori','D','610,00',SPP,'VF+ −Debiti'),
+    R('b','Resi su acquisti','A','500,00',CERC,'VE+ Rettifica di costo'),
+    R('r','IVA ns/credito','A','110,00',SPA,'VF− −IVA a credito (storno)')]}
+ ]},
+/* 12 */{sec:3,slide:12,title:'Dopo il reso paghiamo solo il netto',
+ cap:'Dopo il reso il debito verso Gamma è sceso: paghiamo solo 5.490 €. Nel mastrino il debito nasce in Avere, si riduce e si chiude in Dare: saldo zero.',
+ blocks:[
+  {t:'mast',id:'m',col:'L',title:'Mastrino · Debiti v/fornitori (Gamma)',ents:[{s:'A',l:'Fattura n. 47',v:'6.100,00'},{s:'D',l:'Nota di variazione',v:'610,00'},{s:'D',l:'Bonifico (netto)',v:'5.490,00',later:1}],tot:'6.100,00',saldo:'SALDO = 0',ssub:'debito chiuso'},
+  {t:'fcomp',col:'L',lead:'Fattura − Nota di variazione =',c:'k',items:['6.100','−','610','=','5.490 €']},
+  {t:'table',col:'R',rows:[
+    R('g','Debiti v/fornitori','D','5.490,00',SPP,'VF+ −Debiti'),
+    R('r','Banca X c/c','A','5.490,00',SPA,'VF− Uscita (−Crediti)')]},
+  {t:'mpost',id:'m'},
+  {t:'pill',col:'R',k:'note',ic:'pin',html:'Nel mastrino: in <b class="r">AVERE</b> il debito nasce (fattura), in <b class="g">DARE</b> si riduce (reso) e si chiude (pagamento).'}
+ ]},
+/* 13 */{sec:3,slide:13,title:'Ribassi e abbuoni attivi: lo sconto lo otteniamo noi',
+ cap:'Ribassi e abbuoni attivi: lo sconto lo otteniamo noi. È una rettifica di costo, blu in Avere. Se arriva la nota di variazione, anche l’IVA a credito si storna in rosso.',
+ blocks:[
+  {t:'table',title:'① Difetto lieve: teniamo la merce, il fornitore emette la nota di variazione',icon:'doc',rows:[
+    R('g','Debiti v/fornitori','D','244,00',SPP,'VF+ −Debiti'),
+    R('b','Ribassi e abbuoni attivi','A','200,00',CERC,'VE+ Rettifica di costo'),
+    R('r','IVA ns/credito','A','44,00',SPA,'VF− −IVA a credito (storno)')]},
+  {t:'table',title:'② Dobbiamo 1.000,40 € e il fornitore accetta 1.000 € (senza IVA)',icon:'coins',rows:[
+    R('g','Debiti v/fornitori','D','1.000,40',SPP,'VF+ −Debiti'),
+    R('r','Banca X c/c','A','1.000,00',SPA,'VF− Uscita (−Crediti)'),
+    R('b','Ribassi e abbuoni attivi','A','0,40',CERC,'VE+ Rettifica di costo')]}
+ ]},
+/* 14 */{sec:4,slide:14,title:'Vendite: ricavi, IVA, trasporti e imballaggi',
+ cap:'Ora vendiamo noi: il cliente ci deve 10.126 €, credito verde in Dare. Merci e rimborsi di trasporto e imballaggi sono ricavi blu in Avere; l’IVA è un debito rosso verso lo Stato.',
+ blocks:[
+  {t:'steps',col:'L',items:['Consegniamo la merce al cliente','Addebitiamo trasporto (forfait) e imballaggi','Emettiamo la fattura con IVA','Il cliente ci deve il totale']},
+  {t:'doc',col:'L',title:'Fattura n. 112 · emessa da noi',rows:[['Merci','8.000,00'],['+ Trasporto (forfait)','200,00'],['+ Imballaggi','100,00'],['= Imponibile IVA','8.300,00'],['+ IVA 22%','1.826,00'],['= Totale fattura','10.126,00']]},
+  {t:'table',col:'R',rows:[
+    R('g','Crediti v/clienti','D','10.126,00',SPA,'VF+ +Crediti'),
+    R('b','Merci c/vendite','A','8.000,00',CER,'VE+ Ricavo'),
+    R('b','Rimborsi costi di vendita','A','300,00',CER,'VE+ Ricavo'),
+    R('r','IVA ns/debito','A','1.826,00',SPP,'VF− +IVA a debito')]},
+  {t:'fcomp',col:'R',lead:'Rimborsi costi di vendita =',c:'b',items:['200','+','100','=','300 €'],hl:[{rows:[1,2],c:'b'}]}
+ ]},
+/* 15 */{sec:4,slide:15,title:'Trasporto documentato ① · anticipiamo il vettore',
+ cap:'Il cliente ci chiede di organizzare il trasporto: paghiamo noi il vettore in contanti, ma la fattura è intestata al cliente. Non è un nostro costo: nasce un credito verde.',
+ blocks:[
+  {t:'flow',id:'f',h:300,nodes:[
+    {id:'noi',x:240,y:80,icon:'office',label:'NOI',sub:'③ paghiamo in contanti per il cliente'},
+    {id:'ve',x:896,y:80,icon:'truck',label:'VETTORE',sub:'② intesta la fattura al CLIENTE'},
+    {id:'cl',x:1550,y:80,icon:'person',label:'CLIENTE',sub:'④ ci deve restituire 183 €'}],
+   moves:[
+    {from:'noi',to:'cl',icon:'truck',label:'① trasporto organizzato da noi',c:'b',arc:-70},
+    {from:'ve',to:'cl',icon:'doc',label:'Fattura n. 88 · 183,00',c:'k',arc:100,reveal:['ve']},
+    {from:'noi',to:'ve',icon:'cash',label:'contanti 183,00',c:'r',arc:100,reveal:['noi','cl']}]},
+  {t:'doc',col:'L',title:'Fattura n. 88 · Trasporti Beta → cliente',rows:[['Servizio di trasporto','150,00'],['+ IVA 22%','33,00'],['= Totale pagato da noi','183,00']]},
+  {t:'table',col:'R',rows:[
+    R('g','Clienti c/costi anticipati','D','183,00',SPA,'VF+ +Crediti'),
+    R('r','Denaro in cassa','A','183,00',SPA,'VF− Uscita')]},
+  {t:'pill',col:'R',k:'note',ic:'pin',html:'<b>Non è un nostro costo</b>: abbiamo solo anticipato i soldi → <b class="g">credito verso il cliente</b>.'}
+ ]},
+/* 16 */{sec:4,slide:16,title:'Trasporto documentato ② · lo chiudiamo nella fattura',
+ cap:'Nella fattura di vendita aggiungiamo le spese anticipate, fuori campo IVA. Il credito verso il cliente sale a 7.503 € e il conto Clienti c/costi anticipati si chiude in rosso.',
+ blocks:[
+  {t:'doc',col:'L',title:'Fattura n. 115 · emessa da noi',rows:[['Merci','6.000,00'],['+ IVA 22%','1.320,00'],['+ Spese documentate art. 15','183,00'],['= Totale fattura','7.503,00']]},
+  {t:'mast',id:'m',col:'L',title:'Mastrino · Clienti c/costi anticipati',ents:[{s:'D',l:'Pagamento vettore',v:'183,00'},{s:'A',l:'Chiusura fatt. 115',v:'183,00',later:1}],tot:'183,00',saldo:'SALDO = 0',ssub:'credito chiuso'},
+  {t:'table',col:'R',rows:[
+    R('g','Crediti v/clienti','D','7.503,00',SPA,'VF+ +Crediti'),
+    R('b','Merci c/vendite','A','6.000,00',CER,'VE+ Ricavo'),
+    R('r','IVA ns/debito','A','1.320,00',SPP,'VF− +IVA a debito'),
+    R('r','Clienti c/costi anticipati','A','183,00',SPA,'VF− −Crediti (chiusura)')]},
+  {t:'mpost',id:'m'},
+  {t:'pill',col:'R',k:'note',ic:'pin',html:'Le spese anticipate sono <b>fuori dall’IVA</b> (art. 15): le aggiungiamo in fattura solo per farcele restituire.',hl:[{rows:[2],c:'k'}]}
+ ]},
+/* 17 */{sec:4,slide:17,title:'Resi su vendite: il cliente ci restituisce la merce',
+ cap:'Il cliente ci restituisce merce non conforme: è una rettifica di ricavo, blu in Dare. L’IVA a debito si storna in verde e il credito verso il cliente scende di 488 €, rosso in Avere.',
+ blocks:[
+  {t:'flow',id:'f',col:'L',h:270,nodes:[{id:'cl',x:120,y:100,icon:'person',label:'CLIENTE',sub:'merce non conforme (fatt. n. 112)'},{id:'noi',x:580,y:100,icon:'office',label:'NOI',sub:'emettiamo la nota di variazione'}],
+   moves:[{from:'cl',to:'noi',icon:'box',label:'① merce resa 400 €',c:'b',arc:-75,reveal:['cl']},{from:'noi',to:'cl',icon:'doc',label:'② nota: −400 € e IVA −88 €',c:'k',arc:80,reveal:['noi']}]},
+  {t:'doc',col:'L',title:'Nota di variazione n. 9 · emessa da noi',rows:[['Reso merce non conforme','400,00'],['+ IVA 22%','88,00'],['= Totale a favore del cliente','488,00']]},
+  {t:'pill',col:'R',html:'<b>Perché l’IVA torna indietro?</b> Il ricavo scende di 400 € → l’IVA da versare allo Stato scende di 88 €.'},
+  {t:'table',col:'R',rows:[
+    R('b','Resi su vendite','D','400,00',CERR,'VE− Rettifica di ricavo'),
+    R('g','IVA ns/debito','D','88,00',SPP,'VF+ −IVA a debito (storno)'),
+    R('r','Crediti v/clienti','A','488,00',SPA,'VF− −Crediti')]}
+ ]},
+/* 18 */{sec:4,slide:18,title:'Dopo il reso incassiamo solo il netto',
+ cap:'Dopo il reso incassiamo solo 9.638 €: entrata verde in banca, il credito si chiude in rosso. Nel mastrino il credito nasce in Dare e si chiude in Avere.',
+ blocks:[
+  {t:'mast',id:'m',col:'L',title:'Mastrino · Crediti v/clienti',ents:[{s:'D',l:'Fattura n. 112',v:'10.126,00'},{s:'A',l:'Nota di variazione',v:'488,00'},{s:'A',l:'Bonifico (netto)',v:'9.638,00',later:1}],tot:'10.126,00',saldo:'SALDO = 0',ssub:'credito chiuso'},
+  {t:'fcomp',col:'L',lead:'Fattura − Nota di variazione =',c:'k',items:['10.126','−','488','=','9.638 €']},
+  {t:'table',col:'R',rows:[
+    R('g','Banca X c/c','D','9.638,00',SPA,'VF+ Entrata (+Crediti)'),
+    R('r','Crediti v/clienti','A','9.638,00',SPA,'VF− −Crediti')]},
+  {t:'mpost',id:'m'},
+  {t:'pill',col:'R',k:'note',ic:'pin',html:'Nel mastrino: in <b class="g">DARE</b> il credito nasce (fattura), in <b class="r">AVERE</b> si riduce (reso) e si chiude (incasso).'}
+ ]},
+/* 19 */{sec:4,slide:19,title:'Ribassi e abbuoni passivi: lo sconto lo facciamo noi',
+ cap:'Ribassi e abbuoni passivi: lo sconto lo facciamo noi al cliente. È una rettifica di ricavo, blu in Dare; il credito verso il cliente si riduce, rosso in Avere.',
+ blocks:[
+  {t:'table',title:'① Difetto lieve: il cliente tiene la merce, emettiamo la nota di variazione',icon:'doc',rows:[
+    R('b','Ribassi e abbuoni passivi','D','150,00',CERR,'VE− Rettifica di ricavo'),
+    R('g','IVA ns/debito','D','33,00',SPP,'VF+ −IVA a debito (storno)'),
+    R('r','Crediti v/clienti','A','183,00',SPA,'VF− −Crediti')]},
+  {t:'table',title:'② Il cliente ci deve 2.500,30 € e paga 2.500 € (senza IVA)',icon:'coins',rows:[
+    R('g','Banca X c/c','D','2.500,00',SPA,'VF+ Entrata (+Crediti)'),
+    R('b','Ribassi e abbuoni passivi','D','0,30',CERR,'VE− Rettifica di ricavo'),
+    R('r','Crediti v/clienti','A','2.500,30',SPA,'VF− −Crediti')]}
+ ]},
+/* 20 */{sec:5,slide:20,title:'Acconto al fornitore: prima paghiamo, poi arriva la fattura',
+ cap:'Prima paghiamo l’acconto con bonifico: Debiti v/fornitori verde, Banca rossa. Poi arriva la fattura d’acconto: l’acconto diventa un credito verde verso Delta, con la sua IVA a credito.',
+ blocks:[
+  {t:'flow',id:'f',col:'L',h:230,nodes:[{id:'noi',x:120,y:90,icon:'office',label:'NOI'},{id:'de',x:580,y:90,icon:'office',label:'DELTA SRL'}],
+   moves:[{from:'noi',to:'de',icon:'coins',label:'① bonifico 1.220 €',c:'r',arc:-70}]},
+  {t:'table',col:'R',title:'① Paghiamo l’acconto con bonifico (IVA compresa)',rows:[
+    R('g','Debiti v/fornitori','D','1.220,00',SPP,'VF+ −Debiti'),
+    R('r','Banca X c/c','A','1.220,00',SPA,'VF− Uscita')]},
+  {t:'moves',flow:'f',moves:[{from:'de',to:'noi',icon:'doc',label:'② fattura d’acconto',c:'k',arc:75}]},
+  {t:'doc',col:'L',title:'Fattura d’acconto n. 50 · Delta srl',rows:[['Acconto su merci','1.000,00'],['+ IVA 22%','220,00'],['= Totale (già pagato)','1.220,00']]},
+  {t:'table',col:'R',title:'② Riceviamo la fattura d’acconto',rows:[
+    R('g','Fornitori c/acconti','D','1.000,00',SPA,'VF+ +Crediti'),
+    R('g','IVA ns/credito','D','220,00',SPA,'VF+ +IVA a credito'),
+    R('r','Debiti v/fornitori','A','1.220,00',SPP,'VF− +Debiti')]}
+ ]},
+/* 21 */{sec:5,slide:21,title:'Fattura di saldo dal fornitore con storno dell’acconto',
+ cap:'Arriva la fattura di saldo: il costo della merce si registra sempre pieno, 5.000 €. L’acconto già fatturato si storna in rosso e l’IVA si calcola solo sulla differenza di 4.000 €.',
+ blocks:[
+  {t:'doc',col:'L',title:'Fattura di saldo n. 61 · Delta srl',rows:[['Merci','5.000,00'],['− Acconto già fatturato','1.000,00'],['= Imponibile IVA','4.000,00'],['+ IVA 22%','880,00'],['= Totale da pagare','4.880,00']]},
+  {t:'table',col:'R',rows:[
+    R('b','Merci c/acquisti','D','5.000,00',CEC,'VE− Costo'),
+    R('g','IVA ns/credito','D','880,00',SPA,'VF+ +IVA a credito'),
+    R('r','Fornitori c/acconti','A','1.000,00',SPA,'VF− −Crediti (storno)'),
+    R('r','Debiti v/fornitori','A','4.880,00',SPP,'VF− +Debiti')]},
+  {t:'pill',col:'B',html:'Costo sempre <b class="b">PIENO (5.000)</b> · l’acconto <b class="r">si storna</b> · l’IVA solo sulla <b>differenza (4.000)</b>.',hl:[{rows:[0],c:'b'},{rows:[1],c:'r'},{rows:[2],c:'k'}]}
+ ]},
+/* 22 */{sec:5,slide:22,title:'Acconto dal cliente: prima incassiamo, poi emettiamo la fattura',
+ cap:'Lato vendite tutto è speculare: incassiamo l’acconto, verde in banca, ed emettiamo la fattura d’acconto. Clienti c/acconti è un debito rosso: dobbiamo ancora consegnare la merce.',
+ blocks:[
+  {t:'flow',id:'f',col:'L',h:230,nodes:[{id:'cl',x:120,y:90,icon:'person',label:'CLIENTE'},{id:'noi',x:580,y:90,icon:'office',label:'NOI'}],
+   moves:[{from:'cl',to:'noi',icon:'coins',label:'① bonifico 1.220 €',c:'g',arc:-70}]},
+  {t:'table',col:'R',title:'① Incassiamo l’acconto con bonifico (IVA compresa)',rows:[
+    R('g','Banca X c/c','D','1.220,00',SPA,'VF+ Entrata'),
+    R('r','Crediti v/clienti','A','1.220,00',SPA,'VF− −Crediti')]},
+  {t:'moves',flow:'f',moves:[{from:'noi',to:'cl',icon:'doc',label:'② fattura d’acconto',c:'k',arc:75}]},
+  {t:'doc',col:'L',title:'Fattura d’acconto n. 120 · emessa da noi',rows:[['Acconto su merci','1.000,00'],['+ IVA 22%','220,00'],['= Totale (già incassato)','1.220,00']]},
+  {t:'table',col:'R',title:'② Emettiamo subito la fattura d’acconto',rows:[
+    R('g','Crediti v/clienti','D','1.220,00',SPA,'VF+ +Crediti'),
+    R('r','Clienti c/acconti','A','1.000,00',SPP,'VF− +Debiti'),
+    R('r','IVA ns/debito','A','220,00',SPP,'VF− +IVA a debito')]}
+ ]},
+/* 23 */{sec:5,slide:23,title:'Fattura di saldo al cliente con storno dell’acconto',
+ cap:'Nella fattura di saldo il ricavo è sempre pieno, 5.000 €. Lo storno dell’acconto chiude il debito Clienti c/acconti in verde e l’IVA si applica solo ai 4.000 € residui.',
+ blocks:[
+  {t:'doc',col:'L',title:'Fattura di saldo n. 131 · emessa da noi',rows:[['Merci','5.000,00'],['− Acconto già fatturato','1.000,00'],['= Imponibile IVA','4.000,00'],['+ IVA 22%','880,00'],['= Totale da incassare','4.880,00']]},
+  {t:'table',col:'R',rows:[
+    R('g','Crediti v/clienti','D','4.880,00',SPA,'VF+ +Crediti'),
+    R('g','Clienti c/acconti','D','1.000,00',SPP,'VF+ −Debiti (storno)'),
+    R('b','Merci c/vendite','A','5.000,00',CER,'VE+ Ricavo'),
+    R('r','IVA ns/debito','A','880,00',SPP,'VF− +IVA a debito')]},
+  {t:'pill',col:'B',html:'Ricavo sempre <b class="b">PIENO (5.000)</b> · l’acconto <b class="g">si storna</b> · l’IVA solo sulla <b>differenza (4.000)</b>.',hl:[{rows:[0],c:'b'},{rows:[1],c:'g'},{rows:[2],c:'k'}]}
+ ]},
+/* 24 */{sec:5,slide:24,title:'Il regolamento: bonifico e contanti',
+ cap:'Regolare significa chiudere un credito o un debito con un mezzo di pagamento: bonifico o contanti, troviamo sempre una riga verde in Dare e una rossa in Avere.',
+ blocks:[
+  {t:'table',title:'Paghiamo il saldo a Delta srl con bonifico',icon:'vault',rows:[
+    R('g','Debiti v/fornitori','D','4.880,00',SPP,'VF+ −Debiti'),
+    R('r','Banca X c/c','A','4.880,00',SPA,'VF− Uscita (−Crediti)')]},
+  {t:'table',title:'Un cliente paga in contanti una piccola vendita',icon:'cash',rows:[
+    R('g','Denaro in cassa','D','450,00',SPA,'VF+ Entrata'),
+    R('r','Crediti v/clienti','A','450,00',SPA,'VF− −Crediti')]},
+  {t:'pill',html:'<b>Regolare</b> = chiudere un credito o un debito con un mezzo di pagamento: sempre una riga <b class="g">verde</b> e una <b class="r">rossa</b>.'}
+ ]},
+/* 25 */{sec:5,slide:25,title:'Il regolamento con le cambiali',
+ cap:'Con le cambiali il credito o il debito diventa un titolo: Cambiali attive verdi in Dare, Cambiali passive rosse in Avere. Alla scadenza la cambiale attiva si incassa in banca.',
+ blocks:[
+  {t:'table',title:'Il cliente ci rilascia una cambiale attiva (saldo fatt. n. 131)',icon:'cambiale',rows:[
+    R('g','Cambiali attive','D','4.880,00',SPA,'VF+ +Crediti'),
+    R('r','Crediti v/clienti','A','4.880,00',SPA,'VF− −Crediti')]},
+  {t:'table',title:'Rilasciamo una cambiale passiva ad Alfa srl (fatt. n. 46)',icon:'pen',rows:[
+    R('g','Debiti v/fornitori','D','5.063,00',SPP,'VF+ −Debiti'),
+    R('r','Cambiali passive','A','5.063,00',SPP,'VF− +Debiti')]},
+  {t:'pill',html:'Alla scadenza la cambiale attiva si incassa: <b class="g">Banca X c/c in DARE</b> / <b class="r">Cambiali attive in AVERE</b>.'}
+ ]}
+];
+
+/* ================= COSTRUTTORI DEI BLOCCHI ================= */
+const W={T:1792,B:1792,L:700,R:1044};
+function A(ctx,el,t0,d,k,o){ctx.anims.push({el,t0,d,k,o:o||{},lp:-1})}
+function vc(v){return v.indexOf('VF+')===0?'g':v.indexOf('VF−')===0?'r':'b'}
+function applyHl(b,ctx){
+  if(!b.hl||!ctx.lastDoc)return;
+  b.hl.forEach((g,i)=>g.rows.forEach(r=>{const el=ctx.lastDoc[r];if(el)A(ctx,el,ctx.t+i*.45,.5,'hl',{rgb:RGB[g.c||'k']})}));
+}
+const B={
+ table(b,ctx,w){
+  const wrap=h('div','tbl'+(w>1500?' wide':''));
+  A(ctx,wrap,ctx.t,.4,'up');
+  if(b.title){const t=h('div','tbl-title',icon(b.icon,34)+`<span>${b.title}</span>`);wrap.append(t);A(ctx,t,ctx.t,.45,'up');ctx.t+=.35}
+  const head=h('div','tr th','<div>Conto</div><div class="num">Dare</div><div class="num">Avere</div><div>Destinazione</div><div>Variazione</div>');
+  wrap.append(head);A(ctx,head,ctx.t,.4,'fade');ctx.t+=.4;
+  let last='D',tD=0,tA=0;
+  b.rows.forEach(r=>{
+    const[c,name,side,amt,dest,vari]=r;
+    if(side==='A'&&last==='D'){if(ctx.stops)ctx.stops.push(ctx.t);ctx.t+=.3}
+    last=side;
+    const chip=`<span class="amt ${c}">${amt}</span>`;
+    const row=h('div',`tr row ${c}`,`<div class="acc"><i class="dot ${c}"></i>${name}</div><div class="num">${side==='D'?chip:''}</div><div class="num">${side==='A'?chip:''}</div><div class="dest">${dest}</div><div><span class="vchip ${vc(vari)==='b'?c:vc(vari)}">${vari}</span></div>`);
+    wrap.append(row);
+    A(ctx,row,ctx.t,.65,side==='D'?'left':'right');
+    A(ctx,row.querySelector('.amt'),ctx.t+.45,.55,'flash',{rgb:RGB[c]});
+    if(side==='D')tD+=num(amt);else tA+=num(amt);
+    ctx.t+=.62;
+  });
+  ctx.t+=.2;
+  const bal=h('div','tbl-bal',`<span>Totale Dare <b>${fmt(tD)}</b></span><span>=</span><span>Totale Avere <b>${fmt(tA)}</b></span><span class="ok">${CHECK}quadra</span>`);
+  wrap.append(bal);A(ctx,bal,ctx.t,.5,'pop');ctx.t+=.75;
+  return wrap;
+ },
+ doc(b,ctx){
+  const wrap=h('div','doc');
+  const hd=h('div','doc-h',icon('doc',34)+`<span>${b.title}</span>`);wrap.append(hd);
+  A(ctx,wrap,ctx.t,.45,'up');ctx.t+=.35;
+  const rows=[];
+  b.rows.forEach((r,i)=>{
+    const sum=r[0].charAt(0)==='=';const tot=i===b.rows.length-1;
+    const el=h('div','drow'+(sum?' sum':'')+(tot?' tot':''),`<span>${r[0]}</span><span class="v">${r[1]}</span>`);
+    wrap.append(el);rows.push(el);A(ctx,el,ctx.t,.4,'left');ctx.t+=.24;
+  });
+  if(b.foot){const f=h('div','doc-foot',b.foot);wrap.append(f);A(ctx,f,ctx.t,.4,'fade');ctx.t+=.3}
+  ctx.t+=.25;ctx.lastDoc=rows;
+  return wrap;
+ },
+ pill(b,ctx){
+  const k=b.k||'idea';const ic=b.ic||(k==='info'?'info':k==='note'?'pin':'bulb');
+  const el=h('div','pill '+k,`<span class="pi">${icon(ic,30,'#fff',3)}</span><span>${b.html}</span>`);
+  A(ctx,el,ctx.t,.6,'pop');applyHl(b,ctx);ctx.t+=Math.max(1.1,(b.hl?b.hl.length*.45+.5:0));
+  return el;
+ },
+ formula(b,ctx){
+  const wrap=h('div','formula');
+  b.items.forEach(it=>{
+    if(typeof it==='string'){const o=h('div','fop',it);wrap.append(o);A(ctx,o,ctx.t,.4,'pop');ctx.t+=.25;return}
+    const box=h('div','fbox'+(it.res?' res '+(it.c||''):''),`<span class="l">${it.l}</span><span class="v">0</span>`+(it.s?`<span class="s">${it.s}</span>`:''));
+    wrap.append(box);A(ctx,box,ctx.t,.55,'pop');
+    A(ctx,box.querySelector('.v'),ctx.t+.1,it.res?1.1:.8,'count',{to:it.v,dec:0,suf:' €'});
+    if(it.s)A(ctx,box.querySelector('.s'),ctx.t+.7,.5,'up');
+    if(it.res){A(ctx,box,ctx.t+1.2,.8,'flash',{rgb:RGB[it.c||'b']});ctx.t+=1.4}else ctx.t+=it.s?1.2:.8;
+  });
+  ctx.t+=.3;return wrap;
+ },
+ fcomp(b,ctx){
+  const wrap=h('div','fcomp',`<span class="lead${b.c&&b.c!=='k'?' t-'+b.c:''}">${b.lead}</span>`);
+  A(ctx,wrap,ctx.t,.4,'up');applyHl(b,ctx);ctx.t+=.3;
+  b.items.forEach((s,i)=>{
+    const last=i===b.items.length-1;const isNum=/\d/.test(s);
+    const t=h('span','tok'+(isNum&&!last?' n':'')+(last?' res '+(b.c||''):''),s);
+    wrap.append(t);A(ctx,t,ctx.t,.4,'pop');
+    if(last){const dec=s.indexOf(',')>=0?2:0;A(ctx,t,ctx.t,.9,'count',{to:num(s),dec,suf:s.indexOf('€')>=0?' €':''});A(ctx,t,ctx.t+.9,.6,'flash',{rgb:RGB[b.c||'k']});ctx.t+=1.3}
+    else ctx.t+=.2;
+  });
+  ctx.t+=.3;return wrap;
+ },
+ steps(b,ctx){
+  const wrap=h('div','steps');
+  b.items.forEach((s,i)=>{const el=h('div','step',`<span class="n">${i+1}</span><span>${s}</span>`);wrap.append(el);A(ctx,el,ctx.t,.5,'left');ctx.t+=.55});
+  ctx.t+=.2;return wrap;
+ },
+ cal(b,ctx){
+  const wrap=h('div','cal',`<div class="cal-card"><div class="top">${b.top}</div><div class="big">1</div></div><div class="txt">${b.txt}</div>`);
+  A(ctx,wrap,ctx.t,.5,'up');A(ctx,wrap.querySelector('.big'),ctx.t+.2,1.1,'count',{to:b.n,dec:0});
+  A(ctx,wrap.querySelector('.cal-card'),ctx.t+1.3,.6,'pulse');ctx.t+=1.6;return wrap;
+ },
+ mast(b,ctx){
+  const wrap=h('div','mast');
+  wrap.innerHTML=`<div class="mast-h">${icon('doc',28)}<span>${b.title}</span></div><div class="mcols"><div class="mcol"><span class="mlab">DARE</span></div><div class="mcol"><span class="mlab">AVERE</span></div></div><div class="mtot"><span>${b.tot}</span><span>${b.tot}</span></div><div class="stampbox"><span class="stamp">${b.saldo}<small>${b.ssub}</small></span></div>`;
+  const cols=wrap.querySelectorAll('.mcol');
+  A(ctx,wrap,ctx.t,.45,'up');ctx.t+=.45;
+  const items=b.ents.map(e=>{
+    const c=e.s==='D'?'g':'r';
+    const el=h('div','ment',e.s==='D'?`<span>${e.l}</span><span class="amt ${c}">0</span>`:`<span class="amt ${c}">0</span><span>${e.l}</span>`);
+    cols[e.s==='D'?0:1].append(el);return{e,el,c};
+  });
+  const tot=wrap.querySelector('.mtot'),st=wrap.querySelector('.stamp');
+  const post=(list,c2)=>{list.forEach(it=>{A(c2,it.el,c2.t,.6,it.e.s==='D'?'left':'right');A(c2,it.el.querySelector('.amt'),c2.t+.1,.8,'count',{to:num(it.e.v)});A(c2,it.el.querySelector('.amt'),c2.t+.85,.5,'flash',{rgb:RGB[it.c]});c2.t+=1.1})};
+  const finish=c2=>{A(c2,tot,c2.t,.5,'up');c2.t+=.6;A(c2,st,c2.t,.6,'stamp');c2.t+=.9};
+  post(items.filter(i=>!i.e.later),ctx);
+  const later=items.filter(i=>i.e.later);
+  if(later.length)ctx.mast[b.id]=c2=>{post(later,c2);finish(c2)};else finish(ctx);
+  return wrap;
+ },
+ mpost(b,ctx){const f=ctx.mast[b.id];if(f)f(ctx);return null},
+ flow(b,ctx,w){
+  const wrap=h('div','flow');wrap.style.width=w+'px';wrap.style.height=b.h+'px';
+  const svg=document.createElementNS(SVGNS,'svg');svg.setAttribute('class','trails');svg.setAttribute('width',w);svg.setAttribute('height',b.h);svg.setAttribute('aria-hidden','true');
+  wrap.append(svg);
+  const F={wrap,svg,nodes:{}};
+  b.nodes.forEach((n,i)=>{
+    const el=h('div','node',`<div class="circ">${icon(n.icon,54,'#1B1F2A',2.8)}</div><div class="lab">${n.label}</div>`+(n.sub?`<div class="sub">${n.sub}</div>`:''));
+    el.style.left=n.x+'px';el.style.top=(n.y-50)+'px';wrap.append(el);
+    F.nodes[n.id]={x:n.x,y:n.y,el,circ:el.querySelector('.circ'),sub:el.querySelector('.sub')};
+    A(ctx,el,ctx.t+i*.15,.5,'pop');
+  });
+  ctx.t+=.35+b.nodes.length*.15;
+  ctx.flows[b.id]=F;
+  if(b.moves)B.moves({flow:b.id,moves:b.moves},ctx);
+  return wrap;
+ },
+ moves(b,ctx){
+  const F=ctx.flows[b.flow];
+  b.moves.forEach((m,mi)=>{
+    if(mi>0&&!m.par&&ctx.stops)ctx.stops.push(ctx.t);
+    if(m.par)ctx.t-=m.par;
+    const a=F.nodes[m.from],z=F.nodes[m.to];
+    const dx=z.x-a.x,dy=z.y-a.y,L=Math.hypot(dx,dy),ux=dx/L,uy=dy/L;
+    const P0=[a.x+ux*62,a.y+uy*62],P2=[z.x-ux*62,z.y-uy*62];
+    const mx=(P0[0]+P2[0])/2,my=(P0[1]+P2[1])/2,fl=(dx<0||(dx===0&&dy<0))?-1:1,nx=-uy*fl,ny=ux*fl;
+    const arc=m.arc||0;const C=[mx+nx*arc*2,my+ny*arc*2];
+    const P=[P0,C,P2];
+    let len=0,pr=P0;for(let i=1;i<=40;i++){const q=qb(P,i/40);len+=Math.hypot(q[0]-pr[0],q[1]-pr[1]);pr=q}
+    const col={b:'#0B3BFF',g:'#00A13E',r:'#F01E16',v:'#7A3FD1',t:'#00838F',o:'#E06A00'}[m.c]||'#1B1F2A';
+    const path=document.createElementNS(SVGNS,'path');
+    path.setAttribute('d',`M${P0[0]} ${P0[1]} Q${C[0]} ${C[1]} ${P2[0]} ${P2[1]}`);
+    path.setAttribute('fill','none');path.setAttribute('stroke',col);path.setAttribute('stroke-width','5');path.setAttribute('stroke-linecap','round');
+    if(m.dashed){path.setAttribute('stroke-dasharray','4 12');path.style.opacity=0}
+    else{path.style.strokeDasharray=len;path.style.strokeDashoffset=len}
+    F.svg.append(path);
+    const ang=Math.atan2(P2[1]-C[1],P2[0]-C[0])*180/Math.PI;
+    const head=document.createElementNS(SVGNS,'path');
+    head.setAttribute('d','M-14 -10 L4 0 L-14 10 Z');head.setAttribute('fill',col);
+    const hg=document.createElementNS(SVGNS,'g');hg.setAttribute('transform',`translate(${P2[0]} ${P2[1]}) rotate(${ang})`);
+    head.style.transformBox='fill-box';head.style.transformOrigin='center';head.style.opacity=0;
+    hg.append(head);F.svg.append(hg);
+    const mid=qb(P,.5);const side=arc<0?-1:1;
+    const lw=h('div','mlabel-wrap');lw.style.transform=`translate(${mid[0]+nx*side*30*(arc?1:0)}px,${mid[1]+(arc?ny*side*30:-34)}px)`;
+    const lab=h('div','mlabel '+(m.c||'k'),m.label);lw.append(lab);F.wrap.append(lw);
+    const mv=h('div','mover '+(m.c||'k'),icon(m.icon,40,'#1B1F2A',3));F.wrap.append(mv);
+    const d=m.dur||1.5;
+    A(ctx,path,ctx.t,d,m.dashed?'fade':'draw',{len});
+    A(ctx,mv,ctx.t,d,'move',{P});
+    A(ctx,lab,ctx.t+.25,.5,'pop');
+    A(ctx,head,ctx.t+d-.1,.35,'pop');
+    A(ctx,z.circ,ctx.t+d-.05,.5,'pulse');
+    (m.reveal||[]).forEach(id=>{const s=F.nodes[id].sub;if(s)A(ctx,s,ctx.t+d,.5,'up')});
+    ctx.t+=d+.35;
+  });
+  return null;
+ }
+};
+/* nasconde i sottotitoli dei nodi rivelati dopo (stato iniziale) */
+
+/* ================= SCENE ================= */
+const scenes=[];
+const HOLD=4.2;
+function addScene(s){scenes.push(s)}
+
+function buildLesson(s){
+  const el=h('section','scene lesson');
+  const head=h('header','shead',`<span class="kchip">${SECS[s.sec].k}</span><h2>${s.title}</h2><span class="snum">${s.slide} / 25</span>`);
+  el.append(head);
+  const content=h('div','scontent');el.append(content);
+  const ctx={t:.5,anims:[],flows:{},mast:{},lastDoc:null,stops:[]};
+  A(ctx,head.children[0],.05,.5,'left');A(ctx,head.children[1],.15,.55,'up');A(ctx,head.children[2],.3,.4,'fade');
+  const zT=h('div','zone'),grid=h('div','grid'),cL=h('div','col'),cR=h('div','col'),zB=h('div','zone');
+  grid.append(cL,cR);
+  const tgt={T:zT,L:cL,R:cR,B:zB};
+  /* ogni blocco è un passo della presentazione: ci si ferma prima che inizi */
+  s.blocks.forEach(b=>{const col=b.col||'T';ctx.stops.push(ctx.t);const node=B[b.t](b,ctx,W[col]);if(node)tgt[col].append(node)});
+  ctx.stops.push(ctx.t);s.stops=ctx.stops;
+  if(zT.children.length)content.append(zT);
+  if(cL.children.length||cR.children.length){if(!cL.children.length)grid.style.gridTemplateColumns='1fr';content.append(grid)}
+  if(zB.children.length)content.append(zB);
+  s.el=el;s.anims=ctx.anims;s.kind='lesson';s.dur=Math.max(ctx.t+HOLD,10);
+  // nodi: i sottotitoli che vengono rivelati partono nascosti (hanno un'animazione)
+  return s;
+}
+
+function buildIntro(){
+  const s={kind:'intro',sec:0,cap:'Oggi registriamo in partita doppia costituzione, acquisti, vendite e rettifiche. Prima di tutto, il codice colore: ogni conto si accende del colore della sua variazione.'};
+  const el=h('section','scene intro');
+  el.innerHTML=`<div><div class="kick">ECONOMIA AZIENDALE · CLASSE TERZA ITE</div><h1>Costituzione, Acquisti, Vendite e Rettifiche</h1><p class="sub">Le scritture in partita doppia con il codice colore</p>
+  <div class="tacc"><div class="tn">Il conto</div><div class="tc"><div><span class="mlab">DARE</span></div><div><span class="mlab">AVERE</span></div></div></div></div>
+  <div class="codes">
+   <div class="code"><div class="sw" style="background:var(--blu-bg);border-color:var(--blu);color:var(--blu-t)">VE</div><div><h4 class="t-b">Economico</h4><p class="econ4"><span class="amt b">d’esercizio</span><span class="amt v">pluriennali</span><span class="amt t">patrimonio netto</span><span class="amt o">sospesi</span></p><em>COSTI E RETTIFICHE DI RICAVO → DARE · RICAVI E RETTIFICHE DI COSTO → AVERE</em></div></div>
+   <div class="code"><div class="sw" style="background:var(--ver-bg);border-color:var(--ver);color:var(--ver-t)">VF+</div><div><h4 class="t-g">Finanziario +</h4><p>+Entrate · +Crediti · −Debiti · +IVA a credito</p><em>SEMPRE IN DARE</em></div></div>
+   <div class="code"><div class="sw" style="background:var(--ros-bg);border-color:var(--ros);color:var(--ros-t)">VF−</div><div><h4 class="t-r">Finanziario −</h4><p>−Uscite · −Crediti · +Debiti · +IVA a debito</p><em>SEMPRE IN AVERE</em></div></div>
+  </div>`;
+  const ctx={t:0,anims:[]};
+  const left=el.children[0];
+  A(ctx,left.querySelector('.kick'),.2,.5,'left');A(ctx,left.querySelector('h1'),.4,.7,'up');A(ctx,left.querySelector('.sub'),.9,.6,'up');
+  const codes=el.querySelectorAll('.code');
+  A(ctx,codes[0],1.6,.6,'pop');A(ctx,codes[1],2.4,.6,'left');A(ctx,codes[2],3.2,.6,'right');
+  const ta=left.querySelector('.tacc');A(ctx,ta,4.0,.5,'up');
+  const cd=ta.querySelectorAll('.tc>div');
+  const chips=[[0,'g','+Entrate · +Crediti',4.7,'left'],[1,'r','+Debiti · −Crediti',5.5,'right'],[0,'b','Costi',6.4,'pop'],[1,'b','Ricavi',6.8,'pop'],[0,'v','Costi pluriennali',7.2,'pop'],[1,'t','Patrimonio netto',7.6,'pop']];
+  chips.forEach(([ci,c,t,at,k])=>{const e=h('span','amt '+c,t);cd[ci].append(e);A(ctx,e,at,.6,k);A(ctx,e,at+.5,.5,'flash',{rgb:RGB[c]})});
+  s.el=el;s.anims=ctx.anims;s.dur=11;s.stops=[1.5,4.0];return s;
+}
+function buildChapter(sec){
+  const S=SECS[sec];const list=LESSONS.filter(l=>l.sec===sec);
+  const s={kind:'chap',sec,cap:`Capitolo ${sec}: ${S.t.toLowerCase()}.`};
+  const el=h('section','scene chap');
+  const n=String(sec).padStart(2,'0');
+  el.innerHTML=`<div class="no"><span>${n[0]}</span><span>${n[1]}</span></div><h3>${S.t}</h3><ul>${list.map(l=>`<li><b>${String(l.slide).padStart(2,'0')}</b>${l.title}</li>`).join('')}</ul>`;
+  const ctx={t:0,anims:[]};
+  ['var(--ver)','var(--blu)','var(--ros)'].forEach((c,i)=>{const st=h('div','stripe');st.style.background=c;st.style.left='0';el.append(st);A(ctx,st,i*.09,.85,'wipe')});
+  A(ctx,el.querySelector('.no'),.35,.6,'left');A(ctx,el.querySelector('h3'),.55,.6,'up');
+  el.querySelectorAll('li').forEach((li,i)=>A(ctx,li,.9+i*.18,.45,'left'));
+  s.el=el;s.anims=ctx.anims;s.dur=Math.max(3.4,1.6+list.length*.18+1.6);s.trans=.3;return s;
+}
+function buildOutro(){
+  const s={kind:'outro',sec:6,cap:'Ricapitolando: verde sempre in Dare, rosso sempre in Avere, i conti economici in Dare o in Avere secondo la loro natura, ognuno con il suo colore. E ogni scrittura deve quadrare.'};
+  const el=h('section','scene outro');
+  el.innerHTML=`<div class="kick">RICAPITOLANDO</div><h3>Il codice colore in quattro regole</h3>
+   <div class="rule"><span class="amt g">VF+</span><span>Entrate, crediti che nascono, debiti che si estinguono → <b class="g">sempre in DARE</b></span></div>
+   <div class="rule"><span class="amt r">VF−</span><span>Uscite, debiti che nascono, crediti che si estinguono → <b class="r">sempre in AVERE</b></span></div>
+   <div class="rule"><span class="amt b">VE</span><span>Costi e rettifiche di ricavo in <b class="b">DARE</b> · Ricavi, rettifiche di costo e <b class="t">PN</b> in <b class="b">AVERE</b></span></div>
+   <div class="rule"><span class="amt v">VE</span><span>Quattro colori economici: <b class="b">d’esercizio</b> · <b class="v">costi pluriennali</b> · <b class="t">patrimonio netto</b> · <b class="o">costi e ricavi sospesi</b></span></div>
+   <div class="final">Totale Dare = Totale Avere</div>`;
+  const ctx={t:0,anims:[]};
+  A(ctx,el.querySelector('.kick'),.2,.5,'left');A(ctx,el.querySelector('h3'),.4,.6,'up');
+  const r=el.querySelectorAll('.rule');A(ctx,r[0],1.3,.6,'left');A(ctx,r[1],2.3,.6,'right');A(ctx,r[2],3.3,.6,'pop');A(ctx,r[3],4.1,.6,'up');
+  A(ctx,el.querySelector('.final'),5.0,.7,'pop');A(ctx,el.querySelector('.final'),5.7,.7,'flash',{rgb:RGB.g});
+  s.el=el;s.anims=ctx.anims;s.dur=10.5;s.stops=[1.3,5.0];return s;
+}
+
+addScene(buildIntro());
+for(let sec=1;sec<=5;sec++){addScene(buildChapter(sec));LESSONS.filter(l=>l.sec===sec).forEach(l=>addScene(buildLesson(l)))}
+addScene(buildOutro());
+
+const stage=document.getElementById('stage');
+/* passi della presentazione: a ogni fermata tutto ciò che è già partito deve essere finito,
+   altrimenti si sposta in avanti il resto della scena */
+scenes.forEach(s=>{
+  const st=(s.stops||[]).slice().sort((a,b)=>a-b);let shift=0;
+  for(let k=0;k<st.length;k++){
+    const t=st[k];
+    const over=s.anims.filter(a=>a.t0<t-1e-6).reduce((m,a)=>Math.max(m,a.t0+a.d),0)-t;
+    if(over>.001){const g=over+.05;s.anims.forEach(a=>{if(a.t0>=t-1e-6)a.t0+=g});for(let j=k;j<st.length;j++)st[j]+=g;shift+=g}
+  }
+  s.dur+=shift;
+  const end=s.anims.reduce((m,a)=>Math.max(m,a.t0+a.d),0);s.end=end;
+  const ok=st.filter(t=>t>.6&&t<end-.05);ok.push(end);
+  s.stops=ok.filter((t,k)=>k===0||t-ok[k-1]>.05);
+});
+let acc=0;scenes.forEach(s=>{s.start=acc;acc+=s.dur;s.el.style.display='none';stage.append(s.el)});
+const TOTAL=acc;
+
+/* ================= BARRA SEZIONI, MARCATORI, CAPITOLI ================= */
+const segsEl=document.getElementById('segs');const segs=[];
+for(let sec=1;sec<=5;sec++){
+  const sc=scenes.filter(s=>s.sec===sec);const a=sc[0].start,b=sc[sc.length-1].start+sc[sc.length-1].dur;
+  const el=h('div','seg',`<span>${String(sec).padStart(2,'0')} ${SECS[sec].s.toUpperCase()}</span><i><b></b></i>`);segsEl.append(el);
+  segs.push({el,a,b,bar:el.querySelector('b')});
+}
+const marks=document.getElementById('marks'),chipsEl=document.getElementById('chips');
+const chapList=[{l:'Intro',t:0}];for(let sec=1;sec<=5;sec++){const c=scenes.find(s=>s.kind==='chap'&&s.sec===sec);chapList.push({l:String(sec).padStart(2,'0')+' '+SECS[sec].s,t:c.start})}
+chapList.push({l:'Ripasso',t:scenes[scenes.length-1].start});
+chapList.forEach(c=>{const m=h('i');m.style.left=(c.t/TOTAL*100)+'%';marks.append(m);const b=h('button','',c.l);b.type='button';b.addEventListener('click',()=>{seek(c.t);});chipsEl.append(b);c.btn=b});
+
+/* ================= RENDER ================= */
+const capEl=document.getElementById('caption'),capTxt=document.getElementById('captxt'),topbar=document.getElementById('topbar');
+let lastScene=-1,shown=new Set();
+function sceneIndexAt(T){let i=0;while(i<scenes.length-1&&T>=scenes[i+1].start)i++;return i}
+function applyScene(s,lt){
+  for(const a of s.anims){
+    const p=clamp((lt-a.t0)/a.d,0,1);
+    if(p===a.lp)continue;a.lp=p;K[a.k](a.el,p,a.o);
+  }
+}
+function render(T){
+  T=clamp(T,0,TOTAL);
+  const i=sceneIndexAt(T),sc=scenes[i],lt=T-sc.start,tr=sc.trans||.55;
+  const vis=new Set([i]);
+  const inTrans=i>0&&lt<tr;
+  if(inTrans)vis.add(i-1);
+  shown.forEach(j=>{if(!vis.has(j)){scenes[j].el.style.display='none'}});
+  vis.forEach(j=>{scenes[j].el.style.display=''});shown=vis;
+  if(inTrans){
+    const pv=scenes[i-1],e=eo(lt/tr);
+    applyScene(pv,pv.dur);pv.el.style.zIndex=1;pv.el.style.opacity=1-e;pv.el.style.transform=`translateX(${-e*110}px)`;
+  }
+  const e=i>0?eo(Math.min(1,lt/tr)):1;
+  sc.el.style.zIndex=2;sc.el.style.opacity=sc.kind==='chap'?1:e;sc.el.style.transform=sc.kind==='chap'?'none':`translateX(${(1-e)*110}px)`;
+  applyScene(sc,lt);
+  if(i!==lastScene){capTxt.textContent=sc.cap;lastScene=i;
+    topbar.style.opacity=sc.kind==='lesson'?1:0;
+    segs.forEach((g,k)=>g.el.classList.toggle('on',sc.sec===k+1));
+    let ci=0;chapList.forEach((c,k)=>{if(T>=c.t-0.001)ci=k});chapList.forEach((c,k)=>c.btn.classList.toggle('on',k===ci));
+  }
+  capEl.style.opacity=Math.min(1,Math.max(0,(lt-.15)/.4));
+  segs.forEach(g=>{g.bar.style.width=(clamp((T-g.a)/(g.b-g.a),0,1)*100)+'%'});
+}
+
+/* ================= LETTORE ================= */
+let T=0,playing=false,speed=1,lastTs=0,lessonMode=false,target=null,mode='pres';
+const $=id=>document.getElementById(id);
+const seekEl=$('seek'),timeEl=$('time'),posEl=$('pos'),dotsEl=$('dots');
+seekEl.max=TOTAL;
+const mmss=s=>{s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+/* passo corrente: quante fermate della scena sono già state raggiunte */
+function where(){const i=sceneIndexAt(T),s=scenes[i],lt=T-s.start;let k=0;s.stops.forEach(t=>{if(lt>=t-.02)k++});return{i,s,lt,k}}
+function sceneName(s){return s.kind==='lesson'?`Slide ${s.slide} di 25`:s.kind==='chap'?`Capitolo ${s.sec}`:s.kind==='intro'?'Copertina':'Ripasso finale'}
+function ui(){
+  seekEl.value=T;timeEl.textContent=mmss(T)+' / '+mmss(TOTAL);
+  $('lPlay').textContent=playing&&mode==='vid'?'Pausa':'Riproduci';
+  $('bPlay').setAttribute('aria-label',playing&&mode==='vid'?'Pausa':'Riproduci');
+  $('icoPlay').innerHTML=playing&&mode==='vid'?'<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>':'<path d="M7 4v16l13-8z"/>';
+  const w=where();
+  posEl.textContent=mode==='pres'?`${sceneName(w.s)} · passo ${Math.max(1,w.k)} di ${w.s.stops.length}`:sceneName(w.s);
+  if(dotsEl.childElementCount!==w.s.stops.length||dotsEl.dataset.i!==String(w.i)){dotsEl.innerHTML=w.s.stops.map(()=>'<i></i>').join('');dotsEl.dataset.i=w.i}
+  [...dotsEl.children].forEach((d,k)=>d.classList.toggle('on',k<w.k));
+  const last=w.i===scenes.length-1&&w.k>=w.s.stops.length;
+  $('pNext').disabled=last;$('pPrev').disabled=w.i===0&&w.k<=1;
+}
+function seek(t){target=null;playing=false;T=clamp(t,0,TOTAL);render(T);ui()}
+function play(){if(T>=TOTAL-.01)T=0;playing=true;lastTs=performance.now();ui();requestAnimationFrame(loop)}
+function pause(){playing=false;target=null;ui()}
+function animateTo(t){target=t;if(!playing){playing=true;lastTs=performance.now();requestAnimationFrame(loop)}ui()}
+function loop(ts){
+  if(!playing)return;
+  const dt=Math.min(.1,(ts-lastTs)/1000);lastTs=ts;
+  const before=sceneIndexAt(T);let nt=T+dt*speed;
+  if(target!=null&&nt>=target){T=target;target=null;playing=false;render(T);ui();return}
+  if(mode==='vid'&&lessonMode){const nxt=scenes[before+1];if(nxt&&nt>=nxt.start){T=nxt.start-.001;render(T);pause();return}}
+  T=nt;
+  if(T>=TOTAL){T=TOTAL;render(T);pause();return}
+  render(T);ui();requestAnimationFrame(loop);
+}
+/* ---- presentazione: avanti / indietro per passi ---- */
+function next(){
+  if(target!=null){const t=target;seek(t);return}          // salta l'animazione in corso
+  const w=where();
+  const nx=w.s.stops.find(t=>t>w.lt+.02);
+  if(nx!=null){animateTo(w.s.start+nx);return}
+  if(w.i<scenes.length-1){const s=scenes[w.i+1];T=s.start;render(T);animateTo(s.start+s.stops[0])}
+}
+function prev(){
+  const w=where();playing=false;target=null;
+  const pv=w.s.stops.filter(t=>t<w.lt-.02);
+  if(pv.length){seek(w.s.start+pv[pv.length-1]);return}
+  if(w.i>0){const s=scenes[w.i-1];seek(s.start+s.stops[s.stops.length-1])}
+}
+function goScene(i,full){const s=scenes[i];seek(s.start+(full?s.stops[s.stops.length-1]:s.stops[0]))}
+function sceneJump(dir){const i=sceneIndexAt(T);const lt=T-scenes[i].start;
+  if(dir<0)seek(lt>1.5?scenes[i].start:scenes[Math.max(0,i-1)].start);
+  else seek(scenes[Math.min(scenes.length-1,i+1)].start)}
+function setMode(m){
+  mode=m;pause();
+  $('mPres').setAttribute('aria-pressed',m==='pres');$('mVid').setAttribute('aria-pressed',m==='vid');
+  $('presCtl').hidden=m!=='pres';$('vidCtl').hidden=m!=='vid';
+  vp.classList.toggle('clickable',m==='pres');
+  if(m==='pres'){const w=where();const st=w.s.stops.filter(t=>t<=w.lt+.02);seek(w.s.start+(st.length?st[st.length-1]:w.s.stops[0]))}
+  ui();
+}
+const vp=$('viewport'),player=$('player');
+$('mPres').addEventListener('click',()=>setMode('pres'));
+$('mVid').addEventListener('click',()=>setMode('vid'));
+$('pNext').addEventListener('click',next);
+$('pPrev').addEventListener('click',prev);
+/* clic sulla slide: avanti; clic sul quinto sinistro: indietro (comodo sulla LIM) */
+vp.addEventListener('click',e=>{if(mode!=='pres')return;const r=vp.getBoundingClientRect();(e.clientX-r.left<r.width*.2)?prev():next()});
+$('bPlay').addEventListener('click',()=>playing?pause():play());
+$('bPrev').addEventListener('click',()=>sceneJump(-1));
+$('bNext').addEventListener('click',()=>sceneJump(1));
+seekEl.addEventListener('input',()=>seek(parseFloat(seekEl.value)));
+$('speed').addEventListener('change',e=>{speed=parseFloat(e.target.value)});
+$('cCap').addEventListener('change',e=>stage.classList.toggle('nocap',!e.target.checked));
+$('cLesson').addEventListener('change',e=>{lessonMode=e.target.checked});
+$('bFull').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await player.requestFullscreen()}catch(err){}});
+/* capitoli: in presentazione si apre la scheda del capitolo */
+chapList.forEach(c=>{c.btn.onclick=()=>{const i=scenes.findIndex(s=>Math.abs(s.start-c.t)<1e-6);mode==='pres'?goScene(i,true):seek(c.t)}});
+/* ---- indice ---- */
+const idx=$('index'),grid=$('indexGrid');
+(function buildIndex(){
+  const groups=[{t:'Copertina',items:[0]}];
+  for(let sec=1;sec<=5;sec++){const ids=[];scenes.forEach((s,i)=>{if(s.sec===sec)ids.push(i)});groups.push({sec,items:ids})}
+  groups.push({t:'Ripasso finale',items:[scenes.length-1]});
+  groups.forEach(g=>{
+    const col=h('div','ichap');
+    g.items.forEach(i=>{const s=scenes[i];
+      const label=s.kind==='lesson'?`<b>${String(s.slide).padStart(2,'0')}</b><span>${s.title}</span>`:s.kind==='chap'?`<span>${String(s.sec).padStart(2,'0')} · ${SECS[s.sec].t}</span>`:`<span>${g.t}</span>`;
+      const b=h('button',s.kind==='lesson'?'':'cap',label);b.type='button';b.dataset.i=i;
+      b.addEventListener('click',()=>{closeIndex();mode==='pres'?goScene(i,s.kind!=='lesson'):seek(s.start)});
+      col.append(b)});
+    grid.append(col)});
+})();
+function openIndex(){const i=sceneIndexAt(T);grid.querySelectorAll('button').forEach(b=>b.classList.toggle('here',+b.dataset.i===i));idx.hidden=false;(grid.querySelector('.here')||$('iClose')).focus()}
+function closeIndex(){idx.hidden=true;$('bIndex').focus()}
+$('bIndex').addEventListener('click',openIndex);$('iClose').addEventListener('click',closeIndex);
+idx.addEventListener('click',e=>{if(e.target===idx)closeIndex()});
+/* ---- tastiera e telecomandi (inviano PagGiù/PagSu o frecce) ---- */
+document.addEventListener('keydown',e=>{
+  if(!idx.hidden){if(e.key==='Escape'){e.preventDefault();closeIndex()}return}
+  const tg=e.target;if(tg.tagName==='SELECT'||tg.type==='range'||tg.type==='checkbox')return;
+  const onBtn=tg.tagName==='BUTTON'&&(e.key===' '||e.key==='Enter');
+  if(e.key==='i'||e.key==='I'){e.preventDefault();openIndex();return}
+  if(e.key==='f'||e.key==='F'){e.preventDefault();$('bFull').click();return}
+  if(mode==='pres'){
+    if(onBtn)return;
+    if(['ArrowRight','ArrowDown','PageDown',' ','Enter','n'].includes(e.key)){e.preventDefault();next()}
+    else if(['ArrowLeft','ArrowUp','PageUp','Backspace','p'].includes(e.key)){e.preventDefault();prev()}
+    else if(e.key==='Home'){e.preventDefault();goScene(0,false)}
+    else if(e.key==='End'){e.preventDefault();goScene(scenes.length-1,true)}
+  }else{
+    if(e.key===' '&&!onBtn){e.preventDefault();playing?pause():play()}
+    else if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();sceneJump(1)}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();sceneJump(-1)}
+  }
+});
+
+/* scala del palco */
+function fit(){const w=vp.clientWidth,hh=vp.clientHeight;const s=Math.min(w/1920,hh/1080);stage.style.transform=`translate(${(w-1920*s)/2}px,${(hh-1080*s)/2}px) scale(${s})`}
+new ResizeObserver(fit).observe(vp);fit();
+
+/* stato iniziale: copertina completa, oppure la sezione indicata nel link (#cap1…#cap5, #slide7, #ripasso) */
+seek(5.2);goScene(0,true);setMode('pres');
+(function fromHash(){
+  const hsh=(location.hash||'').slice(1).toLowerCase();let i=-1;
+  let m;
+  if((m=hsh.match(/^cap([1-5])$/)))i=scenes.findIndex(s=>s.kind==='chap'&&s.sec===+m[1]);
+  else if((m=hsh.match(/^slide(\d{1,2})$/)))i=scenes.findIndex(s=>s.kind==='lesson'&&s.slide===+m[1]);
+  else if(hsh==='ripasso')i=scenes.length-1;
+  if(i>=0)goScene(i,scenes[i].kind!=='lesson');
+})();
+window.__lesson={seek,next,prev,TOTAL,state:()=>{const w=where();return{scena:w.i,passo:w.k,passi:w.s.stops.length,T:+T.toFixed(2)}},scenes:scenes.map(s=>({start:s.start,dur:s.dur,kind:s.kind,title:s.title||s.kind,cap:s.cap,stops:s.stops}))};
+})();
+</script>
+
+</body>
+</html>
