@@ -1,0 +1,1317 @@
+<title>Economia Aziendale classe Terza</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: un registro dei materiali, una scheda per argomento in colonna; il codice colore della partita doppia segna stati e destinatari */
+:root{
+  --paper:#F6F3EC; --card:#FFFFFF; --ink:#1B1F2A; --mute:#5A6070; --line:#DDD8CB; --soft:#ECE8DE;
+  --blu:#0B3BFF; --blu-t:#0A2FD0; --blu-bg:#E4EAFF;
+  --ver:#00A13E; --ver-t:#007A2F; --ver-bg:#DDF5E5;
+  --ros:#F01E16; --ros-t:#C8150E; --ros-bg:#FDE3E1;
+  --gold:#FFF1B8; --gold-t:#6B5300;
+  --vio:#7A3FD1; --vio-t:#5E2BAE; --vio-bg:#EFE6FC;
+  --tea:#00838F; --tea-t:#006A74; --tea-bg:#DDF2F3;
+  --ora:#E06A00; --ora-t:#A84F00; --ora-bg:#FDEBD8;
+  --focus:#0B3BFF;
+  --f-disp:'Bricolage Grotesque','IBM Plex Sans',system-ui,sans-serif;
+  --f-body:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#12161F; --card:#1B2030; --ink:#EEEBE3; --mute:#A4ACBD; --line:#2C3346; --soft:#232A3B;
+  --blu:#6E8BFF; --blu-t:#9DB0FF; --blu-bg:#1E2A55;
+  --ver:#2BC266; --ver-t:#6FDB98; --ver-bg:#173A27;
+  --ros:#FF5A52; --ros-t:#FF8F89; --ros-bg:#4A1E1E;
+  --vio:#B48CFF; --vio-t:#CDB2FF; --vio-bg:#33245A;
+  --tea:#3FC7D2; --tea-t:#7FDDE4; --tea-bg:#12393D;
+  --ora:#FF9A45; --ora-t:#FFBA80; --ora-bg:#47290F;
+  --gold:#4A3D10; --gold-t:#F3DE8A; --focus:#9DB0FF; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#12161F; --card:#1B2030; --ink:#EEEBE3; --mute:#A4ACBD; --line:#2C3346; --soft:#232A3B;
+  --blu:#6E8BFF; --blu-t:#9DB0FF; --blu-bg:#1E2A55;
+  --ver:#2BC266; --ver-t:#6FDB98; --ver-bg:#173A27;
+  --ros:#FF5A52; --ros-t:#FF8F89; --ros-bg:#4A1E1E;
+  --vio:#B48CFF; --vio-t:#CDB2FF; --vio-bg:#33245A;
+  --tea:#3FC7D2; --tea-t:#7FDDE4; --tea-bg:#12393D;
+  --ora:#FF9A45; --ora-t:#FFBA80; --ora-bg:#47290F;
+  --gold:#4A3D10; --gold-t:#F3DE8A; --focus:#9DB0FF; color-scheme:dark}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px}
+a{color:var(--blu-t)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+header.top{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between;border-bottom:4px solid var(--ink);padding-bottom:18px}
+.eyebrow{font-family:var(--f-mono);font-size:13px;font-weight:600;letter-spacing:.12em;color:var(--mute);text-transform:uppercase}
+h1{margin:6px 0 0;font-family:var(--f-disp);font-weight:800;font-size:clamp(36px,6vw,58px);line-height:1;letter-spacing:-.02em;text-wrap:balance}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px;font-weight:500;color:var(--mute)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block;flex-shrink:0}
+.dot.v{background:var(--vio)}.dot.t{background:var(--tea)}.dot.o{background:var(--ora)}.dot.g{background:var(--ver)}.dot.b{background:var(--blu)}.dot.r{background:var(--ros)}.dot.k{background:var(--mute)}
+.role{font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.08em;padding:4px 10px;border-radius:20px;background:var(--ink);color:var(--paper)}
+
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.search{flex:1 1 240px;min-width:0;display:flex;align-items:center;gap:8px;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:0 12px;min-height:46px}
+.search input{border:0;background:transparent;flex:1;min-width:0;min-height:42px;outline:none}
+.search:focus-within{border-color:var(--focus)}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters button{min-height:40px;padding:0 14px;border-radius:20px;border:2px solid var(--line);background:transparent;font-weight:600;font-size:14px;cursor:pointer;color:var(--mute)}
+.filters button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.btn{min-height:44px;padding:0 16px;border-radius:10px;border:2px solid var(--ink);background:var(--card);font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);white-space:nowrap}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.small{min-height:36px;padding:0 12px;font-size:14px;border-width:1.5px}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--mute)}
+.btn.ghost:hover{color:var(--ink);background:var(--soft)}
+.btn.danger{border-color:var(--ros);color:var(--ros-t)}
+
+.topics{display:flex;flex-direction:column;gap:22px}
+.topic{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.thead{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-start;justify-content:space-between}
+.tmeta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--f-mono);font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--mute);text-transform:uppercase}
+.topic h2{margin:6px 0 0;font-family:var(--f-disp);font-weight:800;font-size:clamp(24px,3.4vw,32px);line-height:1.1;letter-spacing:-.01em;text-wrap:balance}
+.desc{margin:0;color:var(--mute);max-width:65ch}
+.status{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:20px;font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.status.corso{background:var(--ver-bg);color:var(--ver-t)}
+.status.svolto{background:var(--blu-bg);color:var(--blu-t)}
+.status.prep{background:var(--gold);color:var(--gold-t)}
+.tactions{display:flex;gap:8px;flex-wrap:wrap}
+
+.mgroup{display:flex;flex-direction:column;gap:6px}
+.mgroup h3{margin:0;font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);display:flex;align-items:center;gap:8px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.mat{display:grid;grid-template-columns:120px minmax(0,1fr) auto;gap:14px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
+.mat:last-child{border-bottom:0}
+.kind{font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.04em;padding:4px 8px;border-radius:6px;background:var(--soft);color:var(--ink);text-align:center;justify-self:start}
+.kind.lez{background:var(--blu-bg);color:var(--blu-t)}
+.kind.ese{background:var(--ver-bg);color:var(--ver-t)}
+.kind.ver{background:var(--ros-bg);color:var(--ros-t)}
+.mtitle{font-weight:600;min-width:0;overflow-wrap:anywhere}
+.mtitle small{display:block;font-weight:400;color:var(--mute);font-size:14px}
+.mact{display:flex;gap:4px;align-items:center}
+.none{color:var(--mute);font-size:15px;padding:6px 0}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--ros-t);font-weight:600}
+
+.empty,.notice{background:var(--card);border:2px dashed var(--line);border-radius:18px;padding:28px 24px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.empty h2,.notice h2{margin:0;font-family:var(--f-disp);font-size:24px}
+.empty p,.notice p{margin:0;color:var(--mute);max-width:60ch}
+
+dialog{border:2px solid var(--ink);border-radius:18px;background:var(--card);color:var(--ink);padding:0;width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 32px)}
+dialog::backdrop{background:rgba(10,12,18,.55)}
+dialog form{display:flex;flex-direction:column;gap:14px;padding:22px 24px}
+dialog h2{margin:0;font-family:var(--f-disp);font-size:26px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label,.field legend{font-weight:600;font-size:15px}
+.field input,.field select,.field textarea{border:2px solid var(--line);border-radius:10px;background:var(--paper);padding:10px 12px;min-height:44px;box-sizing:border-box;width:100%}
+.field textarea{min-height:80px;resize:vertical}
+.field .hint{font-size:13px;color:var(--mute)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+fieldset.field{border:0;padding:0;margin:0}
+.radios{display:flex;gap:10px;flex-wrap:wrap}
+.radios label{display:flex;align-items:center;gap:8px;font-weight:500;border:2px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer;min-height:44px;box-sizing:border-box}
+.radios input{width:18px;height:18px;accent-color:var(--blu)}
+.formerr{color:var(--ros-t);font-weight:600;font-size:14px;margin:0}
+.factions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:12px;font-weight:600;z-index:50}
+footer{font-size:14px;color:var(--mute);border-top:1px solid var(--line);padding-top:16px}
+
+/* ---------- schede principali ---------- */
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:-8px;overflow-x:auto}
+.tabs button{min-height:48px;padding:0 18px;border:0;background:transparent;font-family:var(--f-disp);font-weight:600;font-size:18px;color:var(--mute);cursor:pointer;border-bottom:4px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.view{display:flex;flex-direction:column;gap:22px}
+
+/* ---------- palestra ---------- */
+.pal-intro{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+.pal-intro p{margin:0;color:var(--mute);max-width:62ch}
+.exgroup{display:flex;flex-direction:column;gap:10px}
+.exgroup h3{margin:0;font-family:var(--f-mono);font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px}
+.excard{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;text-align:left;cursor:pointer;color:var(--ink);font:inherit}
+.excard:hover{border-color:var(--ink)}
+.excard h4{margin:0;font-family:var(--f-disp);font-size:21px;line-height:1.15}
+.excard .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.05em;color:var(--mute);text-transform:uppercase}
+.tag{padding:3px 8px;border-radius:6px;background:var(--soft);color:var(--ink)}
+.tag.draft{background:var(--gold);color:var(--gold-t)}
+.progress{height:8px;border-radius:4px;background:var(--soft);overflow:hidden;display:flex}
+.progress i{display:block;height:100%}
+.progress .ok{background:var(--ver)}.progress .sol{background:var(--mute)}
+.excard small{color:var(--mute);font-size:14px}
+
+.ws{display:flex;flex-direction:column;gap:18px}
+.ws-head{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;justify-content:space-between}
+.ws-head h2{margin:4px 0 0;font-family:var(--f-disp);font-weight:800;font-size:clamp(24px,3.6vw,34px);line-height:1.1;text-wrap:balance}
+.traccia{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 18px;color:var(--ink);max-width:85ch}
+.traccia b{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;color:var(--mute);display:block;margin-bottom:4px}
+.steps{display:flex;flex-wrap:wrap;gap:6px}
+.steps button{min-width:44px;min-height:44px;border-radius:10px;border:2px solid var(--line);background:var(--card);font-family:var(--f-mono);font-weight:600;cursor:pointer;color:var(--ink)}
+.steps button.cur{border-color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.steps button.ok{background:var(--ver-bg);border-color:var(--ver);color:var(--ver-t)}
+.steps button.ko{background:var(--ros-bg);border-color:var(--ros);color:var(--ros-t)}
+.steps button.sol{background:var(--soft);color:var(--mute)}
+.subtabs{display:flex;gap:6px;flex-wrap:wrap}
+.subtabs button{min-height:40px;padding:0 14px;border-radius:20px;border:2px solid var(--line);background:transparent;font-weight:600;font-size:14px;cursor:pointer;color:var(--mute)}
+.subtabs button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.opcard{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.optext{display:flex;gap:14px;align-items:baseline;font-size:17px;line-height:1.5;max-width:90ch}
+.optext time{font-family:var(--f-mono);font-weight:600;font-size:14px;background:var(--ink);color:var(--paper);padding:3px 8px;border-radius:6px;white-space:nowrap}
+.jwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table.j{border-collapse:collapse;width:100%;min-width:660px;font-variant-numeric:tabular-nums}
+table.j th{font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);text-align:left;padding:8px;border-bottom:2px solid var(--ink);background:var(--paper)}
+table.j th.n,table.j td.n{text-align:right}
+table.j td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.j td.code{font-family:var(--f-mono);font-size:14px;color:var(--mute);width:60px}
+table.j td.vc{width:64px}
+table.j td.x{width:44px}
+table.j input{width:100%;box-sizing:border-box;min-height:40px;border:2px solid var(--line);border-radius:8px;background:var(--paper);padding:6px 8px;font:inherit;color:var(--ink)}
+table.j input.amt{text-align:right;font-family:var(--f-mono);max-width:150px;margin-left:auto;display:block}
+table.j input.bad{border-color:var(--ros);background:var(--ros-bg)}
+table.j tr.vfp td.acc input{border-color:var(--ver)}
+table.j tr.vfm td.acc input{border-color:var(--ros)}
+table.j tr.ve td.acc input{border-color:var(--blu)}
+table.j tfoot td{font-family:var(--f-mono);font-weight:600;border-bottom:0;border-top:2px solid var(--ink)}
+table.j.ro td{font-size:15px}
+table.j tr.sep td{border-top:2px solid var(--ink)}
+.vchip{display:inline-block;font-family:var(--f-mono);font-size:12px;font-weight:600;padding:3px 7px;border-radius:6px;white-space:nowrap}
+.vchip.g{background:var(--ver-bg);color:var(--ver-t)}.vchip.r{background:var(--ros-bg);color:var(--ros-t)}.vchip.b{background:var(--blu-bg);color:var(--blu-t)}.vchip.k{background:var(--soft);color:var(--mute)}
+.balance.ok{color:var(--ver-t)}.balance.ko{color:var(--ros-t)}
+.opbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.opbar .spacer{flex:1}
+.fb{display:flex;flex-direction:column;gap:6px;border-radius:12px;padding:12px 16px;border:2px solid var(--line);background:var(--paper)}
+.fb.ok{border-color:var(--ver);background:var(--ver-bg)}
+.fb.ko{border-color:var(--ros);background:var(--ros-bg)}
+.fb.hint{border-color:var(--gold-t);background:var(--gold)}
+.fb h3{margin:0;font-family:var(--f-disp);font-size:20px}
+.fb ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.fb.ok h3{color:var(--ver-t)}.fb.ko h3{color:var(--ros-t)}.fb.hint h3{color:var(--gold-t)}
+.mastri{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:16px}
+.taccount{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:12px 14px;font-variant-numeric:tabular-nums}
+.taccount h4{margin:0 0 6px;font-size:15px;display:flex;justify-content:space-between;gap:8px;border-bottom:3px solid var(--ink);padding-bottom:6px}
+.taccount h4 span{font-family:var(--f-mono);color:var(--mute);font-weight:600}
+.tcols{display:grid;grid-template-columns:1fr 1fr}
+.tcols>div{display:flex;flex-direction:column;gap:2px;padding:4px 8px 4px 0;font-family:var(--f-mono);font-size:13px;min-height:40px}
+.tcols>div+div{border-left:3px solid var(--ink);padding:4px 0 4px 8px}
+.tcols .e{display:flex;justify-content:space-between;gap:6px}
+.tcols .e i{font-style:normal;color:var(--mute)}
+.tsaldo{margin-top:6px;font-family:var(--f-mono);font-size:13px;font-weight:600;text-align:right}
+.empty-note{color:var(--mute);margin:0}
+dialog.big{width:min(980px,calc(100vw - 24px))}
+.opedit{border:2px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.opedit .row2{grid-template-columns:140px 1fr}
+.opedit-h{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--f-mono);font-weight:600;font-size:13px;color:var(--mute)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- palestra: tipi di conto, foglio libero, natura dei conti ---------- */
+.palnav{display:flex;flex-wrap:wrap;gap:6px}
+.palnav button{min-height:44px;padding:0 16px;border-radius:12px;border:2px solid var(--line);background:var(--card);font-weight:600;cursor:pointer;color:var(--ink)}
+.palnav button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.legend2{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.legend2>span{display:inline-flex;align-items:center;gap:6px}
+.vchip.v{background:var(--vio-bg);color:var(--vio-t)}.vchip.t{background:var(--tea-bg);color:var(--tea-t)}.vchip.o{background:var(--ora-bg);color:var(--ora-t)}
+table.j tr.ve-b td.acc input{border-color:var(--blu)}
+table.j tr.ve-v td.acc input{border-color:var(--vio)}
+table.j tr.ve-t td.acc input{border-color:var(--tea)}
+table.j tr.ve-o td.acc input{border-color:var(--ora)}
+.nt{display:inline-block;font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.03em;padding:2px 6px;border-radius:5px;vertical-align:middle}
+.nt-f{background:var(--soft);color:var(--ink)}.nt-b{background:var(--blu-bg);color:var(--blu-t)}.nt-v{background:var(--vio-bg);color:var(--vio-t)}.nt-t{background:var(--tea-bg);color:var(--tea-t)}.nt-o{background:var(--ora-bg);color:var(--ora-t)}.nt-k{background:var(--soft);color:var(--mute)}
+.taccount{border-top-width:6px}
+.taccount.tk-f{border-top-color:var(--ink)}.taccount.tk-b{border-top-color:var(--blu)}.taccount.tk-v{border-top-color:var(--vio)}.taccount.tk-t{border-top-color:var(--tea)}.taccount.tk-o{border-top-color:var(--ora)}
+.taccount .nt{margin-bottom:6px}
+.fbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end}
+.field.inl{gap:4px}
+.field.inl label{font-size:13px;font-weight:600;color:var(--mute)}
+.field.inl input,.field.inl select{border:2px solid var(--line);border-radius:10px;background:var(--card);padding:8px 10px;min-height:44px;box-sizing:border-box;font:inherit;color:var(--ink)}
+.field.inl.grow{flex:1 1 220px;min-width:0}
+.field.inl.grow input{width:100%}
+.tog2{display:inline-flex;align-items:center;gap:8px;font-weight:600;min-height:44px}
+.tog2 input{width:18px;height:18px}
+.arts{display:flex;flex-direction:column;gap:14px}
+.art{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.art-h{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.art-h .field.inl input{width:120px}
+.art-h .field.inl.grow input{width:100%}
+.art-n{font-family:var(--f-mono);font-weight:600;font-size:13px;background:var(--ink);color:var(--paper);padding:4px 8px;border-radius:6px;align-self:center}
+.art-st{align-self:center}
+.sdbox{display:flex;flex-direction:column;gap:8px}
+.sdbox h3{margin:0;font-family:var(--f-disp);font-size:20px}
+.sdgrid{display:grid;grid-template-columns:1fr 1fr;border:2px solid var(--ink);border-radius:12px;overflow:hidden;background:var(--card)}
+.sdcol{display:flex;flex-direction:column;min-width:0}
+.sdcol+.sdcol{border-left:2px solid var(--ink)}
+.sdcol h4{margin:0;padding:8px 12px;background:var(--ink);color:var(--paper);font-size:14px;font-family:var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
+.sdrow{display:flex;justify-content:space-between;gap:10px;padding:6px 12px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;font-size:15px}
+.sdrow span:last-child{font-family:var(--f-mono);white-space:nowrap}
+.sdrow.res{font-style:italic;color:var(--mute)}
+.sdrow.tot{font-weight:700;border-top:2px solid var(--ink);border-bottom:0;margin-top:auto}
+table.j.quiz{min-width:720px}
+table.j.quiz select{min-height:40px;border:2px solid var(--line);border-radius:8px;background:var(--paper);padding:4px 8px;font:inherit;color:var(--ink);max-width:100%}
+table.j.quiz select.sok{border-color:var(--ver);background:var(--ver-bg)}
+table.j.quiz select.sko{border-color:var(--ros);background:var(--ros-bg)}
+table.j.quiz .code{font-family:var(--f-mono);font-size:13px;color:var(--mute)}
+.qsol{margin-top:4px;font-size:13px;color:var(--mute)}
+table.j.quiz tr.qok td:first-child{box-shadow:inset 4px 0 0 var(--ver)}
+table.j.quiz tr.qko td:first-child{box-shadow:inset 4px 0 0 var(--ros)}
+@media (max-width:640px){.sdgrid{grid-template-columns:1fr}.sdcol+.sdcol{border-left:0;border-top:2px solid var(--ink)}}
+@media (max-width:640px){
+  .mat{grid-template-columns:1fr auto;gap:6px 10px}
+  .mat .kind{grid-column:1/-1}
+  .row2{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Istituto Tecnico Economico · A.S. 2026/27</div>
+      <h1>Economia Aziendale classe Terza</h1>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end">
+      <span class="role" id="role" hidden>VISTA DOCENTE</span>
+      <div class="legend" aria-label="Codice colore della partita doppia">
+        <span><i class="dot g"></i>Finanziario +</span><span><i class="dot r"></i>Finanziario −</span><span><i class="dot b"></i>Econ. d’esercizio</span><span><i class="dot v"></i>Econ. pluriennale</span><span><i class="dot t"></i>Econ. patrimonio netto</span><span><i class="dot o"></i>Econ. sospeso</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Sezioni">
+    <button type="button" role="tab" id="tabArg" aria-controls="vArg" aria-selected="true">Argomenti e materiali</button>
+    <button type="button" role="tab" id="tabPal" aria-controls="vPal" aria-selected="false">Palestra di partita doppia</button>
+  </nav>
+
+  <section id="vArg" role="tabpanel" aria-labelledby="tabArg" class="view">
+  <div class="bar">
+    <label class="search" for="q"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Cerca un argomento o un materiale" aria-label="Cerca"></label>
+    <div class="filters" role="group" aria-label="Filtra per stato">
+      <button type="button" data-f="tutti" aria-pressed="true">Tutti</button>
+      <button type="button" data-f="corso" aria-pressed="false">In corso</button>
+      <button type="button" data-f="svolto" aria-pressed="false">Svolti</button>
+      <button type="button" data-f="prep" aria-pressed="false" class="ed" hidden>In preparazione</button>
+    </div>
+    <button type="button" class="btn primary ed" id="addTopic" hidden>+ Nuovo argomento</button>
+  </div>
+
+  <main class="topics" id="topics" aria-live="polite">
+    <div class="notice" id="loading"><h2>Carico gli argomenti…</h2><p>Qui compaiono gli argomenti della classe con le lezioni e i materiali di ciascuno.</p></div>
+  </main>
+  </section>
+
+  <section id="vPal" role="tabpanel" aria-labelledby="tabPal" class="view" hidden>
+    <div id="pal"><div class="notice"><h2>Preparo la palestra…</h2><p>Qui trovi gli esercizi di partita doppia con la correzione automatica.</p></div></div>
+  </section>
+
+  <datalist id="pianoList"></datalist>
+
+  <footer id="foot">Ogni argomento raccoglie la lezione da proiettare e i materiali per lo studio. I materiali segnati “solo docente” non sono visibili agli studenti.</footer>
+</div>
+
+<dialog id="dTopic" aria-labelledby="dtT">
+  <form method="dialog" id="fTopic">
+    <h2 id="dtT">Nuovo argomento</h2>
+    <div class="field"><label for="tTitolo">Titolo</label><input id="tTitolo" required maxlength="140" placeholder="Es. Il patrimonio aziendale"></div>
+    <div class="row2">
+      <div class="field"><label for="tModulo">Modulo o unità</label><input id="tModulo" maxlength="60" placeholder="Es. Partita doppia"></div>
+      <div class="field"><label for="tStato">Stato</label><select id="tStato"><option value="prep">In preparazione</option><option value="corso">In corso</option><option value="svolto">Svolto</option></select></div>
+    </div>
+    <div class="field"><label for="tDesc">Descrizione per la classe</label><textarea id="tDesc" maxlength="400" placeholder="Cosa si impara in questo argomento"></textarea></div>
+    <div class="field"><label for="tOrd">Posizione nell’elenco</label><input id="tOrd" type="number" min="1" max="999" step="1"><span class="hint">Numero più basso = più in alto.</span></div>
+    <p class="formerr" id="tErr" hidden></p>
+    <div class="factions"><button type="button" class="btn" id="tCancel">Annulla</button><button type="submit" class="btn primary" id="tSave">Salva argomento</button></div>
+  </form>
+</dialog>
+
+<dialog id="dMat" aria-labelledby="dmT">
+  <form method="dialog" id="fMat">
+    <h2 id="dmT">Aggiungi materiale</h2>
+    <div class="field"><label for="mTitolo">Titolo</label><input id="mTitolo" required maxlength="140" placeholder="Es. Esercizi di ripasso"></div>
+    <div class="row2">
+      <div class="field"><label for="mTipo">Tipo</label><select id="mTipo">
+        <option>Lezione animata</option><option>Presentazione</option><option>Video</option><option>Esercizi</option><option>Dispensa</option><option>Verifica</option><option>Soluzioni</option><option>Storyboard</option><option>Link</option>
+      </select></div>
+      <fieldset class="field"><legend>Chi lo vede</legend><div class="radios">
+        <label><input type="radio" name="mPer" id="mPerS" value="studenti" checked>La classe</label>
+        <label><input type="radio" name="mPer" id="mPerD" value="docente">Solo docente</label>
+      </div></fieldset>
+    </div>
+    <div class="field"><label for="mUrl">Link</label><input id="mUrl" type="url" placeholder="https://claude.ai/artifact/…"><span class="hint">Incolla il link di una lezione, un documento o un sito. In alternativa carica un file qui sotto.</span></div>
+    <div class="field"><label for="mFile">Oppure carica un file (PDF o immagine, max 20 MB)</label><input id="mFile" type="file" accept="application/pdf,image/*"></div>
+    <div class="field"><label for="mNota">Nota</label><input id="mNota" maxlength="200" placeholder="Es. da svolgere entro venerdì"></div>
+    <p class="formerr" id="mErr" hidden></p>
+    <div class="factions"><button type="button" class="btn" id="mCancel">Annulla</button><button type="submit" class="btn primary" id="mSave">Salva materiale</button></div>
+  </form>
+</dialog>
+
+<dialog id="dEx" class="big" aria-labelledby="exT">
+  <form method="dialog" id="fEx">
+    <h2 id="exT">Nuovo esercizio</h2>
+    <div class="field"><label for="exTitolo">Titolo</label><input id="exTitolo" required maxlength="140" placeholder="Es. Acquisti con trasporto documentato"></div>
+    <div class="row2">
+      <div class="field"><label for="exArg">Argomento</label><select id="exArg"><option>Costituzione</option><option>Costi di impianto</option><option>Acquisti</option><option>Vendite</option><option>Resi e ribassi</option><option>Acconti</option><option>Regolamento</option><option>Riepilogo</option><option>Altro</option></select></div>
+      <div class="row2" style="grid-template-columns:1fr 1fr">
+        <div class="field"><label for="exLiv">Difficoltà</label><select id="exLiv"><option value="1">● Base</option><option value="2">●● Media</option><option value="3">●●● Avanzata</option></select></div>
+        <div class="field"><label for="exOrd">Posizione</label><input id="exOrd" type="number" min="1" max="999"></div>
+      </div>
+    </div>
+    <div class="field"><label for="exIntro">Traccia (situazione iniziale dell’impresa)</label><textarea id="exIntro" maxlength="800" placeholder="Es. L’impresa individuale Verdi Anna commercia articoli sportivi…"></textarea></div>
+    <div id="exOps" style="display:flex;flex-direction:column;gap:12px"></div>
+    <div><button type="button" class="btn small" id="exAddOp">+ Operazione</button></div>
+    <label class="tog" style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="exBozza" style="width:18px;height:18px">Bozza: gli studenti non la vedono</label>
+    <p class="formerr" id="exErr" hidden></p>
+    <div class="factions"><button type="button" class="btn danger" id="exDel" hidden>Elimina esercizio</button><span style="flex:1"></span><button type="button" class="btn" id="exCancel">Annulla</button><button type="submit" class="btn primary" id="exSave">Salva esercizio</button></div>
+  </form>
+</dialog>
+
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const STATI={corso:['In corso','corso'],svolto:['Svolto','svolto'],prep:['In preparazione','prep']};
+const KIND={'Lezione animata':'lez','Presentazione':'lez','Video':'lez','Esercizi':'ese','Dispensa':'ese','Verifica':'ver','Soluzioni':'ver'};
+let db=null,assets=null,editor=false,topics=[],mats=[],priv=[],filter='tutti',query='',confirmId=null;
+let loaded={t:false,m:false};
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function safeUrl(u){u=String(u||'').trim();if(/^\/_blob\/[A-Za-z0-9_-]+$/.test(u))return u;try{const x=new URL(u);return(x.protocol==='https:'||x.protocol==='http:')?x.href:''}catch(e){return ''}}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.setAttribute('role','status');t.textContent=msg;document.body.append(t);setTimeout(()=>t.remove(),2600)}
+
+/* ---------- rendering ---------- */
+function matRow(m,isPriv){
+  const url=safeUrl(m.url);const k=KIND[m.tipo]||'';
+  const act=editor?(confirmId===m._id?`<span class="confirm">Eliminare?<button class="btn small danger" data-del="${m._id}" data-col="${isPriv?'riservati':'materiali'}">Elimina</button><button class="btn small" data-undel>Annulla</button></span>`:
+    `<button class="btn ghost small" data-editm="${m._id}" data-col="${isPriv?'riservati':'materiali'}" aria-label="Modifica ${esc(m.titolo)}">Modifica</button><button class="btn ghost small" data-askdel="${m._id}" aria-label="Elimina ${esc(m.titolo)}">Elimina</button>`):'';
+  return `<div class="mat"><span class="kind ${k}">${esc(m.tipo||'Link')}</span><div class="mtitle">${esc(m.titolo)}${m.nota?`<small>${esc(m.nota)}</small>`:''}</div><div class="mact">${url?`<a class="btn small" href="${esc(url)}" target="_blank" rel="noopener">Apri<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>`:''}${act}</div></div>`;
+}
+function render(){
+  const box=$('topics');
+  if(!loaded.t){return}
+  const q=query.toLowerCase();
+  const list=topics.filter(t=>editor||t.stato!=='prep').filter(t=>filter==='tutti'||t.stato===filter).filter(t=>{
+    if(!q)return true;
+    const ms=mats.concat(editor?priv:[]).filter(m=>m.argomento===t._id);
+    return [t.titolo,t.modulo,t.descrizione].concat(ms.map(m=>m.titolo)).join(' ').toLowerCase().includes(q);
+  });
+  if(!topics.length){
+    box.innerHTML=editor?`<div class="empty"><h2>Nessun argomento ancora</h2><p>Crea il primo argomento, poi aggiungi la lezione animata e i materiali per gli studenti.</p><button class="btn primary" type="button" data-newtopic>+ Nuovo argomento</button></div>`
+      :`<div class="empty"><h2>Nessun argomento pubblicato</h2><p>Gli argomenti compariranno qui quando la docente li pubblica.</p></div>`;return;
+  }
+  if(!list.length){box.innerHTML=`<div class="empty"><h2>Nessun risultato</h2><p>Nessun argomento corrisponde alla ricerca o al filtro scelto.</p></div>`;return}
+  box.innerHTML=list.map(t=>{
+    const st=STATI[t.stato]||STATI.corso;
+    const ms=mats.filter(m=>m.argomento===t._id).sort(byOrd);
+    const ps=priv.filter(m=>m.argomento===t._id).sort(byOrd);
+    const lesson=ms.find(m=>m.tipo==='Lezione animata'&&safeUrl(m.url));
+    return `<article class="topic" id="arg-${esc(t._id)}">
+      <div class="thead"><div style="min-width:0">
+        <div class="tmeta">${t.modulo?`<span>${esc(t.modulo)}</span>`:''}<span class="status ${st[1]}">${st[0]}</span></div>
+        <h2>${esc(t.titolo)}</h2></div>
+        <div class="tactions">${lesson?`<a class="btn primary" href="${esc(safeUrl(lesson.url))}" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg>Presenta la lezione</a>`:''}
+        ${editor?`<button class="btn small" type="button" data-addm="${t._id}">+ Materiale</button><button class="btn ghost small" type="button" data-editt="${t._id}">Modifica</button>`:''}</div>
+      </div>
+      ${t.descrizione?`<p class="desc">${esc(t.descrizione)}</p>`:''}
+      <section class="mgroup" aria-label="Materiali per la classe"><h3><i class="dot g"></i>Per la classe</h3>
+        ${ms.length?ms.map(m=>matRow(m,false)).join(''):`<div class="none">Nessun materiale per la classe.</div>`}</section>
+      ${editor?`<section class="mgroup" aria-label="Materiali solo docente"><h3><i class="dot r"></i>Solo docente</h3>
+        ${ps.length?ps.map(m=>matRow(m,true)).join(''):`<div class="none">Nessun materiale riservato.</div>`}</section>`:''}
+    </article>`}).join('');
+}
+function byOrd(a,b){return (a.ordine||0)-(b.ordine||0)||String(a.titolo).localeCompare(String(b.titolo))}
+
+/* ---------- filtri e ricerca ---------- */
+document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.f;document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));render()}));
+$('q').addEventListener('input',e=>{query=e.target.value.trim();render()});
+
+/* ---------- azioni docente ---------- */
+let editTopic=null,editMat=null,matTopic=null;
+function openTopic(t){
+  editTopic=t||null;$('dtT').textContent=t?'Modifica argomento':'Nuovo argomento';
+  $('tTitolo').value=t?t.titolo:'';$('tModulo').value=t?(t.modulo||''):'';$('tStato').value=t?t.stato:'prep';
+  $('tDesc').value=t?(t.descrizione||''):'';$('tOrd').value=t?(t.ordine||''):(topics.reduce((m,x)=>Math.max(m,x.ordine||0),0)+1);
+  $('tErr').hidden=true;$('dTopic').showModal();$('tTitolo').focus();
+}
+function openMat(topicId,m,col){
+  matTopic=topicId;editMat=m?{...m,_col:col}:null;$('dmT').textContent=m?'Modifica materiale':'Aggiungi materiale';
+  $('mTitolo').value=m?m.titolo:'';$('mTipo').value=m?(m.tipo||'Link'):'Lezione animata';
+  (col==='riservati'?$('mPerD'):$('mPerS')).checked=true;
+  $('mUrl').value=m?(m.url||''):'';$('mNota').value=m?(m.nota||''):'';$('mFile').value='';
+  $('mErr').hidden=true;$('dMat').showModal();$('mTitolo').focus();
+}
+$('addTopic').addEventListener('click',()=>openTopic());
+$('tCancel').addEventListener('click',()=>$('dTopic').close());
+$('mCancel').addEventListener('click',()=>$('dMat').close());
+$('topics').addEventListener('click',async e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.hasAttribute('data-newtopic'))openTopic();
+  else if(b.dataset.addm)openMat(b.dataset.addm);
+  else if(b.dataset.editt)openTopic(topics.find(t=>t._id===b.dataset.editt));
+  else if(b.dataset.editm){const list=b.dataset.col==='riservati'?priv:mats;const m=list.find(x=>x._id===b.dataset.editm);openMat(m.argomento,m,b.dataset.col)}
+  else if(b.dataset.askdel){confirmId=b.dataset.askdel;render()}
+  else if(b.hasAttribute('data-undel')){confirmId=null;render()}
+  else if(b.dataset.del){
+    try{await db.collection(b.dataset.col).doc(b.dataset.del).delete();toast('Materiale eliminato')}catch(err){toast('Non è stato possibile eliminarlo. Riprova.')}
+    confirmId=null;render();
+  }
+});
+$('fTopic').addEventListener('submit',async e=>{
+  e.preventDefault();const titolo=$('tTitolo').value.trim();
+  if(!titolo){$('tErr').textContent='Scrivi un titolo per l’argomento.';$('tErr').hidden=false;return}
+  const data={titolo,modulo:$('tModulo').value.trim(),stato:$('tStato').value,descrizione:$('tDesc').value.trim(),ordine:parseInt($('tOrd').value,10)||1};
+  $('tSave').disabled=true;
+  try{
+    if(editTopic)await db.collection('argomenti').doc(editTopic._id).update(data);
+    else await db.collection('argomenti').add(data);
+    $('dTopic').close();toast(editTopic?'Argomento aggiornato':'Argomento creato');
+  }catch(err){$('tErr').textContent='Salvataggio non riuscito: controlla di avere i permessi di modifica e riprova.';$('tErr').hidden=false}
+  $('tSave').disabled=false;
+});
+$('fMat').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const titolo=$('mTitolo').value.trim(),file=$('mFile').files[0];let url=$('mUrl').value.trim();
+  const err=m=>{$('mErr').textContent=m;$('mErr').hidden=false};
+  if(!titolo)return err('Scrivi un titolo per il materiale.');
+  if(url&&!safeUrl(url))return err('Il link deve iniziare con https://');
+  if(!url&&!file)return err('Incolla un link oppure scegli un file da caricare.');
+  $('mSave').disabled=true;
+  try{
+    if(file){
+      if(!assets)throw {code:'no_assets'};
+      $('mSave').textContent='Carico il file…';
+      const up=await assets.upload(file);url=up.url;
+    }
+    const per=document.querySelector('input[name="mPer"]:checked').value;
+    const col=per==='docente'?'riservati':'materiali';
+    const list=col==='riservati'?priv:mats;
+    const data={argomento:matTopic,titolo,tipo:$('mTipo').value,url,nota:$('mNota').value.trim(),
+      ordine:editMat?(editMat.ordine||1):list.filter(m=>m.argomento===matTopic).reduce((m,x)=>Math.max(m,x.ordine||0),0)+1};
+    if(editMat&&editMat._col===col)await db.collection(col).doc(editMat._id).set(data);
+    else{await db.collection(col).add(data);if(editMat)await db.collection(editMat._col).doc(editMat._id).delete()}
+    $('dMat').close();toast(editMat?'Materiale aggiornato':'Materiale aggiunto');
+  }catch(ex){
+    err(ex&&ex.code==='too_large'?'Il file supera i 20 MB.':ex&&ex.code==='unsupported_type'?'Questo tipo di file non si può caricare: usa un PDF o un’immagine.':ex&&ex.code==='no_assets'?'Il caricamento di file non è disponibile qui: incolla un link.':'Salvataggio non riuscito. Riprova.');
+  }
+  $('mSave').disabled=false;$('mSave').textContent='Salva materiale';
+});
+
+/* ---------- dati ---------- */
+function snap(col,arr,setter,flag){
+  return db.collection(col).onSnapshot(s=>{setter(s.docs.map(d=>({...d.data(),_id:d.id})));if(flag)loaded[flag]=true;clearTimeout(timer);render()},
+    ()=>{if(flag){loaded[flag]=true;render()}});
+}
+let timer=setTimeout(()=>{if(!loaded.t){$('topics').innerHTML=`<div class="notice"><h2>Gli argomenti non si sono caricati</h2><p>Controlla la connessione e ricarica la pagina. Per vedere i materiali serve aver effettuato l’accesso a Claude.</p></div>`}},10000);
+(async()=>{
+  const cl=window.claude;
+  if(!cl||!cl.use){clearTimeout(timer);$('topics').innerHTML=`<div class="notice"><h2>Apri la pagina dal link condiviso</h2><p>Gli argomenti e i materiali si caricano quando la pagina è aperta su claude.ai.</p></div>`;return}
+  const [d,u]=await Promise.all([cl.use('db'),cl.use('user')]);
+  db=d;
+  if(!db){clearTimeout(timer);$('topics').innerHTML=`<div class="notice"><h2>Accedi per vedere i materiali</h2><p>Questa pagina mostra i materiali solo a chi ha effettuato l’accesso a Claude con l’account della scuola.</p></div>`;return}
+  editor=u?await u.canEdit():false;
+  if(editor){
+    $('role').hidden=false;document.querySelectorAll('.ed').forEach(x=>x.hidden=false);
+    $('foot').textContent='Vista docente: vedi anche gli argomenti in preparazione e i materiali solo docente. Gli studenti vedono solo gli argomenti in corso o svolti e i materiali per la classe.';
+    assets=await cl.use('assets');
+    snap('riservati',priv,v=>priv=v);
+  }
+  snap('argomenti',topics,v=>topics=v.sort(byOrd),'t');
+  snap('materiali',mats,v=>mats=v,'m');
+})();
+})();
+</script>
+<script>
+
+(function(){
+"use strict";
+/* ================= PIANO DEI CONTI (quadro TE204, impresa commerciale individuale) =================
+   natura: F finanziario, E economico, T transitorio, O conto d'ordine */
+const PIANO_SRC=`01.01|Costi di impianto|E
+01.03|Brevetti|E
+01.04|Software|E
+01.05|Avviamento|E
+01.11|Fondo ammortamento costi di impianto|E
+01.13|Fondo ammortamento brevetti|E
+01.14|Fondo ammortamento software|E
+01.15|Fondo ammortamento avviamento|E
+01.20|Fornitori immobilizzazioni immateriali c/acconti|F
+02.01|Fabbricati|E
+02.02|Impianti e macchinari|E
+02.04|Attrezzature commerciali|E
+02.05|Macchine d’ufficio|E
+02.06|Arredamento|E
+02.07|Automezzi|E
+02.08|Imballaggi durevoli|E
+02.11|Fondo ammortamento fabbricati|E
+02.12|Fondo ammortamento impianti e macchinari|E
+02.14|Fondo ammortamento attrezzature commerciali|E
+02.15|Fondo ammortamento macchine d’ufficio|E
+02.16|Fondo ammortamento arredamento|E
+02.17|Fondo ammortamento automezzi|E
+02.18|Fondo ammortamento imballaggi durevoli|E
+02.30|Fornitori immobilizzazioni materiali c/acconti|F
+03.01|Mutui attivi|F
+04.01|Materie di consumo|E
+04.04|Merci|E
+04.10|Fornitori c/acconti|F
+05.01|Crediti v/clienti|F
+05.02|Fatture da emettere|F
+05.03|Crediti commerciali diversi|F
+05.04|Crediti v/clienti esteri|F
+05.05|Clienti c/costi anticipati|F
+05.06|Cambiali attive|F
+05.07|Cambiali allo sconto|F
+05.08|Cambiali all’incasso|F
+05.09|Crediti da liquidare|F
+05.10|Crediti insoluti|F
+05.11|Cambiali insolute|F
+05.15|Crediti per acconti da clienti|F
+05.20|Fondo svalutazione crediti|F
+06.01|IVA ns/credito|F
+06.02|IVA c/acconto|F
+06.03|Crediti per IVA|F
+06.04|Crediti v/Istituti previdenziali|F
+06.05|Crediti per cauzioni|F
+06.10|Crediti diversi|F
+06.20|Personale c/acconti|F
+08.01|Banche c/c attivi|F
+08.02|C/c postali|F
+08.10|Assegni|F
+08.20|Denaro in cassa|F
+08.21|Valori bollati|F
+09.01|Ratei attivi|F
+09.02|Risconti attivi|E
+10.01|Patrimonio netto|E
+10.02|Prelevamenti extragestione|E
+10.03|Titolare c/ritenute subite|E
+10.04|Utile d’esercizio|E
+10.05|Perdita d’esercizio|E
+11.01|Fondo responsabilità civile|F
+11.10|Fondo manutenzioni programmate|F
+12.01|Debiti per TFR|F
+13.01|Mutui passivi|F
+13.10|Banche c/Ri.Ba. sbf|F
+13.11|Banche c/anticipi su fatture|F
+13.15|Sovvenzioni bancarie|F
+13.20|Banche c/c passivi|F
+13.21|Banche c/interessi maturati|F
+13.30|Debiti v/altri finanziatori|F
+14.01|Debiti v/fornitori|F
+14.02|Fatture da ricevere|F
+14.03|Debiti commerciali diversi|F
+14.04|Debiti v/fornitori esteri|F
+14.06|Cambiali passive|F
+14.09|Debiti da liquidare|F
+14.15|Debiti per acconti a fornitori|F
+14.20|Clienti c/acconti|F
+15.01|IVA ns/debito|F
+15.02|Debiti per ritenute da versare|F
+15.03|Debiti per IVA|F
+15.04|Debiti fiscali diversi|F
+15.06|Debiti v/Istituti previdenziali|F
+15.07|Debiti per cauzioni|F
+15.20|Personale c/retribuzioni|F
+15.21|Personale c/liquidazione|F
+15.22|Debiti v/fondi pensione|F
+15.23|Cedente c/cessione|F
+15.30|Debiti diversi|F
+15.31|Vettori c/spese anticipate|F
+16.01|Ratei passivi|F
+16.02|Risconti passivi|E
+18.01|Bilancio di apertura|T
+18.02|Bilancio di chiusura|T
+18.10|IVA c/liquidazione|F
+18.11|Istituti previdenziali|F
+18.20|Banca X c/c|F
+18.25|Banca X c/valuta estera|F
+19.01|Beni di terzi|O
+19.02|Depositanti beni|O
+19.11|Impegni per beni in leasing|O
+19.12|Creditori c/leasing|O
+19.21|Rischi per fideiussioni|O
+19.22|Creditori per fideiussioni|O
+20.01|Merci c/vendite|E
+20.02|Merci c/vendite on line|E
+20.03|Servizi on line|E
+20.04|Merci c/vendite estero|E
+20.05|Lavorazioni c/terzi|E
+20.10|Resi su vendite|E
+20.11|Ribassi e abbuoni passivi|E
+20.12|Premi su vendite|E
+20.15|Fitti attivi|E
+20.16|Proventi vari|E
+20.17|Arrotondamenti attivi|E
+20.20|Plusvalenze|E
+20.21|Sopravvenienze attive|E
+20.22|Insussistenze attive|E
+20.30|Rimborsi costi di vendita|E
+30.01|Merci c/acquisti|E
+30.02|Materie di consumo c/acquisti|E
+30.03|Merci c/acquisti estero|E
+30.05|Merci c/apporti|E
+30.10|Resi su acquisti|E
+30.11|Ribassi e abbuoni attivi|E
+30.12|Premi su acquisti|E
+31.01|Costi di trasporto|E
+31.02|Costi per energia|E
+31.03|Pubblicità|E
+31.04|Consulenze|E
+31.05|Costi telefonici|E
+31.06|Costi di vigilanza|E
+31.07|Costi postali|E
+31.08|Assicurazioni|E
+31.09|Costi per i locali|E
+31.10|Manutenzioni e riparazioni|E
+31.11|Costi di etichettatura|E
+31.12|Lavorazioni presso terzi|E
+31.13|Provvigioni passive|E
+31.14|Costi di incasso|E
+31.15|Commissioni bancarie|E
+31.16|Costi di tenuta c/c|E
+32.01|Fitti passivi|E
+32.02|Canoni di leasing|E
+33.01|Salari e stipendi|E
+33.02|Oneri sociali|E
+33.03|TFR|E
+34.01|Ammortamento costi di impianto|E
+34.03|Ammortamento brevetti|E
+34.04|Ammortamento software|E
+34.05|Ammortamento avviamento|E
+35.01|Ammortamento fabbricati|E
+35.02|Ammortamento impianti e macchinari|E
+35.04|Ammortamento attrezzature commerciali|E
+35.05|Ammortamento macchine d’ufficio|E
+35.06|Ammortamento arredamento|E
+35.07|Ammortamento automezzi|E
+35.08|Ammortamento imballaggi durevoli|E
+36.20|Svalutazione crediti|E
+37.01|Merci c/esistenze iniziali|E
+37.02|Materie di consumo c/esistenze iniziali|E
+37.10|Merci c/rimanenze finali|E
+37.11|Materie di consumo c/rimanenze finali|E
+38.01|Accantonamento per responsabilità civile|E
+38.10|Accantonamento per manutenzioni programmate|E
+39.01|Arrotondamenti passivi|E
+39.02|Oneri fiscali diversi|E
+39.05|Perdite su crediti|E
+39.06|Accantonamento per imposte indirette|E
+39.10|Minusvalenze|E
+39.11|Sopravvenienze passive|E
+39.12|Insussistenze passive|E
+40.01|Interessi attivi da clienti|E
+40.02|Interessi attivi bancari|E
+40.03|Interessi attivi postali|E
+40.20|Proventi finanziari diversi|E
+40.21|Differenze attive in cambi|E
+41.01|Interessi passivi a fornitori|E
+41.02|Interessi passivi bancari|E
+41.03|Sconti passivi bancari|E
+41.04|Interessi passivi su mutui|E
+41.20|Oneri finanziari diversi|E
+41.21|Differenze passive in cambi|E
+90.01|Conto di risultato economico|E`;
+const PIANO=PIANO_SRC.split('\n').map(l=>{const[c,n,t]=l.split('|');return{c,n,t}});
+const ACC=new Map(PIANO.map(a=>[a.c,a]));
+const norm=s=>String(s||'').toLowerCase().replace(/[’`´]/g,"'").replace(/\s+/g,' ').trim();
+const BYNAME=new Map(PIANO.map(a=>[norm(a.n),a.c]));
+const TOPICS=['Costituzione','Costi di impianto','Acquisti','Vendite','Resi e ribassi','Acconti','Regolamento','Riepilogo'];
+
+const $=id=>document.getElementById(id);
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmt(n){const neg=n<0;n=Math.abs(n);let[i,d]=n.toFixed(2).split('.');i=i.replace(/\B(?=(\d{3})+(?!\d))/g,'.');return(neg?'−':'')+i+','+d}
+function parseAmt(s){
+  s=String(s||'').replace(/[\s€]/g,'');if(!s)return 0;
+  if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');
+  else if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'');
+  const v=Number(s);return isFinite(v)&&v>0?Math.round(v*100)/100:NaN;
+}
+function accOf(txt){
+  const t=String(txt||'').trim();if(!t)return '';
+  const m=t.match(/^(\d{2}\.\d{2})\b/);if(m&&ACC.has(m[1]))return m[1];
+  return BYNAME.get(norm(t))||null;
+}
+const accName=c=>ACC.has(c)?ACC.get(c).n:c;
+const accLabel=c=>ACC.has(c)?c+' '+ACC.get(c).n:'';
+
+/* ================= NATURA E DESTINAZIONE (colonne Natura, Destinazione ed Eccedenza del quadro TE204) =================
+   nat: F finanziario · Ee economico, variazioni d'esercizio · Ep economico, costi pluriennali · En economico, patrimonio netto
+        Es economico, costi e ricavi sospesi · T transitorio · O conto d'ordine
+   dest: SA SP attività · SPP SP passività e netto · SC SE costi · SR SE ricavi (secondo destinazione ed eccedenza del conto) */
+const NAT={F:'Finanziario',Ee:'Economico · variazioni d’esercizio',Ep:'Economico · costi pluriennali',En:'Economico · patrimonio netto',Es:'Economico · costi e ricavi sospesi'};
+const NATSHORT={Ee:'es.',Ep:'plur.',En:'PN',Es:'sosp.'};
+const NATCOL={Ee:'b',Ep:'v',En:'t',Es:'o'};
+const DEST={SA:'SP · Attività',SPP:'SP · Passività e netto',SC:'SE · Costi',SR:'SE · Ricavi'};
+function classify(c,n){
+  const g=c.slice(0,2),k=+c.slice(3);let nat,dest,desc;
+  if(g==='01'||g==='02'){
+    if(k===20||k===30){nat='F';dest='SA';desc='credito'}
+    else if(k>=11){nat='Ep';dest='SPP';desc='rettifica di costo pluriennale'}
+    else{nat='Ep';dest='SA';desc='costo pluriennale'}
+  }else if(g==='03'){nat='F';dest='SA';desc='credito'}
+  else if(g==='04'){if(k===10){nat='F';dest='SA';desc='credito'}else{nat='Es';dest='SA';desc='costo sospeso'}}
+  else if(g==='05'){nat='F';if(k===20){dest='SPP';desc='rettifica di credito'}else{dest='SA';desc='credito'}}
+  else if(g==='06'){nat='F';dest='SA';desc='credito'}
+  else if(g==='08'){nat='F';dest='SA';desc=k>=10?'valori in cassa':'credito'}
+  else if(g==='09'){if(k===1){nat='F';dest='SA';desc='rateo'}else{nat='Es';dest='SA';desc='costo sospeso'}}
+  else if(g==='10'){nat='En';desc=k===1?'capitale proprio':k===4?'utile d’esercizio':'rettifica di patrimonio netto';dest=(k===1||k===4)?'SPP':'SA'}
+  else if(g==='11'){nat='F';dest='SPP';desc=k===1?'fondo rischi':'fondo oneri'}
+  else if(g==='12'||g==='13'||g==='14'||g==='15'){nat='F';dest='SPP';desc='debito'}
+  else if(g==='16'){if(k===1){nat='F';dest='SPP';desc='rateo'}else{nat='Es';dest='SPP';desc='ricavo sospeso'}}
+  else if(g==='18'){if(k<=2){nat='T';dest=null;desc='transitorio di contropartita'}else{nat='F';dest=null;desc='crediti e debiti'}}
+  else if(g==='19'){nat='O';dest=null;desc='conto d’ordine'}
+  else if(g==='90'){nat='Ee';dest=null;desc='conto di risultato'}
+  else{
+    nat='Ee';
+    if(g==='20'){if(k>=10&&k<=12){dest='SC';desc='rettifica di ricavo'}else{dest='SR';desc='ricavo d’esercizio'}}
+    else if(g==='30'){if(k>=10){dest='SR';desc='rettifica di costo'}else{dest='SC';desc='costo d’esercizio'}}
+    else if(g==='37'){if(k>=10){dest='SR';desc='rettifica di costo'}else{dest='SC';desc='costo d’esercizio'}}
+    else if(g==='40'){dest='SR';desc='ricavo d’esercizio'}
+    else{dest='SC';desc='costo d’esercizio'}
+  }
+  return{nat,dest,desc};
+}
+PIANO.forEach(a=>Object.assign(a,classify(a.c,a.n)));
+/* variazione: finanziario in Dare VF+ (verde), in Avere VF− (rosso); economico in Dare VE−, in Avere VE+ con il colore del suo tipo */
+function variation(c,side){
+  const a=ACC.get(c);if(!a||!side)return null;
+  if(a.nat==='F')return side==='D'?{t:'VF+',k:'g'}:{t:'VF−',k:'r'};
+  if(NATCOL[a.nat])return{t:(side==='D'?'VE−':'VE+')+' '+NATSHORT[a.nat],k:NATCOL[a.nat]};
+  return{t:a.nat==='T'?'transit.':'ordine',k:'k'};
+}
+const natura=c=>{const a=ACC.get(c);return !a?'':a.nat==='F'?'finanziario':a.nat==='T'||a.nat==='O'?'transitorio':'economico'};
+const rowCls=v=>!v?'':v.k==='g'?'vfp':v.k==='r'?'vfm':'ve-'+v.k;
+const chip=v=>v?`<span class="vchip ${v.k}">${v.t}</span>`:'';
+function legendHtml(){
+  const it=[['g','VF+','Finanziario in Dare'],['r','VF−','Finanziario in Avere'],['b','VE','Economico · variazioni d’esercizio'],['v','VE','Economico · costi pluriennali'],['t','VE','Economico · patrimonio netto'],['o','VE','Economico · costi e ricavi sospesi']];
+  return `<div class="legend2" aria-label="Codice colore dei conti">${it.map(([k,t,l])=>`<span><span class="vchip ${k}">${t}</span>${l}</span>`).join('')}</div>`;
+}
+
+/* ================= STATO ================= */
+let db=null,user=null,uid=null,editor=false;
+let exercises=[],progress={},quizStats={prove:0,migliore:0,ultimo:0},fogli=[],curF=null;
+let mode='ex',cur=null,curOp=0,sub='reg',fsub='lg',saveTimer=null,saveFTimer=null,loadedEx=false,results=[];
+let quiz=null;
+const pal=$('pal');
+
+/* ================= CORREZIONE ================= */
+function sums(rows,sol){
+  const alt=new Map();(sol||[]).forEach(r=>(r.alt||[]).forEach(a=>alt.set(a,r.c)));
+  const m=new Map();
+  rows.forEach(r=>{
+    if(!r.c)return;const c=alt.get(r.c)||r.c;
+    [['D',r.d],['A',r.a]].forEach(([s,v])=>{if(v>0){const k=c+'|'+s;m.set(k,Math.round(((m.get(k)||0)+v)*100)/100)}});
+  });
+  return m;
+}
+function grade(rawRows,sol){
+  const msgs=[];
+  const rows=rawRows.map(r=>({c:accOf(r.txt),txt:r.txt,d:parseAmt(r.d),a:parseAmt(r.a)})).filter(r=>r.txt||r.d||r.a);
+  if(rows.length<2){return{ok:false,msgs:['Un articolo in partita doppia ha almeno due conti: uno in Dare e uno in Avere.']}}
+  rows.forEach(r=>{
+    if(r.c===null)msgs.push(`«${r.txt}» non è nel piano dei conti: scegli il conto dall’elenco.`);
+    else if(!r.c)msgs.push('C’è un importo senza conto: scegli il conto o cancella la riga.');
+    if(Number.isNaN(r.d)||Number.isNaN(r.a))msgs.push(`L’importo di «${r.txt||'una riga'}» non è un numero valido.`);
+    if(r.c&&!(r.d>0)&&!(r.a>0))msgs.push(`Al conto ${accName(r.c)} manca l’importo.`);
+    if(r.d>0&&r.a>0)msgs.push(`Il conto ${accName(r.c)} ha un importo sia in Dare sia in Avere: usa una sola sezione per riga.`);
+  });
+  const clean=rows.filter(r=>r.c).map(r=>({c:r.c,d:r.d>0?r.d:0,a:r.a>0?r.a:0}));
+  const tD=rows.reduce((s,r)=>s+(r.d>0?r.d:0),0),tA=rows.reduce((s,r)=>s+(r.a>0?r.a:0),0);
+  if(Math.abs(tD-tA)>0.005)msgs.push(`L’articolo non quadra: totale Dare ${fmt(tD)} e totale Avere ${fmt(tA)}.`);
+  const S=sums(clean,sol),E=new Map();
+  sol.forEach(r=>{const k=r.c+'|'+r.s;E.set(k,Math.round(((E.get(k)||0)+r.v)*100)/100)});
+  const solCodes=new Set(sol.map(r=>r.c));
+  S.forEach((v,k)=>{
+    const[c,s]=k.split('|');
+    if(E.has(k)){if(Math.abs(E.get(k)-v)>0.005)msgs.push(`L’importo del conto ${accName(c)} non è corretto.`)}
+    else if(solCodes.has(c))msgs.push(`Il conto ${accName(c)} è nella sezione sbagliata: ricontrolla se va in ${s==='D'?'Avere':'Dare'}.`);
+    else msgs.push(`Il conto ${accName(c)} non serve in questa operazione.`);
+  });
+  const missing=[];E.forEach((v,k)=>{const[c]=k.split('|');if(!S.has(k)&&![...S.keys()].some(x=>x.startsWith(c+'|')))missing.push(c)});
+  if(missing.length){
+    const f=missing.filter(c=>natura(c)==='finanziario').length,e=missing.length-f;
+    const parts=[];if(f)parts.push(f===1?'un conto finanziario':f+' conti finanziari');if(e)parts.push(e===1?'un conto economico':e+' conti economici');
+    msgs.push(`Manca ${parts.join(' e ')}.`);
+  }
+  return{ok:msgs.length===0,msgs:[...new Set(msgs)]};
+}
+
+/* ================= SALVATAGGI ================= */
+function P(exId){return progress[exId]||(progress[exId]={ops:{}})}
+function OP(exId,i){const p=P(exId);return p.ops[i]||(p.ops[i]={rows:[],st:'',tries:0,hints:0})}
+function summary(){
+  const out={};
+  exercises.forEach(ex=>{const p=progress[ex._id];if(!p)return;const n=(ex.operazioni||[]).length;let ok=0,sol=0,primo=0,tent=0;
+    for(let i=0;i<n;i++){const o=p.ops[i];if(!o)continue;tent+=o.tries||0;if(o.st==='ok'){ok++;if(o.tries===1&&!o.hints)primo++}else if(o.st==='sol')sol++}
+    if(tent||ok||sol)out[ex._id]={n,ok,sol,primo,tent}});
+  return out;
+}
+function saveSoon(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(async()=>{
+    try{localStorage.setItem('palestra3EE',JSON.stringify({ex:progress,quiz:quizStats}))}catch(e){}
+    if(db&&uid){try{await db.collection('data/users/'+uid).doc('palestra').set({ex:progress,quiz:quizStats,agg:new Date().toISOString()})}catch(e){}
+      /* riepilogo visibile solo alla docente: niente nomi, solo l'id dello studente */
+      if(!editor){try{await db.collection('risultati').doc(uid).set({riepilogo:summary(),quiz:quizStats,agg:new Date().toISOString()})}catch(e){}}}
+  },700);
+}
+function saveFogli(){
+  clearTimeout(saveFTimer);
+  saveFTimer=setTimeout(async()=>{
+    try{localStorage.setItem('fogli3EE',JSON.stringify(fogli))}catch(e){}
+    if(db&&uid){try{await db.collection('data/users/'+uid).doc('fogli').set({lista:fogli,agg:new Date().toISOString()})}catch(e){}}
+  },800);
+}
+async function loadSaved(){
+  try{const s=JSON.parse(localStorage.getItem('palestra3EE')||'null');if(s){progress=s.ex||s;quizStats=s.quiz||quizStats}}catch(e){}
+  try{const f=JSON.parse(localStorage.getItem('fogli3EE')||'null');if(Array.isArray(f))fogli=f}catch(e){}
+  if(db&&uid){
+    try{const d=await db.collection('data/users/'+uid).doc('palestra').get();if(d.exists){const v=d.data();if(v.ex)progress=v.ex;if(v.quiz)quizStats=v.quiz}}catch(e){}
+    try{const d=await db.collection('data/users/'+uid).doc('fogli').get();if(d.exists&&Array.isArray(d.data().lista))fogli=d.data().lista}catch(e){}
+  }
+}
+function exStats(ex){
+  const n=(ex.operazioni||[]).length;let ok=0,sol=0;
+  for(let i=0;i<n;i++){const o=(progress[ex._id]||{ops:{}}).ops[i];if(o&&o.st==='ok')ok++;else if(o&&o.st==='sol')sol++}
+  return{n,ok,sol};
+}
+
+/* ================= STRUTTURA DELLA PALESTRA ================= */
+function navHtml(){
+  const m=[['ex','Esercizi guidati'],['foglio','Foglio libero'],['natura','Natura dei conti']];if(editor)m.push(['ris','Risultati della classe']);
+  return `<div class="palnav" role="group" aria-label="Sezioni della palestra">${m.map(([k,l])=>`<button type="button" data-mode="${k}" aria-pressed="${mode===k}">${l}</button>`).join('')}</div>${legendHtml()}`;
+}
+function paint(html){pal.innerHTML=navHtml()+html}
+function render(){
+  if(mode==='foglio')return renderFoglio();
+  if(mode==='natura')return renderNatura();
+  if(mode==='ris')return renderResults();
+  if(cur)return renderWs();
+  return renderList();
+}
+
+/* ================= ESERCIZI GUIDATI: ELENCO ================= */
+function renderList(){
+  cur=null;
+  if(!loadedEx)return paint(`<div class="notice"><h2>Carico gli esercizi…</h2><p>Un momento.</p></div>`);
+  const vis=exercises.filter(e=>editor||!e.bozza).sort((a,b)=>(a.ordine||0)-(b.ordine||0));
+  const head=`<div class="pal-intro"><p>Registra ogni operazione nel libro giornale scegliendo i conti dal piano dei conti. Premi <b>Verifica</b>: la palestra ti dice se l’articolo è corretto e, se non lo è, dove ricontrollare.</p>${editor?`<button class="btn primary" type="button" data-newex>+ Nuovo esercizio</button>`:''}</div>`;
+  if(!vis.length)return paint(head+`<div class="empty"><h2>Nessun esercizio disponibile</h2><p>${editor?'Crea il primo esercizio con il pulsante qui sopra.':'Gli esercizi compariranno qui quando la docente li pubblica.'}</p></div>`);
+  const groups=TOPICS.concat(['Altro']).map(t=>({t,items:vis.filter(e=>(TOPICS.includes(e.argomento)?e.argomento:'Altro')===t)})).filter(g=>g.items.length);
+  paint(head+groups.map(g=>`<section class="exgroup"><h3>${esc(g.t)}</h3><div class="exgrid">${g.items.map(e=>{
+    const s=exStats(e);const pOk=s.n?s.ok/s.n*100:0,pSol=s.n?s.sol/s.n*100:0;
+    return `<button type="button" class="excard" data-ex="${esc(e._id)}"><div class="meta"><span>${'●'.repeat(e.livello||1)}${'○'.repeat(3-(e.livello||1))}</span><span>${s.n} operazioni</span>${e.bozza?'<span class="tag draft">Bozza</span>':''}</div><h4>${esc(e.titolo)}</h4><div class="progress" aria-hidden="true"><i class="ok" style="width:${pOk}%"></i><i class="sol" style="width:${pSol}%"></i></div><small>${s.ok?`${s.ok} di ${s.n} corrette`:'Da iniziare'}${s.sol?` · ${s.sol} con soluzione`:''}</small></button>`}).join('')}</div></section>`).join(''));
+}
+
+/* ================= ESERCIZI GUIDATI: AREA DI LAVORO ================= */
+function openEx(id,op){
+  cur=exercises.find(e=>e._id===id);if(!cur)return renderList();
+  curOp=op!=null?op:Math.max(0,(cur.operazioni||[]).findIndex((o,i)=>OP(cur._id,i).st!=='ok'));
+  if(curOp<0)curOp=0;sub='reg';renderWs();
+  pal.scrollIntoView({block:'start'});
+}
+function rowState(r){
+  const c=accOf(r.txt);const side=parseAmt(r.d)>0?'D':parseAmt(r.a)>0?'A':null;
+  return{c,v:c?variation(c,side):null};
+}
+function journalRows(rows,ro,delAttr){
+  delAttr=delAttr||'data-del';
+  return rows.map((r,i)=>{
+    const st=rowState(r);const cls=rowCls(st.v);
+    if(ro)return `<tr class="${cls}"><td class="code">${st.c||''}</td><td>${esc(st.c?accName(st.c):r.txt)}</td><td class="n">${parseAmt(r.d)>0?fmt(parseAmt(r.d)):''}</td><td class="n">${parseAmt(r.a)>0?fmt(parseAmt(r.a)):''}</td><td class="vc">${chip(st.v)}</td></tr>`;
+    return `<tr class="${cls}" data-i="${i}"><td class="code">${st.c||''}</td>
+      <td class="acc"><input list="pianoList" data-f="txt" value="${esc(r.txt)}" aria-label="Conto riga ${i+1}" placeholder="Scrivi o scegli il conto" class="${st.c===null?'bad':''}" autocomplete="off"></td>
+      <td><input class="amt" data-f="d" inputmode="decimal" value="${esc(r.d)}" aria-label="Dare riga ${i+1}"></td>
+      <td><input class="amt" data-f="a" inputmode="decimal" value="${esc(r.a)}" aria-label="Avere riga ${i+1}"></td>
+      <td class="vc">${chip(st.v)}</td>
+      <td class="x"><button type="button" class="btn ghost small" ${delAttr}="${i}" aria-label="Elimina riga ${i+1}">✕</button></td></tr>`;
+  }).join('');
+}
+function totals(rows){let d=0,a=0;rows.forEach(r=>{const x=parseAmt(r.d),y=parseAmt(r.a);if(x>0)d+=x;if(y>0)a+=y});return{d,a}}
+function footRow(rows,ro){
+  const t=totals(rows);const ok=Math.abs(t.d-t.a)<0.005&&t.d>0;
+  return `<tr><td></td><td>Totali ${t.d||t.a?`<span class="balance ${ok?'ok':'ko'}">· ${ok?'quadra':'non quadra'}</span>`:''}</td><td class="n">${fmt(t.d)}</td><td class="n">${fmt(t.a)}</td><td></td>${ro?'':'<td></td>'}</tr>`;
+}
+/* aggiorna codice, colore e totali di una tabella senza ridisegnarla (il cursore resta dov'è) */
+function refreshTable(tbody,rows,tfoot){
+  tbody.querySelectorAll('tr').forEach(tr=>{
+    const r=rows[+tr.dataset.i];if(!r)return;const st=rowState(r);
+    tr.className=rowCls(st.v);
+    tr.querySelector('.code').textContent=st.c||'';
+    tr.querySelector('.vc').innerHTML=chip(st.v);
+    tr.querySelector('[data-f="txt"]').classList.toggle('bad',st.c===null&&!!r.txt.trim());
+  });
+  if(tfoot)tfoot.innerHTML=footRow(rows,false);
+}
+function exEntries(ex){
+  const out=[];(ex.operazioni||[]).forEach((op,i)=>{
+    const o=(progress[ex._id]||{ops:{}}).ops[i];if(!o)return;
+    const rows=o.st==='sol'?op.righe.map(r=>({txt:accLabel(r.c),d:r.s==='D'?fmt(r.v):'',a:r.s==='A'?fmt(r.v):''})):o.rows;
+    rows.forEach(r=>{const c=accOf(r.txt),d=parseAmt(r.d),a=parseAmt(r.a);if(c&&(d>0||a>0))out.push({grp:i,data:op.data,descr:'',c,d:d>0?d:0,a:a>0?a:0,st:o.st})});
+  });return out;
+}
+function renderWs(){
+  const ex=cur,ops=ex.operazioni||[],op=ops[curOp],o=OP(ex._id,curOp);
+  if(!o.rows.length)o.rows=[{txt:'',d:'',a:''},{txt:'',d:'',a:''}];
+  const stepBtns=ops.map((x,i)=>{const s=OP(ex._id,i).st;return `<button type="button" data-op="${i}" class="${i===curOp?'cur ':''}${s}" aria-label="Operazione ${i+1}${s==='ok'?', corretta':s==='ko'?', da correggere':s==='sol'?', soluzione vista':''}" ${i===curOp?'aria-current="step"':''}>${i+1}</button>`}).join('');
+  const subs=[['reg','Registra'],['lg','Libro giornale'],['ma','Mastrini'],['sc','Situazione contabile'],['sd','Per destinazione']];
+  let body='';
+  if(sub==='reg'){
+    const locked=o.st==='ok'||o.st==='sol';
+    body=`<div class="opcard">
+      <div class="optext"><time>${esc(op.data||'')}</time><span>${esc(op.testo)}</span></div>
+      <div class="jwrap"><table class="j${locked?' ro':''}"><thead><tr><th>Codice</th><th>Conto</th><th class="n">Dare</th><th class="n">Avere</th><th>Var.</th>${locked?'':'<th><span class="sr">Azioni</span></th>'}</tr></thead>
+      <tbody id="jb">${journalRows(o.rows,locked)}</tbody><tfoot id="jf">${footRow(o.rows,locked)}</tfoot></table></div>
+      <div class="opbar">${locked?`<button type="button" class="btn small" data-redo>Rifai l’operazione</button>`:`<button type="button" class="btn small" data-addrow>+ Riga</button><button type="button" class="btn primary" data-verify>Verifica</button><button type="button" class="btn" data-hint>Suggerimento</button>${o.tries>=2||o.hints>=2?`<button type="button" class="btn ghost" data-sol>Mostra la soluzione</button>`:''}`}
+        <span class="spacer"></span>${curOp<ops.length-1?`<button type="button" class="btn${o.st==='ok'?' primary':''}" data-next>Operazione successiva →</button>`:`<button type="button" class="btn" data-back>Torna agli esercizi</button>`}</div>
+      <div id="fb" aria-live="polite">${feedbackHtml(o)}</div>
+    </div>`;
+  }else{
+    const E=exEntries(ex);
+    body=sub==='lg'?lgHtml(E,'Il libro giornale si riempie man mano che registri le operazioni.',true):sub==='ma'?mastriHtml(E):sub==='sc'?scHtml(E):sdHtml(E);
+  }
+  paint(`<div class="ws">
+    <div class="ws-head"><div><div class="tmeta"><span>${esc(ex.argomento||'')}</span>${ex.bozza?'<span class="tag draft">Bozza</span>':''}</div><h2>${esc(ex.titolo)}</h2></div>
+      <div class="tactions">${editor?`<button class="btn small" type="button" data-editex>Modifica esercizio</button>`:''}<button class="btn small" type="button" data-back>← Tutti gli esercizi</button></div></div>
+    ${ex.intro?`<div class="traccia"><b>TRACCIA</b>${esc(ex.intro)}</div>`:''}
+    <div class="steps" role="list" aria-label="Operazioni">${stepBtns}</div>
+    <div class="subtabs" role="group" aria-label="Vista">${subs.map(([k,l])=>`<button type="button" data-sub="${k}" aria-pressed="${sub===k}">${l}</button>`).join('')}</div>
+    ${body}
+  </div>`);
+}
+function feedbackHtml(o){
+  if(o.st==='ok')return `<div class="fb ok"><h3>Corretto</h3><p style="margin:0">L’articolo è registrato bene${o.tries>1?` (dopo ${o.tries} tentativi)`:' al primo tentativo'}. I colori mostrano la natura di ogni conto e la variazione che registra.</p></div>`;
+  if(o.st==='sol')return `<div class="fb hint"><h3>Soluzione</h3><p style="margin:0">Questa è la registrazione corretta. Rileggi l’operazione e confrontala con il tuo tentativo, poi prova l’operazione successiva.</p></div>`;
+  let h='';
+  if(o.msgs&&o.msgs.length)h+=`<div class="fb ko"><h3>Da ricontrollare</h3><ul>${o.msgs.map(m=>`<li>${esc(m)}</li>`).join('')}</ul></div>`;
+  if(o.hints>0){
+    const sol=cur.operazioni[curOp].righe;const nd=sol.filter(r=>r.s==='D').length,na=sol.length-nd;
+    let t=`<li>L’articolo ha ${sol.length} righe: ${nd} in Dare e ${na} in Avere.</li>`;
+    if(o.hints>1)t+=`<li>Conti in Dare: ${[...new Set(sol.filter(r=>r.s==='D').map(r=>accName(r.c)))].join(', ')}.</li><li>Conti in Avere: ${[...new Set(sol.filter(r=>r.s==='A').map(r=>accName(r.c)))].join(', ')}.</li>`;
+    h+=`<div class="fb hint"><h3>Suggerimento</h3><ul>${t}</ul></div>`;
+  }
+  return h;
+}
+
+/* ================= PROSPETTI: libro giornale, mastrini, situazioni contabili ================= */
+function lgHtml(E,emptyMsg,withEsito){
+  if(!E.length)return `<p class="empty-note">${emptyMsg}</p>`;
+  let n=0,prev=null;const t=E.reduce((s,x)=>({d:s.d+x.d,a:s.a+x.a}),{d:0,a:0});
+  return `<div class="jwrap"><table class="j ro"><thead><tr><th>Nr.</th><th>Data</th><th>Codice</th><th>Conto</th><th>Descrizione</th><th class="n">Dare</th><th class="n">Avere</th>${withEsito?'<th>Esito</th>':''}</tr></thead><tbody>${E.map(x=>{const sep=prev!==null&&x.grp!==prev;prev=x.grp;n++;
+    return `<tr class="${sep?'sep ':''}${rowCls(variation(x.c,x.d?'D':'A'))}"><td>${n}</td><td>${esc(x.data||'')}</td><td class="code">${x.c}</td><td>${esc(accName(x.c))}</td><td>${esc(x.descr||'')}</td><td class="n">${x.d?fmt(x.d):''}</td><td class="n">${x.a?fmt(x.a):''}</td>${withEsito?`<td>${x.st==='ok'?'<span class="vchip g">corretta</span>':x.st==='sol'?'<span class="vchip k">soluzione</span>':x.st==='ko'?'<span class="vchip r">da correggere</span>':'<span class="vchip k">non verificata</span>'}</td>`:''}</tr>`}).join('')}</tbody>
+    <tfoot><tr><td></td><td></td><td></td><td>Totali</td><td></td><td class="n">${fmt(t.d)}</td><td class="n">${fmt(t.a)}</td>${withEsito?'':''}<td>${Math.abs(t.d-t.a)<0.005?'<span class="balance ok">quadra</span>':'<span class="balance ko">non quadra</span>'}</td></tr></tfoot></table></div>`;
+}
+function ledger(E){
+  const m=new Map();E.forEach(x=>{if(!m.has(x.c))m.set(x.c,{c:x.c,D:[],A:[]});const L=m.get(x.c);if(x.d)L.D.push(x);if(x.a)L.A.push(x)});
+  return [...m.values()].map(a=>{a.td=a.D.reduce((s,x)=>s+x.d,0);a.ta=a.A.reduce((s,x)=>s+x.a,0);return a}).sort((a,b)=>a.c.localeCompare(b.c));
+}
+function natTag(c){const a=ACC.get(c);if(!a)return '';const k=a.nat==='F'?'f':(NATCOL[a.nat]||'k');return `<span class="nt nt-${k}">${a.nat==='F'?'Finanziario':a.nat==='T'?'Transitorio':(NAT[a.nat]||'').replace('Economico · ','Econ. ')}</span>`}
+function mastriHtml(E){
+  const L=ledger(E);if(!L.length)return `<p class="empty-note">I conti di mastro compaiono quando registri le prime scritture.</p>`;
+  return `<div class="mastri">${L.map(a=>{const sal=a.td-a.ta;const nat=(ACC.get(a.c)||{}).nat;const k=nat==='F'?'f':(NATCOL[nat]||'k');
+    return `<article class="taccount tk-${k}"><h4><span>${a.c}</span>${esc(accName(a.c))}</h4>${natTag(a.c)}<div class="tcols"><div>${a.D.map(x=>`<div class="e"><i>${esc(x.data||'')}</i>${fmt(x.d)}</div>`).join('')}</div><div>${a.A.map(x=>`<div class="e"><i>${esc(x.data||'')}</i>${fmt(x.a)}</div>`).join('')}</div></div>
+      <div class="tsaldo">${Math.abs(sal)<0.005?'Saldo 0 · conto chiuso':`Saldo ${sal>0?'Dare':'Avere'} ${fmt(Math.abs(sal))}`}</div></article>`}).join('')}</div>`;
+}
+function scHtml(E){
+  const L=ledger(E);if(!L.length)return `<p class="empty-note">La situazione contabile si compila con i saldi dei conti movimentati.</p>`;
+  let T={d:0,a:0,ed:0,ea:0};
+  const rows=L.map(a=>{const d=a.td,av=a.ta,ed=d>av?d-av:0,ea=av>d?av-d:0;T.d+=d;T.a+=av;T.ed+=ed;T.ea+=ea;
+    return `<tr><td class="code">${a.c}</td><td>${esc(accName(a.c))} ${natTag(a.c)}</td><td class="n">${d?fmt(d):''}</td><td class="n">${av?fmt(av):''}</td><td class="n">${ed>0.004?fmt(ed):''}</td><td class="n">${ea>0.004?fmt(ea):''}</td></tr>`}).join('');
+  const ok=Math.abs(T.d-T.a)<0.005;
+  return `<div class="jwrap"><table class="j ro"><thead><tr><th>Codice</th><th>Conto</th><th class="n">Totale Dare</th><th class="n">Totale Avere</th><th class="n">Eccedenza Dare</th><th class="n">Eccedenza Avere</th></tr></thead><tbody>${rows}</tbody>
+    <tfoot><tr><td></td><td>Totali <span class="balance ${ok?'ok':'ko'}">· ${ok?'quadra':'non quadra'}</span></td><td class="n">${fmt(T.d)}</td><td class="n">${fmt(T.a)}</td><td class="n">${fmt(T.ed)}</td><td class="n">${fmt(T.ea)}</td></tr></tfoot></table></div>`;
+}
+/* situazione contabile per destinazione: SP (attività / passività e netto) e SE (costi / ricavi), con il saldo economico */
+function sdHtml(E){
+  const L=ledger(E).filter(a=>Math.abs(a.td-a.ta)>0.004);if(!L.length)return `<p class="empty-note">La situazione per destinazione si compila con i saldi dei conti movimentati.</p>`;
+  const sp={D:[],A:[]},se={D:[],A:[]};
+  L.forEach(a=>{const acc=ACC.get(a.c)||{};const s=a.td-a.ta;const side=s>0?'D':'A';const isSE=acc.dest==='SC'||acc.dest==='SR';(isSE?se:sp)[side].push({c:a.c,v:Math.abs(s)})});
+  const sum=l=>l.reduce((s,x)=>s+x.v,0);
+  const cost=sum(se.D),ric=sum(se.A),res=ric-cost;
+  const li=l=>l.map(x=>`<div class="sdrow"><span>${esc(accName(x.c))}</span><span>${fmt(x.v)}</span></div>`).join('');
+  const att=sum(sp.D),pas=sum(sp.A);
+  const extraSP=res<-0.004?{side:'D',t:'Saldo economico negativo (perdita)',v:-res}:res>0.004?{side:'A',t:'Saldo economico positivo (utile)',v:res}:null;
+  const extraSE=res>0.004?{side:'D',t:'Saldo economico positivo (utile)',v:res}:res<-0.004?{side:'A',t:'Saldo economico negativo (perdita)',v:-res}:null;
+  const col=(title,list,extra,side)=>`<div class="sdcol"><h4>${title}</h4>${li(list)||'<div class="sdrow empty-note"><span>—</span></div>'}${extra&&extra.side===side?`<div class="sdrow res"><span>${extra.t}</span><span>${fmt(extra.v)}</span></div>`:''}<div class="sdrow tot"><span>Totale</span><span>${fmt(sum(list)+(extra&&extra.side===side?extra.v:0))}</span></div></div>`;
+  return `<div class="sdbox"><h3>Situazione patrimoniale</h3><div class="sdgrid">${col('Attività',sp.D,extraSP,'D')}${col('Passività e netto',sp.A,extraSP,'A')}</div></div>
+    <div class="sdbox"><h3>Situazione economica</h3><div class="sdgrid">${col('Costi',se.D,extraSE,'D')}${col('Ricavi',se.A,extraSE,'A')}</div></div>
+    <p class="empty-note">I conti si dispongono secondo la loro destinazione (SP o SE) e la sezione in cui hanno l’eccedenza. Se tutte le scritture quadrano, i totali delle due colonne coincidono.</p>`;
+}
+
+/* ================= FOGLIO LIBERO (come il libro giornale di T-SMART) ================= */
+const newArt=()=>({data:'',descr:'',rows:[{txt:'',d:'',a:''},{txt:'',d:'',a:''}]});
+function ensureFoglio(){
+  if(!fogli.length)fogli.push({id:'f'+Date.now().toString(36),nome:'Foglio 1',articoli:[newArt()]});
+  if(!curF||!fogli.find(f=>f.id===curF))curF=fogli[0].id;
+  return fogli.find(f=>f.id===curF);
+}
+function artState(a){const t=totals(a.rows);const any=t.d>0||t.a>0;const ok=any&&Math.abs(t.d-t.a)<0.005;
+  const bad=a.rows.some(r=>r.txt.trim()&&accOf(r.txt)===null);return{t,any,ok,bad}}
+function artStatusHtml(a){const s=artState(a);
+  if(!s.any)return '<span class="vchip k">vuoto</span>';
+  if(s.bad)return '<span class="vchip r">conto non valido</span>';
+  return s.ok?'<span class="vchip g">quadra</span>':`<span class="vchip r">non quadra · differenza ${fmt(Math.abs(s.t.d-s.t.a))}</span>`}
+function fEntries(f){
+  const out=[];f.articoli.forEach((a,i)=>a.rows.forEach(r=>{const c=accOf(r.txt),d=parseAmt(r.d),a2=parseAmt(r.a);if(c&&(d>0||a2>0))out.push({grp:i,data:a.data,descr:a.descr,c,d:d>0?d:0,a:a2>0?a2:0})}));return out;
+}
+let delF=false,delArt=-1;
+function countHtml(f){const nOk=f.articoli.filter(a=>artState(a).ok).length,nTot=f.articoli.filter(a=>artState(a).any).length;return nTot?`${nOk} articoli su ${nTot} quadrano`:'Scrivi il primo articolo'}
+function renderFoglio(){
+  const f=ensureFoglio();
+  const subs=[['lg','Libro giornale'],['ma','Mastrini'],['sc','Situazione contabile'],['sd','Per destinazione']];
+  const nOk=f.articoli.filter(a=>artState(a).ok).length,nTot=f.articoli.filter(a=>artState(a).any).length;
+  let body='';
+  if(fsub==='lg'){
+    body=`<div class="arts">${f.articoli.map((a,i)=>`<article class="art" data-art="${i}">
+      <div class="art-h"><span class="art-n">Art. ${i+1}</span>
+        <div class="field inl"><label for="ad${i}">Data</label><input id="ad${i}" data-af="data" value="${esc(a.data)}" placeholder="gg/mm"></div>
+        <div class="field inl grow"><label for="ade${i}">Descrizione</label><input id="ade${i}" data-af="descr" value="${esc(a.descr)}" placeholder="Es. fattura n. 12 di Alfa srl"></div>
+        <span class="art-st" aria-live="polite">${artStatusHtml(a)}</span>
+        ${delArt===i?`<button type="button" class="btn small danger" data-artdel-ok="${i}">Conferma</button><button type="button" class="btn small" data-artdel-no>Annulla</button>`:`<button type="button" class="btn ghost small" data-artdel="${i}" aria-label="Elimina articolo ${i+1}">Elimina</button>`}</div>
+      <div class="jwrap"><table class="j"><thead><tr><th>Codice</th><th>Conto</th><th class="n">Dare</th><th class="n">Avere</th><th>Var.</th><th><span class="sr">Azioni</span></th></tr></thead><tbody>${journalRows(a.rows,false,'data-frow-del')}</tbody><tfoot>${footRow(a.rows,false)}</tfoot></table></div>
+      <div><button type="button" class="btn small" data-frow-add="${i}">+ Riga</button></div></article>`).join('')}</div>
+      <div class="opbar"><button type="button" class="btn primary" data-artadd>+ Nuovo articolo</button><span class="spacer"></span><span class="empty-note" id="fCount">${countHtml(f)}</span></div>`;
+  }else{
+    const E=fEntries(f);
+    body=fsub==='ma'?mastriHtml(E):fsub==='sc'?scHtml(E):sdHtml(E);
+  }
+  paint(`<div class="ws">
+    <div class="pal-intro"><p>Un libro giornale libero, come il foglio T-SMART: scrivi le scritture in partita doppia di un esercizio che hai sul libro o sulla fotocopia. Ogni articolo viene controllato mentre scrivi; mastrini e situazioni contabili si aggiornano da soli.</p></div>
+    <div class="fbar">
+      <div class="field inl"><label for="fSel">Foglio</label><select id="fSel">${fogli.map(x=>`<option value="${esc(x.id)}"${x.id===f.id?' selected':''}>${esc(x.nome)}</option>`).join('')}</select></div>
+      <div class="field inl"><label for="fName">Nome</label><input id="fName" value="${esc(f.nome)}" maxlength="60"></div>
+      <button type="button" class="btn small" data-fnew>+ Nuovo foglio</button>
+      ${delF?`<button type="button" class="btn small danger" data-fdel-ok>Conferma eliminazione</button><button type="button" class="btn small" data-fdel-no>Annulla</button>`:`<button type="button" class="btn ghost small" data-fdel>Elimina foglio</button>`}
+    </div>
+    <div class="subtabs" role="group" aria-label="Vista">${subs.map(([k,l])=>`<button type="button" data-fsub="${k}" aria-pressed="${fsub===k}">${l}</button>`).join('')}</div>
+    ${body}</div>`);
+}
+
+/* ================= NATURA DEI CONTI ================= */
+const QUIZ_POOL=()=>PIANO.filter(a=>a.dest&&NAT[a.nat]&&a.c!=='90.01');
+function newQuiz(n){
+  const pool=QUIZ_POOL().slice();for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
+  const k=n==='all'?pool.length:Math.min(+n,pool.length);
+  quiz={n:String(n),showCode:quiz?quiz.showCode:false,checked:false,items:pool.slice(0,k).map(a=>({c:a.c,nat:'',dest:''}))};
+}
+function renderNatura(){
+  if(!quiz)newQuiz(20);
+  const natOpts=Object.entries(NAT),destOpts=Object.entries(DEST);
+  let ok1=0,ok2=0;
+  const rows=quiz.items.map((it,i)=>{const a=ACC.get(it.c);const g1=it.nat===a.nat,g2=it.dest===a.dest;if(g1)ok1++;if(g2)ok2++;
+    const k=a.nat==='F'?'f':NATCOL[a.nat];
+    return `<tr data-q="${i}" class="${quiz.checked?(g1&&g2?'qok':'qko'):''}"><td>${i+1}</td><td><b>${esc(a.n)}</b>${quiz.showCode?` <span class="code">${a.c}</span>`:''}${quiz.checked?`<div class="qsol"><span class="nt nt-${k}">${NAT[a.nat]}</span> · ${a.desc} · ${DEST[a.dest]}</div>`:''}</td>
+      <td><select data-qf="nat" aria-label="Natura di ${esc(a.n)}" ${quiz.checked?'disabled':''} class="${quiz.checked?(g1?'sok':'sko'):''}"><option value="">Scegli…</option>${natOpts.map(([v,l])=>`<option value="${v}"${it.nat===v?' selected':''}>${l}</option>`).join('')}</select></td>
+      <td><select data-qf="dest" aria-label="Destinazione di ${esc(a.n)}" ${quiz.checked?'disabled':''} class="${quiz.checked?(g2?'sok':'sko'):''}"><option value="">Scegli…</option>${destOpts.map(([v,l])=>`<option value="${v}"${it.dest===v?' selected':''}>${l}</option>`).join('')}</select></td></tr>`}).join('');
+  const n=quiz.items.length,pct=n?Math.round((ok1+ok2)/(2*n)*100):0;const filled=quiz.items.filter(x=>x.nat&&x.dest).length;
+  paint(`<div class="ws">
+    <div class="pal-intro"><p>Per ogni conto scegli la <b>natura</b> (finanziario oppure economico, e in questo caso a quale tipo di valori è acceso) e la <b>destinazione</b> nella situazione contabile: Situazione patrimoniale (attività o passività e netto) o Situazione economica (costi o ricavi), secondo la sezione in cui il conto ha l’eccedenza.</p></div>
+    <div class="fbar">
+      <div class="field inl"><label for="qN">Quanti conti</label><select id="qN">${['20','30','40','60','all'].map(v=>`<option value="${v}"${quiz.n===v?' selected':''}>${v==='all'?'Tutti ('+QUIZ_POOL().length+')':v}</option>`).join('')}</select></div>
+      <label class="tog2"><input type="checkbox" id="qCode"${quiz.showCode?' checked':''}> Mostra il codice del conto</label>
+      <button type="button" class="btn small" data-qnew>Nuova estrazione</button>
+      ${quizStats.prove?`<span class="empty-note">Prove fatte: ${quizStats.prove} · miglior risultato ${quizStats.migliore}%</span>`:''}
+    </div>
+    ${quiz.checked?`<div class="fb ${pct>=80?'ok':pct>=50?'hint':'ko'}"><h3>Risultato: ${pct}%</h3><p style="margin:0">Natura corretta in ${ok1} conti su ${n} · destinazione corretta in ${ok2} conti su ${n}. Sotto ogni conto trovi la risposta giusta.</p></div>`:''}
+    <div class="jwrap"><table class="j quiz"><thead><tr><th>Nr.</th><th>Conto</th><th>Natura</th><th>Destinazione</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="opbar">${quiz.checked?`<button type="button" class="btn primary" data-qnew>Nuova estrazione</button>`:`<button type="button" class="btn primary" data-qcheck>Correggi</button><span class="empty-note">${filled} di ${n} completati</span>`}</div>
+  </div>`);
+}
+
+/* ================= RISULTATI DELLA CLASSE (solo docente) ================= */
+async function renderResults(){
+  cur=null;
+  const exs=exercises.filter(e=>!e.bozza).sort((a,b)=>(a.ordine||0)-(b.ordine||0));
+  const head=`<div class="ws-head"><div><div class="tmeta"><span>Vista docente</span></div><h2>Risultati della classe</h2></div></div>`;
+  if(!results.length)return paint(`<div class="ws">${head}<div class="empty"><h2>Ancora nessun risultato</h2><p>I risultati compaiono qui quando gli studenti verificano le prime operazioni o correggono un’estrazione sulla natura dei conti. Per salvarli, gli studenti devono poter usare la pagina, non solo visualizzarla: controlla il livello di accesso nel menu Condividi.</p></div></div>`);
+  let names={};
+  try{if(user&&user.profiles){const ps=await user.profiles(results.map(r=>r._id));results.forEach(r=>{names[r._id]=(ps[r._id]&&ps[r._id].name)||''})}}catch(e){}
+  if(mode!=='ris')return;
+  const rows=results.map((r,i)=>{const R=r.riepilogo||{};let tot=0,ok=0;
+    const cells=exs.map(ex=>{const s=R[ex._id];const n=(ex.operazioni||[]).length;tot+=n;if(!s)return `<td class="n"><span class="vchip k">–</span></td>`;ok+=s.ok;
+      const k=s.ok===n?'g':s.ok>0?'b':'r';
+      return `<td class="n" title="${esc(ex.titolo)}: ${s.ok} corrette su ${n}, ${s.primo} al primo tentativo, ${s.sol} con soluzione, ${s.tent} verifiche"><span class="vchip ${k}">${s.ok}/${n}</span>${s.sol?`<small style="display:block;color:var(--mute)">${s.sol} sol.</small>`:''}</td>`}).join('');
+    const q=r.quiz||{};const d=r.agg?new Date(r.agg):null;
+    return {name:names[r._id]||'Studente '+(i+1),html:cells,ok,tot,q,d}}).sort((a,b)=>a.name.localeCompare(b.name));
+  const avg=exs.map(ex=>{const n=(ex.operazioni||[]).length;const ss=results.map(r=>(r.riepilogo||{})[ex._id]).filter(Boolean);
+    return ss.length?`${Math.round(ss.reduce((s,x)=>s+x.ok,0)/ss.length/n*100)}%`:'–'});
+  const qs=results.map(r=>r.quiz).filter(q=>q&&q.prove);
+  paint(`<div class="ws">${head}
+    <p class="empty-note">Ogni cella indica le operazioni registrate correttamente su quelle dell’esercizio; passa sopra una cella per il dettaglio. La colonna Natura riporta il miglior risultato nell’esercizio sulla natura dei conti e il numero di prove.</p>
+    <div class="jwrap"><table class="j ro"><thead><tr><th>Studente</th>${exs.map((ex,i)=>`<th class="n" title="${esc(ex.titolo)}">Es. ${i+1}</th>`).join('')}<th class="n">Totale</th><th class="n">Natura</th><th>Ultima attività</th></tr></thead>
+    <tbody>${rows.map(r=>`<tr><td>${esc(r.name)}</td>${r.html}<td class="n"><b>${r.ok}</b>/${r.tot}</td><td class="n">${r.q.prove?`<span class="vchip ${r.q.migliore>=80?'g':r.q.migliore>=50?'b':'r'}">${r.q.migliore}%</span><small style="display:block;color:var(--mute)">${r.q.prove} prove</small>`:'<span class="vchip k">–</span>'}</td><td>${r.d?r.d.toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit'})+' '+r.d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}):''}</td></tr>`).join('')}</tbody>
+    <tfoot><tr><td>Media della classe</td>${avg.map(a=>`<td class="n">${a}</td>`).join('')}<td></td><td class="n">${qs.length?Math.round(qs.reduce((s,q)=>s+q.migliore,0)/qs.length)+'%':'–'}</td><td></td></tr></tfoot></table></div>
+    <div class="traccia"><b>LEGENDA ESERCIZI</b>${exs.map((ex,i)=>`Es. ${i+1}: ${esc(ex.titolo)}`).join(' · ')}</div>
+  </div>`);
+}
+
+/* ================= EVENTI ================= */
+pal.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.mode){mode=b.dataset.mode;if(mode==='ex')cur=null;delF=false;delArt=-1;return render()}
+  /* esercizi guidati */
+  if(b.dataset.ex)return openEx(b.dataset.ex);
+  if(b.hasAttribute('data-back')){cur=null;return renderList()}
+  if(b.hasAttribute('data-newex'))return openEditor(null);
+  if(b.hasAttribute('data-editex'))return openEditor(cur);
+  /* foglio libero */
+  if(mode==='foglio'){
+    const f=ensureFoglio();
+    if(b.dataset.fsub){fsub=b.dataset.fsub;return renderFoglio()}
+    if(b.hasAttribute('data-artadd')){f.articoli.push(newArt());saveFogli();renderFoglio();const ins=pal.querySelectorAll('[data-af="data"]');ins[ins.length-1].focus();return}
+    if(b.dataset.frowAdd!=null){f.articoli[+b.dataset.frowAdd].rows.push({txt:'',d:'',a:''});saveFogli();return renderFoglio()}
+    if(b.dataset.frowDel!=null){const a=f.articoli[+b.closest('[data-art]').dataset.art];a.rows.splice(+b.dataset.frowDel,1);if(a.rows.length<2)a.rows.push({txt:'',d:'',a:''});saveFogli();return renderFoglio()}
+    if(b.dataset.artdel!=null){delArt=+b.dataset.artdel;return renderFoglio()}
+    if(b.hasAttribute('data-artdel-no')){delArt=-1;return renderFoglio()}
+    if(b.dataset.artdelOk!=null){f.articoli.splice(+b.dataset.artdelOk,1);if(!f.articoli.length)f.articoli.push(newArt());delArt=-1;saveFogli();return renderFoglio()}
+    if(b.hasAttribute('data-fnew')){const nf={id:'f'+Date.now().toString(36),nome:'Foglio '+(fogli.length+1),articoli:[newArt()]};fogli.push(nf);curF=nf.id;fsub='lg';saveFogli();renderFoglio();$('fName').focus();$('fName').select();return}
+    if(b.hasAttribute('data-fdel')){delF=true;return renderFoglio()}
+    if(b.hasAttribute('data-fdel-no')){delF=false;return renderFoglio()}
+    if(b.hasAttribute('data-fdel-ok')){fogli=fogli.filter(x=>x.id!==f.id);curF=null;delF=false;saveFogli();return renderFoglio()}
+    return;
+  }
+  /* natura dei conti */
+  if(mode==='natura'){
+    if(b.hasAttribute('data-qnew')){newQuiz(quiz?quiz.n:20);return renderNatura()}
+    if(b.hasAttribute('data-qcheck')){
+      quiz.checked=true;let ok=0;quiz.items.forEach(it=>{const a=ACC.get(it.c);if(it.nat===a.nat)ok++;if(it.dest===a.dest)ok++});
+      const pct=Math.round(ok/(2*quiz.items.length)*100);quizStats={prove:(quizStats.prove||0)+1,migliore:Math.max(quizStats.migliore||0,pct),ultimo:pct};
+      saveSoon();renderNatura();pal.scrollIntoView({block:'start'});return;
+    }
+    return;
+  }
+  if(!cur)return;
+  const o=OP(cur._id,curOp);
+  if(b.dataset.op!=null){curOp=+b.dataset.op;sub='reg';return renderWs()}
+  if(b.dataset.sub){sub=b.dataset.sub;return renderWs()}
+  if(b.hasAttribute('data-addrow')){o.rows.push({txt:'',d:'',a:''});renderWs();const ins=pal.querySelectorAll('[data-f="txt"]');ins[ins.length-1].focus();return}
+  if(b.dataset.del!=null){o.rows.splice(+b.dataset.del,1);if(o.rows.length<2)o.rows.push({txt:'',d:'',a:''});saveSoon();return renderWs()}
+  if(b.hasAttribute('data-verify')){
+    const g=grade(o.rows,cur.operazioni[curOp].righe);o.tries++;o.msgs=g.msgs;o.st=g.ok?'ok':'ko';
+    if(g.ok)o.rows=o.rows.filter(r=>r.txt||r.d||r.a).map(r=>({txt:accLabel(accOf(r.txt)),d:r.d,a:r.a}));
+    saveSoon();renderWs();const fb=$('fb');if(fb)fb.scrollIntoView({block:'nearest'});return;
+  }
+  if(b.hasAttribute('data-hint')){o.hints=Math.min(2,o.hints+1);saveSoon();return renderWs()}
+  if(b.hasAttribute('data-sol')){o.st='sol';o.rows=cur.operazioni[curOp].righe.map(r=>({txt:accLabel(r.c),d:r.s==='D'?fmt(r.v):'',a:r.s==='A'?fmt(r.v):''}));saveSoon();return renderWs()}
+  if(b.hasAttribute('data-redo')){o.st='';o.msgs=[];o.rows=[{txt:'',d:'',a:''},{txt:'',d:'',a:''}];o.tries=0;o.hints=0;saveSoon();return renderWs()}
+  if(b.hasAttribute('data-next')){curOp=Math.min(cur.operazioni.length-1,curOp+1);sub='reg';return renderWs()}
+});
+function onRowInput(inp,rows){
+  const tr=inp.closest('tr');if(!tr||tr.dataset.i==null)return null;
+  const r=rows[+tr.dataset.i];r[inp.dataset.f]=inp.value;
+  if(inp.dataset.f==='d'&&inp.value.trim()){r.a='';tr.querySelector('[data-f="a"]').value=''}
+  if(inp.dataset.f==='a'&&inp.value.trim()){r.d='';tr.querySelector('[data-f="d"]').value=''}
+  return r;
+}
+pal.addEventListener('input',e=>{
+  const inp=e.target;
+  if(mode==='foglio'){
+    const f=ensureFoglio();
+    if(inp.id==='fName'){f.nome=inp.value||'Foglio';const opt=$('fSel').querySelector(`option[value="${CSS.escape(f.id)}"]`);if(opt)opt.textContent=f.nome;saveFogli();return}
+    const box=inp.closest('[data-art]');if(!box)return;const a=f.articoli[+box.dataset.art];
+    if(inp.dataset.af){a[inp.dataset.af]=inp.value;saveFogli();return}
+    if(inp.dataset.f&&onRowInput(inp,a.rows)){refreshTable(box.querySelector('tbody'),a.rows,box.querySelector('tfoot'));box.querySelector('.art-st').innerHTML=artStatusHtml(a);const fc=$('fCount');if(fc)fc.textContent=countHtml(f);saveFogli()}
+    return;
+  }
+  if(!cur||!inp.dataset.f)return;
+  const o=OP(cur._id,curOp);if(onRowInput(inp,o.rows)){if(o.st==='ko')o.st='';refreshTable($('jb'),o.rows,$('jf'));saveSoon()}
+});
+pal.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.id==='fSel'){curF=t.value;delF=false;delArt=-1;return renderFoglio()}
+  if(t.id==='qN'){newQuiz(t.value);return renderNatura()}
+  if(t.id==='qCode'){quiz.showCode=t.checked;return renderNatura()}
+  if(t.dataset.qf){const i=+t.closest('[data-q]').dataset.q;quiz.items[i][t.dataset.qf]=t.value;const s=pal.querySelector('.opbar .empty-note');if(s)s.textContent=`${quiz.items.filter(x=>x.nat&&x.dest).length} di ${quiz.items.length} completati`}
+});
+pal.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&mode==='ex'&&e.target.dataset&&e.target.dataset.f){e.preventDefault();const b=pal.querySelector('[data-verify]');if(b)b.click()}
+});
+
+/* ================= EDITOR DOCENTE ================= */
+const dEx=$('dEx');let edEx=null,edOps=[];
+function openEditor(ex){
+  edEx=ex;$('exT').textContent=ex?'Modifica esercizio':'Nuovo esercizio';
+  $('exTitolo').value=ex?ex.titolo:'';$('exArg').value=ex?(ex.argomento||'Altro'):'Costituzione';
+  $('exLiv').value=ex?String(ex.livello||1):'1';$('exIntro').value=ex?(ex.intro||''):'';
+  $('exOrd').value=ex?(ex.ordine||''):(exercises.reduce((m,x)=>Math.max(m,x.ordine||0),0)+1);
+  $('exBozza').checked=ex?!!ex.bozza:true;$('exDel').hidden=!ex;$('exErr').hidden=true;
+  edOps=ex?(ex.operazioni||[]).map(o=>({data:o.data||'',testo:o.testo||'',rows:o.righe.map(r=>({txt:accLabel(r.c),d:r.s==='D'?fmt(r.v):'',a:r.s==='A'?fmt(r.v):''}))})):[{data:'',testo:'',rows:[{txt:'',d:'',a:''},{txt:'',d:'',a:''}]}];
+  renderEdOps();dEx.showModal();$('exTitolo').focus();
+}
+function renderEdOps(){
+  $('exOps').innerHTML=edOps.map((o,i)=>`<div class="opedit" data-o="${i}"><div class="opedit-h"><span>OPERAZIONE ${i+1}</span><button type="button" class="btn ghost small" data-rmop="${i}">Elimina operazione</button></div>
+    <div class="row2"><div class="field"><label for="od${i}">Data</label><input id="od${i}" data-of="data" value="${esc(o.data)}" placeholder="12/03"></div><div class="field"><label for="ot${i}">Testo dell’operazione</label><textarea id="ot${i}" data-of="testo" rows="2">${esc(o.testo)}</textarea></div></div>
+    <div class="jwrap"><table class="j"><thead><tr><th>Codice</th><th>Conto (soluzione)</th><th class="n">Dare</th><th class="n">Avere</th><th>Var.</th><th></th></tr></thead><tbody>${journalRows(o.rows,false,'data-edrow-del')}</tbody><tfoot>${footRow(o.rows,false)}</tfoot></table></div>
+    <div><button type="button" class="btn small" data-edrow-add="${i}">+ Riga</button></div></div>`).join('');
+}
+$('exOps').addEventListener('input',e=>{
+  const box=e.target.closest('[data-o]');if(!box)return;const o=edOps[+box.dataset.o];
+  if(e.target.dataset.of){o[e.target.dataset.of]=e.target.value;return}
+  if(e.target.dataset.f&&onRowInput(e.target,o.rows))refreshTable(box.querySelector('tbody'),o.rows,box.querySelector('tfoot'));
+});
+$('exOps').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.rmop!=null){edOps.splice(+b.dataset.rmop,1);if(!edOps.length)edOps.push({data:'',testo:'',rows:[{txt:'',d:'',a:''},{txt:'',d:'',a:''}]});renderEdOps()}
+  else if(b.dataset.edrowAdd!=null){edOps[+b.dataset.edrowAdd].rows.push({txt:'',d:'',a:''});renderEdOps()}
+  else if(b.dataset.edrowDel!=null){const box=b.closest('[data-o]');const o=edOps[+box.dataset.o];o.rows.splice(+b.dataset.edrowDel,1);if(o.rows.length<2)o.rows.push({txt:'',d:'',a:''});renderEdOps()}
+});
+$('exAddOp').addEventListener('click',()=>{edOps.push({data:'',testo:'',rows:[{txt:'',d:'',a:''},{txt:'',d:'',a:''}]});renderEdOps();const t=$('exOps').querySelectorAll('textarea');t[t.length-1].focus()});
+$('exCancel').addEventListener('click',()=>dEx.close());
+let delArmed=false;
+$('exDel').addEventListener('click',async()=>{
+  if(!delArmed){delArmed=true;$('exDel').textContent='Conferma eliminazione';setTimeout(()=>{delArmed=false;$('exDel').textContent='Elimina esercizio'},4000);return}
+  try{await db.collection('esercizi').doc(edEx._id).delete();dEx.close();cur=null;renderList()}catch(err){showExErr('Eliminazione non riuscita. Riprova.')}
+});
+function showExErr(m){$('exErr').textContent=m;$('exErr').hidden=false}
+$('fEx').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const titolo=$('exTitolo').value.trim();if(!titolo)return showExErr('Scrivi un titolo.');
+  const ops=[];
+  for(let i=0;i<edOps.length;i++){
+    const o=edOps[i];if(!o.testo.trim())return showExErr(`Scrivi il testo dell’operazione ${i+1}.`);
+    const righe=[];
+    for(const r of o.rows){if(!r.txt.trim()&&!r.d&&!r.a)continue;const c=accOf(r.txt),d=parseAmt(r.d),a=parseAmt(r.a);
+      if(!c)return showExErr(`Operazione ${i+1}: «${r.txt}» non è nel piano dei conti.`);
+      if(!(d>0)&&!(a>0))return showExErr(`Operazione ${i+1}: manca l’importo del conto ${accName(c)}.`);
+      righe.push({c,s:d>0?'D':'A',v:d>0?d:a})}
+    if(righe.length<2)return showExErr(`Operazione ${i+1}: servono almeno due conti nella soluzione.`);
+    const tD=righe.filter(r=>r.s==='D').reduce((s,r)=>s+r.v,0),tA=righe.filter(r=>r.s==='A').reduce((s,r)=>s+r.v,0);
+    if(Math.abs(tD-tA)>0.005)return showExErr(`Operazione ${i+1}: la soluzione non quadra (Dare ${fmt(tD)}, Avere ${fmt(tA)}).`);
+    ops.push({data:o.data.trim(),testo:o.testo.trim(),righe});
+  }
+  const data={titolo,argomento:$('exArg').value,livello:+$('exLiv').value,intro:$('exIntro').value.trim(),ordine:parseInt($('exOrd').value,10)||1,bozza:$('exBozza').checked,operazioni:ops};
+  $('exSave').disabled=true;
+  try{
+    const id=edEx?edEx._id:('ex-'+titolo.toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)+'-'+Date.now().toString(36));
+    await db.collection('esercizi').doc(id).set(data);dEx.close();
+    if(edEx&&cur&&cur._id===id){cur={...data,_id:id};curOp=Math.min(curOp,ops.length-1);renderWs()}
+  }catch(err){showExErr('Salvataggio non riuscito: controlla di avere i permessi di modifica e riprova.')}
+  $('exSave').disabled=false;
+});
+
+/* ================= SCHEDE DELLA PAGINA ================= */
+function showTab(t){
+  const p=t==='pal';$('tabArg').setAttribute('aria-selected',!p);$('tabPal').setAttribute('aria-selected',p);
+  $('vArg').hidden=p;$('vPal').hidden=!p;
+}
+$('tabArg').addEventListener('click',()=>showTab('arg'));
+$('tabPal').addEventListener('click',()=>showTab('pal'));
+document.querySelector('.tabs').addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const p=$('tabPal').getAttribute('aria-selected')==='true';showTab(p?'arg':'pal');(p?$('tabArg'):$('tabPal')).focus()}});
+const H0=(location.hash||'').toLowerCase();
+if(H0==='#palestra'||H0==='#foglio'||H0==='#natura'){showTab('pal');if(H0==='#foglio')mode='foglio';if(H0==='#natura')mode='natura'}
+
+/* ================= AVVIO ================= */
+$('pianoList').innerHTML=PIANO.filter(a=>a.nat!=='O').map(a=>`<option value="${a.c} ${esc(a.n)}"></option>`).join('');
+(async()=>{
+  const cl=window.claude;
+  if(!cl||!cl.use){pal.innerHTML=`<div class="notice"><h2>Apri la pagina dal link condiviso</h2><p>La palestra si carica quando la pagina è aperta su claude.ai.</p></div>`;return}
+  [db,user]=await Promise.all([cl.use('db'),cl.use('user')]);
+  if(!db){pal.innerHTML=`<div class="notice"><h2>Accedi per esercitarti</h2><p>La palestra funziona per chi ha effettuato l’accesso a Claude con l’account della scuola.</p></div>`;return}
+  editor=user?await user.canEdit():false;
+  try{uid=user?await user.id():null}catch(e){uid=null}
+  await loadSaved();
+  if(editor)db.collection('risultati').onSnapshot(s=>{results=s.docs.map(d=>({...d.data(),_id:d.id}));if(mode==='ris')renderResults()},()=>{});
+  render();
+  const timer=setTimeout(()=>{if(!loadedEx&&mode==='ex')paint(`<div class="notice"><h2>Gli esercizi non si sono caricati</h2><p>Controlla la connessione e ricarica la pagina. Il foglio libero e la natura dei conti funzionano comunque.</p></div>`)},10000);
+  db.collection('esercizi').onSnapshot(s=>{
+    clearTimeout(timer);loadedEx=true;
+    exercises=s.docs.map(d=>({...d.data(),_id:d.id}));
+    if(mode!=='ex')return;
+    if(cur){const n=exercises.find(e=>e._id===cur._id);if(n){cur=n;if(sub!=='reg')renderWs()}else renderList()}else renderList();
+  },()=>{clearTimeout(timer);loadedEx=true;if(mode==='ex')renderList()});
+})();
+})();
+</script>

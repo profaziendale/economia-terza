@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Economia Aziendale classe Terza</title>
+<meta name="description" content="Lezioni animate, materiali e palestra di partita doppia con correzione automatica.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="stile.css">
+<style>body{margin:0}</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Istituto Tecnico Economico · A.S. 2026/27</div>
+      <h1>Economia Aziendale classe Terza</h1>
+    </div>
+    <div class="legend" aria-label="Codice colore della partita doppia">
+      <span><i class="dot g"></i>Finanziario +</span><span><i class="dot r"></i>Finanziario −</span><span><i class="dot b"></i>Econ. d’esercizio</span><span><i class="dot v"></i>Econ. pluriennale</span><span><i class="dot t"></i>Econ. patrimonio netto</span><span><i class="dot o"></i>Econ. sospeso</span>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Sezioni">
+    <button type="button" role="tab" id="tabArg" aria-controls="vArg" aria-selected="true">Argomenti e materiali</button>
+    <button type="button" role="tab" id="tabPal" aria-controls="vPal" aria-selected="false">Palestra di partita doppia</button>
+  </nav>
+
+  <section id="vArg" role="tabpanel" aria-labelledby="tabArg" class="view">
+    <div class="bar">
+      <label class="search" for="q"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Cerca un argomento o un materiale" aria-label="Cerca"></label>
+      <div class="filters" role="group" aria-label="Filtra per stato">
+        <button type="button" data-f="tutti" aria-pressed="true">Tutti</button>
+        <button type="button" data-f="corso" aria-pressed="false">In corso</button>
+        <button type="button" data-f="svolto" aria-pressed="false">Svolti</button>
+      </div>
+    </div>
+    <main class="topics" id="topics" aria-live="polite"></main>
+  </section>
+
+  <section id="vPal" role="tabpanel" aria-labelledby="tabPal" class="view" hidden>
+    <div id="pal"></div>
+  </section>
+
+  <datalist id="pianoList"></datalist>
+
+  <footer>I progressi della palestra restano salvati solo nel browser di chi la usa: nessun dato viene inviato su internet. Per consegnarli all’insegnante usa “Il mio resoconto” nella palestra.</footer>
+</div>
+
+<script src="contenuti.js"></script>
+<script>
+(function(){
+"use strict";
+/* elenco degli argomenti, letto da contenuti.js */
+const $=id=>document.getElementById(id);
+const STATI={corso:['In corso','corso'],svolto:['Svolto','svolto']};
+const KIND={'Lezione animata':'lez','Presentazione':'lez','Video':'lez','Esercizi':'ese','Dispensa':'ese'};
+const SITO=window.SITO||{argomenti:[]};
+let filter='tutti',query='';
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function link(m){
+  const u=String(m.url||'');
+  if(u.charAt(0)==='#')return `<a class="btn small" href="${esc(u)}" data-inner="${esc(u)}">Apri</a>`;
+  const ext=/^https?:/i.test(u);
+  return `<a class="btn small" href="${esc(u)}"${ext||/\.pdf$/i.test(u)?' target="_blank" rel="noopener"':''}>Apri<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>`;
+}
+function render(){
+  const q=query.toLowerCase();
+  const list=(SITO.argomenti||[]).filter(t=>filter==='tutti'||t.stato===filter).filter(t=>!q||[t.titolo,t.modulo,t.descrizione].concat((t.materiali||[]).map(m=>m.titolo)).join(' ').toLowerCase().includes(q));
+  if(!list.length){$('topics').innerHTML=`<div class="empty"><h2>Nessun argomento</h2><p>Nessun argomento corrisponde alla ricerca o al filtro scelto.</p></div>`;return}
+  $('topics').innerHTML=list.map(t=>{
+    const st=STATI[t.stato]||STATI.corso;const ms=t.materiali||[];
+    const lesson=ms.find(m=>m.tipo==='Lezione animata');
+    return `<article class="topic"><div class="thead"><div style="min-width:0"><div class="tmeta">${t.modulo?`<span>${esc(t.modulo)}</span>`:''}<span class="status ${st[1]}">${st[0]}</span></div><h2>${esc(t.titolo)}</h2></div>
+      <div class="tactions">${lesson?`<a class="btn primary" href="${esc(lesson.url)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg>Presenta la lezione</a>`:''}</div></div>
+      ${t.descrizione?`<p class="desc">${esc(t.descrizione)}</p>`:''}
+      <section class="mgroup" aria-label="Materiali"><h3><i class="dot g"></i>Materiali</h3>
+      ${ms.length?ms.map(m=>`<div class="mat"><span class="kind ${KIND[m.tipo]||''}">${esc(m.tipo||'Link')}</span><div class="mtitle">${esc(m.titolo)}${m.nota?`<small>${esc(m.nota)}</small>`:''}</div><div class="mact">${link(m)}</div></div>`).join(''):'<div class="none">Nessun materiale.</div>'}</section></article>`}).join('');
+}
+document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.f;document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));render()}));
+$('q').addEventListener('input',e=>{query=e.target.value.trim();render()});
+/* i collegamenti interni (#palestra) aprono la scheda della palestra */
+$('topics').addEventListener('click',e=>{const a=e.target.closest('[data-inner]');if(!a)return;e.preventDefault();$('tabPal').click();window.scrollTo(0,0)});
+render();
+})();
+</script>
+<script src="palestra.js"></script>
+</body>
+</html>
