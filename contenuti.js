@@ -33,6 +33,12 @@ argomenti: [
         "nota": "Si avanza un passo alla volta; contiene anche la versione video"
       },
       {
+        "titolo": "Video della lezione (MP4)",
+        "tipo": "Video",
+        "url": "video-partita-doppia.mp4",
+        "nota": "7 minuti, con sottotitoli, da guardare o scaricare"
+      },
+      {
         "titolo": "Slide della lezione (PDF)",
         "tipo": "Presentazione",
         "url": "slide-costituzione-acquisti-vendite.pdf",
