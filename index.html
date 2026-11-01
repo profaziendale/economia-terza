@@ -3,11 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1B1F2A">
+<meta name="apple-mobile-web-app-title" content="Economia 3ª">
 <title>Economia Aziendale classe Terza</title>
 <meta name="description" content="Lezioni animate, materiali e palestra di partita doppia con correzione automatica.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="stile.css">
+<link rel="stylesheet" href="stile.css?v=2">
 <style>body{margin:0}</style>
 </head>
 <body>
@@ -48,7 +54,7 @@
   <footer>I progressi della palestra restano salvati solo nel browser di chi la usa: nessun dato viene inviato su internet. Per consegnarli all’insegnante usa “Il mio resoconto” nella palestra.</footer>
 </div>
 
-<script src="contenuti.js"></script>
+<script src="contenuti.js?v=2"></script>
 <script>
 (function(){
 "use strict";
@@ -85,6 +91,6 @@ $('topics').addEventListener('click',e=>{const a=e.target.closest('[data-inner]'
 render();
 })();
 </script>
-<script src="palestra.js"></script>
+<script src="palestra.js?v=3"></script>
 </body>
 </html>

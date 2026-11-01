@@ -1,5 +1,3 @@
-[README.md](https://github.com/user-attachments/files/34238943/README.md)
-
 # Economia Aziendale classe Terza
 
 Sito per la classe: lezioni animate, materiali e una palestra di partita doppia con correzione automatica. Funziona in qualsiasi browser, senza account e senza installare nulla.
@@ -16,6 +14,7 @@ Sito per la classe: lezioni animate, materiali e una palestra di partita doppia 
 | `contenuti.js` | **Argomenti, materiali ed esercizi.** È l'unico file da modificare per aggiungere contenuti |
 | `docente.html` | Registro dell'insegnante: legge i resoconti consegnati dagli studenti |
 | `stile.css` | Grafica del sito |
+| `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `manifest.webmanifest` | Icona del sito nel browser e sulla schermata Home del telefono |
 
 ## Pubblicare il sito su GitHub Pages (una volta sola)
 
@@ -30,10 +29,19 @@ Sito per la classe: lezioni animate, materiali e una palestra di partita doppia 
 6. Dopo uno o due minuti in alto compare l'indirizzo del sito, del tipo
    `https://tuonome.github.io/economia-terza/`. È il link da dare agli studenti.
 
+## Aggiungere il sito alla schermata Home del telefono
+
+Gli studenti possono usare il sito come un'app:
+- **iPhone (Safari)**: tasto Condividi → **Aggiungi alla schermata Home**;
+- **Android (Chrome)**: menu ⋮ → **Aggiungi a schermata Home** (o **Installa app**).
+
+Compare l'icona con il conto a T colorato.
+
 ## Aggiornare i contenuti
 
 - Apri `contenuti.js` con un editor di testo (anche TextEdit, in modalità testo semplice) e segui le istruzioni all'inizio del file.
 - Per caricare la versione aggiornata: nel repository premi **Add file** → **Upload files**, trascina il file modificato e premi **Commit changes**. Il sito si aggiorna in un paio di minuti.
+- Se dopo l'aggiornamento il telefono mostra ancora la versione vecchia, ricarica la pagina; se non basta, chiudi e riapri il browser.
 - Per aggiungere un PDF o un'altra lezione: caricalo nello stesso modo e aggiungilo tra i `materiali` dell'argomento in `contenuti.js`, scrivendo il nome del file in `url`.
 
 ## Come lavorano gli studenti

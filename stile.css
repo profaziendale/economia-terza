@@ -258,7 +258,10 @@ table.j.quiz tr.qko td:first-child{box-shadow:inset 4px 0 0 var(--ros)}
   .wrap{padding-block:20px 48px;gap:20px}
   header.top{padding-bottom:12px}
   .legend{font-size:12px;gap:6px 10px}
-  .tabs button{font-size:16px;padding:0 12px}
+  .tabs{overflow:visible}
+  .tabs button{flex:1 1 0;font-size:15px;padding:6px 8px;white-space:normal;line-height:1.2;min-height:52px}
+  .eyebrow{font-size:11px}
+  h1{font-size:32px}
   .topic{padding:16px}
   .thead .tactions{width:100%}
   .thead .tactions .btn{flex:1;justify-content:center}
@@ -271,4 +274,37 @@ table.j.quiz tr.qko td:first-child{box-shadow:inset 4px 0 0 var(--ros)}
   .opbar .btn{flex:1 1 auto;justify-content:center}
   .steps button{min-width:40px;min-height:40px}
   .ws-head .tactions{width:100%}
+}
+
+/* ---------- telefono: righe del libro giornale e della natura dei conti come schede ---------- */
+@media (max-width:640px){
+  .jwrap:has(table.j:not(.ro)){overflow-x:visible;border:0}
+  table.j:not(.ro){min-width:0;display:block}
+  table.j:not(.ro) thead{display:none}
+  table.j:not(.ro) tbody,table.j:not(.ro) tfoot{display:block}
+  table.j:not(.ro):not(.quiz) tbody tr{display:grid;grid-template-columns:1fr 1fr 44px;grid-template-areas:"acc acc acc" "d a x" "code vc vc";gap:6px 8px;padding:10px;margin-bottom:8px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+  table.j:not(.ro):not(.quiz) tbody td{border:0;padding:0;width:auto;display:block}
+  table.j:not(.ro):not(.quiz) td.acc{grid-area:acc}
+  table.j:not(.ro):not(.quiz) tbody td:nth-child(3){grid-area:d}
+  table.j:not(.ro):not(.quiz) tbody td:nth-child(4){grid-area:a}
+  table.j:not(.ro):not(.quiz) td.x{grid-area:x;align-self:end}
+  table.j:not(.ro):not(.quiz) td.code{grid-area:code;font-size:12px}
+  table.j:not(.ro):not(.quiz) td.vc{grid-area:vc;text-align:right}
+  table.j:not(.ro):not(.quiz) tbody td:nth-child(3)::before{content:"Dare";display:block;font:600 11px var(--f-mono);letter-spacing:.08em;color:var(--mute);margin-bottom:2px}
+  table.j:not(.ro):not(.quiz) tbody td:nth-child(4)::before{content:"Avere";display:block;font:600 11px var(--f-mono);letter-spacing:.08em;color:var(--mute);margin-bottom:2px}
+  table.j:not(.ro) input.amt{max-width:none}
+  table.j:not(.ro):not(.quiz) tfoot tr{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;padding:8px 10px;border-top:2px solid var(--ink)}
+  table.j:not(.ro):not(.quiz) tfoot td{border:0;padding:0;display:block}
+  table.j:not(.ro):not(.quiz) tfoot td:first-child,table.j:not(.ro):not(.quiz) tfoot td:nth-child(n+5){display:none}
+  table.j:not(.ro):not(.quiz) tfoot td:nth-child(2){grid-column:1/-1}
+  table.j.quiz tbody tr{display:grid;grid-template-columns:32px 1fr;grid-template-areas:"n c" "nat nat" "dest dest";gap:6px 8px;padding:10px;margin-bottom:8px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+  table.j.quiz tbody td{border:0;padding:0;display:block}
+  table.j.quiz tbody td:nth-child(1){grid-area:n;font-family:var(--f-mono);color:var(--mute)}
+  table.j.quiz tbody td:nth-child(2){grid-area:c}
+  table.j.quiz tbody td:nth-child(3){grid-area:nat}
+  table.j.quiz tbody td:nth-child(4){grid-area:dest}
+  table.j.quiz select{width:100%;min-height:44px}
+  table.j.quiz tr.qok td:first-child,table.j.quiz tr.qko td:first-child{box-shadow:none}
+  table.j.quiz tr.qok{border-color:var(--ver)}table.j.quiz tr.qko{border-color:var(--ros)}
+  .art{padding:10px}
 }
