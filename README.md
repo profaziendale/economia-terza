@@ -1,3 +1,5 @@
+[README.md](https://github.com/user-attachments/files/34238943/README.md)
+
 # Economia Aziendale classe Terza
 
 Sito per la classe: lezioni animate, materiali e una palestra di partita doppia con correzione automatica. Funziona in qualsiasi browser, senza account e senza installare nulla.
@@ -9,6 +11,7 @@ Sito per la classe: lezioni animate, materiali e una palestra di partita doppia 
 | `index.html` | Pagina iniziale: argomenti, materiali e palestra di partita doppia |
 | `lezione.html` | Lezione animata "La partita doppia a colori" (presentazione passo per passo o video continuo) |
 | `slide-costituzione-acquisti-vendite.pdf` | Le slide della lezione in PDF |
+| `video-partita-doppia.mp4` | Il video della lezione (720p, circa 22 MB) |
 | `palestra.js` | La palestra: esercizi guidati, foglio libero, natura dei conti, il mio resoconto |
 | `contenuti.js` | **Argomenti, materiali ed esercizi.** È l'unico file da modificare per aggiungere contenuti |
 | `docente.html` | Registro dell'insegnante: legge i resoconti consegnati dagli studenti |
